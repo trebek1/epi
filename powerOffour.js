@@ -31,7 +31,4 @@
 	isPowerOfFour(32); // should be false 
 	isPowerOfFour(64); // true 
 
-
-
-
 })(); 
