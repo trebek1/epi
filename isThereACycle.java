@@ -110,3 +110,28 @@ class LinkedList{
     }
 }
 
+// Now to get the start of the cycle reset position of tortoise to head and make both speeds 1. Go till collision and 
+// that point will be the start of the cycle 
+
+//why?  slow moves x + y; 
+// fast moves x + y + z + y to make collision; 
+// so 2(x+y) = x + y + z + y; 
+// so x = z; Thus collision will be where cycle is 
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
