@@ -1,12 +1,16 @@
 import java.util.ArrayList;
-import java.util.Stack; 
+import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList; 
 
 class Maze {
   public static enum Color { WHITE, BLACK };
   public ArrayList<Coordinate> path = new ArrayList<>();
   public ArrayList<ArrayList<Color>> maze = new ArrayList<>();
   public Stack<Coordinate> stack = new Stack<>(); // for iterative DFS 
+  public Queue<Coordinate> q; 
   public final int size;
+  public int shortestPathSize = 0; 
 
   Maze(){
     // make a new maze 
@@ -98,6 +102,87 @@ class Maze {
     path.add(c);
     stack.push(c);
   }
+
+  void handleCaseBFS(int x, int y, Coordinate last){
+    Coordinate c; 
+    maze.get(x).set(y, Color.BLACK);
+    c = new Coordinate(x, y);
+    c.prev = last;
+    q.add(c); 
+  }
+
+  void printShortestPath(Coordinate winner){
+    System.out.println("x= " + winner.x + " y= " + winner.y);
+    shortestPathSize = 1; 
+    while(winner.prev != null){
+      winner = winner.prev;
+      System.out.println("x= " + winner.x + " y= " + winner.y);
+      shortestPathSize++;
+    }
+  }
+
+  ArrayList<Coordinate> searchThisDungeonBFS(int startX, int startY, int finalX, int finalY){
+    q = new LinkedList<>();
+    Coordinate c = new Coordinate(startX, startY);
+
+    c.prev = null;
+
+    // get in line
+    q.add(c);
+
+    maze.get(startX).set(startY, Color.BLACK);
+
+    // if there's a line, we are open for business
+    while(!q.isEmpty()){
+
+      // get next element - step up to the register
+      Coordinate current = q.remove();
+
+      // add current to the final path - pay 
+      path.add(current);
+
+      // decide who is next 
+      
+      int i = current.x; 
+      int j = current.y;
+
+      int left = j - 1; 
+      int right = j + 1;
+      int up = i - 1; 
+      int down = i + 1;
+
+      // check to see if the coordinate you are on is the final one
+      if(i == finalX && j == finalY){
+        System.out.println("Found the shortest path through this maze!");
+        // printPath();
+        printShortestPath(current);
+        System.out.println("Shortest path size " + shortestPathSize); 
+        return path;
+      }
+
+      // add all possible place you can go to the queue
+
+      if(valid(down, j)){
+        handleCaseBFS(down, j, current);
+      }
+
+      if(valid(up, j)){
+        handleCaseBFS(up, j, current);
+      }
+
+      if(valid(i, right)){
+        handleCaseBFS(i, right, current);
+      }
+
+      if(valid(i, left)){
+        handleCaseBFS(i, left, current);
+      }
+      // done with coordinate so paint black
+
+    }
+
+    return null;  
+  }  
 
   ArrayList<Coordinate> searchThisDungeonDFSIter(int finalX, int finalY){
     
@@ -236,11 +321,19 @@ class Maze {
     m.maze.get(9).set(0, Maze.Color.BLACK);
     m.path.add(start);
     m.searchThisDungeonDFS(9, 0, 0, 9);
+    
     m.reset(); 
 
     m.maze.get(9).set(0, Maze.Color.BLACK);
     m.path.add(start);
     m.stack.push(start);
-    m.searchThisDungeonDFSIter(0, 9);  
+    m.searchThisDungeonDFSIter(0, 9);
+
+    m.reset();
+    m.searchThisDungeonBFS(9, 0, 0, 9);
+
+
+
+
   }
 }

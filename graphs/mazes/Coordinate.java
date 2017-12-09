@@ -1,11 +1,13 @@
 import java.util.Objects;
 
 public class Coordinate {
-  public int x, y; 
+  public int x, y;
+  public Coordinate prev;  
   
   public Coordinate(int x, int y){
     this.x = x; 
-    this.y = y; 
+    this.y = y;
+    this.prev = null; 
   }
   
   @Override
