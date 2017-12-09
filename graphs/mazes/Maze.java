@@ -143,6 +143,9 @@ class Maze {
       stack.pop();
       path.remove(path.size() - 1);
       maze.get(i).set(j, Color.BLACK);
+      if(stack.empty()){
+        return null; 
+      }
       c = stack.peek();
     }
 
@@ -151,21 +154,19 @@ class Maze {
 
   }
 
-  ArrayList<Coordinate> searchThisDungeonDFS(int i, int j){
+  ArrayList<Coordinate> searchThisDungeonDFS(int i, int j, int finalX, int finalY){
     maze.get(i).set(j, Color.BLACK);
-    if(i == 0 && (j == (size - 1))){
+    if(i == finalX && (j == finalY)){
       System.out.println("found the end!");
       System.out.println("size " + path.size());
       printPath();
       return path;
     }
 
-    int left = j - 1; 
+    int left = j - 1;
     int right = j + 1;
-    int up = i - 1; 
-    int down = i + 1; 
-
-    int[] deltas = {1, -1}; 
+    int up = i - 1;
+    int[] deltas = {1, -1};
 
     for(int m = 0; m < deltas.length; m++){
       for(int k = 0; k < deltas.length; k++){
@@ -173,12 +174,12 @@ class Maze {
         if(m == 0){
           if(valid(i + delta, j)){
             path.add(new Coordinate(i + delta, j));
-            return searchThisDungeonDFS(i + delta, j);
+            return searchThisDungeonDFS(i + delta, j, finalX, finalY);
           }
         } else {
           if(valid(i, j + delta)){
             path.add(new Coordinate(i, j + delta));
-            return searchThisDungeonDFS(i, j + delta);
+            return searchThisDungeonDFS(i, j + delta, finalX, finalY);
           }
         }
       }
@@ -213,7 +214,7 @@ class Maze {
       return null;
     }
     Coordinate prev = path.get(path.size() - 1);
-    return searchThisDungeonDFS(prev.x, prev.y); 
+    return searchThisDungeonDFS(prev.x, prev.y, finalX, finalY); 
   }
 
   void reset(){
@@ -234,7 +235,7 @@ class Maze {
     Coordinate start = new Coordinate(9, 0);
     m.maze.get(9).set(0, Maze.Color.BLACK);
     m.path.add(start);
-    m.searchThisDungeonDFS(9, 0);
+    m.searchThisDungeonDFS(9, 0, 0, 9);
     m.reset(); 
 
     m.maze.get(9).set(0, Maze.Color.BLACK);
