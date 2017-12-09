@@ -1,5 +1,7 @@
-public static class Coordinate {
-  public int x,y; 
+import java.util.Objects;
+
+public class Coordinate {
+  public int x, y; 
   
   public Coordinate(int x, int y){
     this.x = x; 
@@ -23,6 +25,6 @@ public static class Coordinate {
   }
   @Override
   public int hashCode(){
-    return Object.hash(x, y);
+    return Objects.hash(x, y);
   }
 }

@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 
 class Maze {
-  public static enum Color {WHITE, BLACK}; 
-  public ArrayList<ArrayList<Color>> maze = new ArrayList<>(); 
+  public static enum Color { WHITE, BLACK };
+  public ArrayList<Coordinate> path = new ArrayList<>();
+  public ArrayList<ArrayList<Color>> maze = new ArrayList<>();
+  public final int size;
 
   Maze(){
     // make a new maze 
-    makeMaze(); 
+    makeMaze();
+    size = maze.get(0).size(); 
   }
 
   public void makeMaze(){
@@ -68,17 +71,97 @@ class Maze {
 
   }
 
+  boolean valid(int x, int y){
+    if(x >= 0 && y >= 0 && x < size && y < size && maze.get(x).get(y) != Color.BLACK){
+      return true;
+    }
+    return false; 
+  }
+
+  ArrayList<Coordinate> searchThisDungeonDFS(int i, int j){
+    // System.out.println()
+    maze.get(i).set(j, Color.BLACK);
+    System.out.println("i " + i + " j " + j);
+    if(i == 0 && (j == (size - 1))){
+      path.add(new Coordinate(i, j));
+      System.out.println("found the end!");
+      return path;
+    }
+
+    int left = j - 1; 
+    int right = j + 1;
+    int up = i - 1; 
+    int down = i + 1; 
+
+    int[] deltas = {1, -1}; 
+
+    for(int m = 0; m < deltas.length; m++){
+      for(int k = 0; k < deltas.length; k++){
+        int delta = deltas[k];
+        if(m == 0){
+          if(valid(i + delta, j)){
+            path.add(new Coordinate(i + delta, j));
+            return searchThisDungeonDFS(i + delta, j);
+          }
+        } else {
+          if(valid(i, j + delta)){
+            path.add(new Coordinate(i, j + delta));
+            return searchThisDungeonDFS(i, j + delta);
+          }
+        }
+      }
+    }
+    
+    // if(down < size && maze.get(down).get(j) != Color.BLACK){
+    //   path.add(new Coordinate(down, j));
+    //   return searchThisDungeonDFS(down, j);
+    // }
+
+    // if(up >= 0 && maze.get(up).get(j) != Color.BLACK){
+    //   path.add(new Coordinate(up, j));
+    //   return searchThisDungeonDFS(up, j);
+    // }
+
+    // if(right < size && maze.get(i).get(right) != Color.BLACK){
+    //   path.add(new Coordinate(i, right));
+    //   return searchThisDungeonDFS(i, right);
+    // }
+
+    // if(left >= 0 && maze.get(i).get(left) != Color.BLACK){
+    //   path.add(new Coordinate(i, left));
+    //   return searchThisDungeonDFS(i, left);
+    // }
+
+    // remove last node if no where to go
+    path.remove(path.size() - 1);
+    maze.get(i).set(j, Color.BLACK);
+
+    // return if nowhere else to explore
+    if(path.size() == 0){
+      return null;
+    }
+    Coordinate prev = path.get(path.size() - 1);
+    return searchThisDungeonDFS(prev.x, prev.y); 
+  }
+
   public static void main(String[] args) {
 
     // create instance 
-    Maze m = new Maze(); 
+    Maze m = new Maze();
+    Coordinate start = new Coordinate(9, 0);
+    m.maze.get(9).set(0, Maze.Color.BLACK);
+    m.path.add(start);
+    m.searchThisDungeonDFS(9, 0);
+    // for(int i = 0; i < m.size; i++){
+    //   System.out.println("")
+    // }
 
     // print the maze
-    for(int i = 0; i < 10; i++){
-      for(int k = 0; k < 10; k++){
-        System.out.println(m.maze.get(i).get(k));
-      }
-    }    
+    // for(int i = 0; i < 10; i++){
+    //   for(int k = 0; k < 10; k++){
+    //     System.out.println(m.maze.get(i).get(k));
+    //   }
+    // }    
   }
 }
 
