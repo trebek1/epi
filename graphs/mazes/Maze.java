@@ -11,6 +11,8 @@ class Maze {
   Maze(){
     // make a new maze 
     makeMaze();
+
+    // maze is square in this case so get size here 
     size = maze.get(0).size(); 
   }
 
@@ -89,11 +91,18 @@ class Maze {
     }
   }
 
+  void handleCase(int x, int y){
+    Coordinate c; 
+    c = new Coordinate(x, y);
+    maze.get(x).set(y, Color.BLACK);
+    path.add(c);
+    stack.push(c);
+  }
+
   ArrayList<Coordinate> searchThisDungeonDFSIter(int finalX, int finalY){
     
     Coordinate c = stack.peek();
     while(!stack.empty()){
-      // System.out.println("this is path size " + path.size());
       int i = c.x; 
       int j = c.y;
       int left = j - 1; 
@@ -104,39 +113,30 @@ class Maze {
       if(i == finalX && j == finalY){
         System.out.println("found the path iteratively");
         printPath();
-
         return path;
       } 
 
-      if(down < size && maze.get(down).get(j) != Color.BLACK){
+      if(valid(down, j)){
+        handleCase(down, j);
         c = new Coordinate(down, j);
-        maze.get(down).set(j, Color.BLACK);
-        path.add(c);
-        stack.push(c);
         continue;
       }
 
-      if(up >= 0 && maze.get(up).get(j) != Color.BLACK){
+      if(valid(up, j)){
+        handleCase(up, j);
         c = new Coordinate(up, j);
-        maze.get(up).set(j, Color.BLACK);
-        path.add(c);
-        stack.push(c);
         continue;
       }
 
-      if(right < size && maze.get(i).get(right) != Color.BLACK){
+      if(valid(i, right)){
+        handleCase(i, right);
         c = new Coordinate(i,right);
-        maze.get(i).set(right, Color.BLACK);
-        path.add(c);
-        stack.push(c);
         continue;
       }
 
-      if(left >= 0 && maze.get(i).get(left) != Color.BLACK){
+      if(valid(i, left)){
+        handleCase(i, left);
         c = new Coordinate(i, left);
-        maze.get(i).set(left, Color.BLACK);
-        path.add(c);
-        stack.push(c);
         continue;
       }
 
@@ -144,7 +144,6 @@ class Maze {
       path.remove(path.size() - 1);
       maze.get(i).set(j, Color.BLACK);
       c = stack.peek();
-
     }
 
     System.out.println("did not find exit");
@@ -153,11 +152,8 @@ class Maze {
   }
 
   ArrayList<Coordinate> searchThisDungeonDFS(int i, int j){
-    // System.out.println()
     maze.get(i).set(j, Color.BLACK);
-    // System.out.println("i " + i + " j " + j);
     if(i == 0 && (j == (size - 1))){
-      // path.add(new Coordinate(i, j));
       System.out.println("found the end!");
       System.out.println("size " + path.size());
       printPath();
@@ -245,14 +241,5 @@ class Maze {
     m.path.add(start);
     m.stack.push(start);
     m.searchThisDungeonDFSIter(0, 9);  
-
-
-
   }
 }
-
-
-
-
-
-
