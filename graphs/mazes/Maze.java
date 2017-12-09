@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.util.Stack; 
 
 class Maze {
   public static enum Color { WHITE, BLACK };
   public ArrayList<Coordinate> path = new ArrayList<>();
   public ArrayList<ArrayList<Color>> maze = new ArrayList<>();
+  public Stack<Coordinate> stack = new Stack<>(); // for iterative DFS 
   public final int size;
 
   Maze(){
@@ -25,6 +27,7 @@ class Maze {
     // set index, element 
     // row 1
     // These are walls
+
     maze.get(0).set(0, Color.BLACK); 
     maze.get(0).set(6, Color.BLACK); 
     maze.get(0).set(7, Color.BLACK); 
@@ -78,13 +81,86 @@ class Maze {
     return false; 
   }
 
+  void printPath(){
+    System.out.println("path size " + path.size()); 
+    for(int i = 0; i < path.size(); i++){
+      Coordinate c = path.get(i); 
+      System.out.println("x= " + c.x + " y=" + c.y);
+    }
+  }
+
+  ArrayList<Coordinate> searchThisDungeonDFSIter(int finalX, int finalY){
+    
+    Coordinate c = stack.peek();
+    while(!stack.empty()){
+      // System.out.println("this is path size " + path.size());
+      int i = c.x; 
+      int j = c.y;
+      int left = j - 1; 
+      int right = j + 1;
+      int up = i - 1; 
+      int down = i + 1;
+
+      if(i == finalX && j == finalY){
+        System.out.println("found the path iteratively");
+        printPath();
+
+        return path;
+      } 
+
+      if(down < size && maze.get(down).get(j) != Color.BLACK){
+        c = new Coordinate(down, j);
+        maze.get(down).set(j, Color.BLACK);
+        path.add(c);
+        stack.push(c);
+        continue;
+      }
+
+      if(up >= 0 && maze.get(up).get(j) != Color.BLACK){
+        c = new Coordinate(up, j);
+        maze.get(up).set(j, Color.BLACK);
+        path.add(c);
+        stack.push(c);
+        continue;
+      }
+
+      if(right < size && maze.get(i).get(right) != Color.BLACK){
+        c = new Coordinate(i,right);
+        maze.get(i).set(right, Color.BLACK);
+        path.add(c);
+        stack.push(c);
+        continue;
+      }
+
+      if(left >= 0 && maze.get(i).get(left) != Color.BLACK){
+        c = new Coordinate(i, left);
+        maze.get(i).set(left, Color.BLACK);
+        path.add(c);
+        stack.push(c);
+        continue;
+      }
+
+      stack.pop();
+      path.remove(path.size() - 1);
+      maze.get(i).set(j, Color.BLACK);
+      c = stack.peek();
+
+    }
+
+    System.out.println("did not find exit");
+    return null;
+
+  }
+
   ArrayList<Coordinate> searchThisDungeonDFS(int i, int j){
     // System.out.println()
     maze.get(i).set(j, Color.BLACK);
-    System.out.println("i " + i + " j " + j);
+    // System.out.println("i " + i + " j " + j);
     if(i == 0 && (j == (size - 1))){
-      path.add(new Coordinate(i, j));
+      // path.add(new Coordinate(i, j));
       System.out.println("found the end!");
+      System.out.println("size " + path.size());
+      printPath();
       return path;
     }
 
@@ -144,6 +220,17 @@ class Maze {
     return searchThisDungeonDFS(prev.x, prev.y); 
   }
 
+  void reset(){
+    // reset the path 
+    path = new ArrayList<>();
+
+    // reset the maze 
+    maze = new ArrayList<>();
+
+    // make the initial maze again 
+    makeMaze();  
+  }
+
   public static void main(String[] args) {
 
     // create instance 
@@ -152,16 +239,15 @@ class Maze {
     m.maze.get(9).set(0, Maze.Color.BLACK);
     m.path.add(start);
     m.searchThisDungeonDFS(9, 0);
-    // for(int i = 0; i < m.size; i++){
-    //   System.out.println("")
-    // }
+    m.reset(); 
 
-    // print the maze
-    // for(int i = 0; i < 10; i++){
-    //   for(int k = 0; k < 10; k++){
-    //     System.out.println(m.maze.get(i).get(k));
-    //   }
-    // }    
+    m.maze.get(9).set(0, Maze.Color.BLACK);
+    m.path.add(start);
+    m.stack.push(start);
+    m.searchThisDungeonDFSIter(0, 9);  
+
+
+
   }
 }
 
