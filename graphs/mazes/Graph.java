@@ -4,7 +4,7 @@ import java.util.Stack;
 
 class Graph {
 	HashMap<String, GraphNode> vertices;
-	Stack<GraphNode> stack;
+	Stack<GraphNode> stack = new Stack<>();
 	final Integer V;
 	int E = 0;
 
@@ -47,7 +47,6 @@ class Graph {
 	}
 
 	boolean checkMinimalConnectedness(){
-		stack = new Stack<>();
 
 		GraphNode firstNode = vertices.get(vertices.keySet().toArray()[0]);
 
@@ -77,8 +76,36 @@ class Graph {
 		return true;
 	}
 
-	Graph cloneGraph(){
-		
+	Graph cloneGraph(GraphNode start){
+		System.out.println("This is node start  " + start.value);
+		Graph clone = new Graph(V); 
+
+		clone.vertices.put(start.value, start);
+
+		clone.stack.push(start);
+		start.color = GraphNode.Color.GREY;
+
+		while(!clone.stack.isEmpty()){
+			GraphNode currentNode = clone.stack.peek();
+			ArrayList<GraphNode> neighbors = currentNode.neighbors;
+
+			for(int i = 0; i < neighbors.size(); i++){
+				GraphNode n = neighbors.get(i);
+				if(n.color == GraphNode.Color.WHITE){
+					clone.stack.push(n);
+					clone.vertices.put(n.value, n);
+					n.color = GraphNode.Color.GREY;
+					break;
+				}else if(i == neighbors.size() - 1){
+					currentNode.color = GraphNode.Color.BLACK;
+					clone.stack.pop();
+				}
+			}
+		}
+
+		System.out.println("This is the clone ");
+		printGraph();
+		return clone;
 	}
 
 	public static void main(String[] args){
@@ -99,5 +126,10 @@ class Graph {
 		g.printGraph();
 
 		System.out.println("Is minimally connected " + g.checkMinimalConnectedness());
+
+		System.out.println("clone the graph ");
+		GraphNode firstNode = g.vertices.get(g.vertices.keySet().toArray()[0]);
+		g.cloneGraph(firstNode);
+
 	}
 }
