@@ -1,11 +1,16 @@
 import java.util.ArrayList;
 
 class GraphNode {
+	public static enum Color { WHITE, GREY, BLACK };
 	String value;
 	ArrayList<GraphNode> neighbors;
+	Color color;
+	GraphNode cameFrom;
+
 	GraphNode(String value){
 		neighbors = new ArrayList<>();
 		this.value = value;
+		this.color = Color.WHITE; 
 	}
 
 	@Override
