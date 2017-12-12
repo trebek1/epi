@@ -8,6 +8,7 @@ class GraphNode {
 	GraphNode cameFrom;
 	int count = -1;
 	boolean visited = false;
+	int distance;
 
 	GraphNode(String value){
 		neighbors = new ArrayList<>();

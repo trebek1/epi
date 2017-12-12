@@ -104,7 +104,7 @@ class WiredConnections {
 	}
 
 	public static void main(String[] args){
-		WiredConnections g = new WiredConnections(5);
+		WiredConnections g = new WiredConnections(8);
 		
 		g.addVertex("A");
 		g.addVertex("B");
