@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 
 class GraphNode {
-	public static enum Color { WHITE, GREY, BLACK };
+	public static enum Color { WHITE, GREY, BLACK, RED };
 	String value;
 	ArrayList<GraphNode> neighbors;
 	Color color;
 	GraphNode cameFrom;
+	int count = -1;
+	boolean visited = false;
 
 	GraphNode(String value){
 		neighbors = new ArrayList<>();
