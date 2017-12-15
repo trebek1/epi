@@ -332,8 +332,5 @@ class Maze {
     m.reset();
     m.searchThisDungeonBFS(9, 0, 0, 9);
 
-
-
-
   }
 }

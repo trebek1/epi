@@ -146,10 +146,9 @@ class Bst {
   }
 
   // void morrisTraversal(){
-
   // 	Node current = head;
-  // 	boolean doneLeft = false;
 
+  // 	boolean doneLeft = false;
 
   // 	while(current != null){
   // 		if(doneLeft == false){
@@ -157,63 +156,69 @@ class Bst {
   // 				current = current.left;
   // 			}
   // 		}
-		// System.out.println(current.value);
-		// doneLeft = true;
+  // 		System.out.println(current.value);
+  // 		doneLeft = true;
 
-		// if(current.right != null){
-		// 	current = current.right; 
-		// 	doneLeft = false;
-		// } else if (current.parent != null){
-
-		// 	while(current.parent != null && current == current.parent.right){
-		// 		current = current.parent;
-		// 	}
-
-		// 	if(current.parent == null){
-		// 		break;
-		// 	}
-
-		// 	current = current.parent;
-
-		// } else {
-		// 	break;
-		// }
+  // 		if(current.right != null){
+  // 			current = current.right; 
+  // 			doneLeft = false;
+  // 		} else if(current.parent != null){
+  // 			// case down deep right side of a tree coming up many nodes 
+  // 			while(current.parent != null && current == current.parent.right){
+  // 				current = current.parent;
+  // 			}
+  // 			// case where on rt side of tree coming all the way up to head many rt nodes 
+  // 			if(current.parent == null){
+  // 				return;
+  // 			}
+  // 			// case going from a left child that was reached coming up from right many nodes 
+  // 			current = current.parent;
+  // 		} else {
+  // 			// if rt is null and parent is null, must be at the top!
+  // 			return;
+  // 		}
   // 	}
   // }
 
   void morrisTraversal(){
   	Node current = head;
-
   	boolean doneLeft = false;
 
   	while(current != null){
-  		if(doneLeft == false){
+
+  		// got all the way left 
+  		if(doneLeft != true){
   			while(current.left != null){
   				current = current.left;
   			}
   		}
+  		// print value 
   		System.out.println(current.value);
   		doneLeft = true;
 
+  		// if right go right
   		if(current.right != null){
-  			current = current.right; 
+  			current = current.right;
   			doneLeft = false;
-  		} else if(current.parent != null){
-  			// case down deep right side of a tree coming up many nodes 
+  		} else if (current.parent != null){
+  			// go up and to the left if out of rt branch 
   			while(current.parent != null && current == current.parent.right){
   				current = current.parent;
   			}
-  			// case where on rt side of tree coming all the way up to head many rt nodes 
+  			// if at the very top 
   			if(current.parent == null){
   				return;
   			}
-  			// case going from a left child that was reached coming up from right many nodes 
+  			// left side of tree coming up from a long rt branch
   			current = current.parent;
+
   		} else {
-  			// if rt is null and parent is null, must be at the top!
+  			// must be at the top if nothing right or up
   			return;
   		}
+
   	}
+
   }
 
   public static void main(String[] args){

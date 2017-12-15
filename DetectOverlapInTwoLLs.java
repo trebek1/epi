@@ -106,3 +106,12 @@ class LinkedList{
     }
 }
 
+// once detected, the best way to figure out what the overlapping node is, iterate through both lists
+// and check the difference in lengths until you find a node value that overlaps smaller + diff
+
+
+
+ 
+
+
+
