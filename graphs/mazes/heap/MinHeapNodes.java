@@ -4,13 +4,13 @@ import java.lang.Math;
 
 class MinHeap {
 
-	Edge[] heap;
+	Node[] heap;
 	int heapSize;
 	int length;
 
-	MinHeap(Edge[] arr){
+	MinHeap(int[] arr){
 		int len = arr.length;
-		heap = new Edge[len + 1];
+		heap = new Node[len + 1];
 		
 		// length of the heap
 		heapSize = len;
@@ -64,14 +64,14 @@ class MinHeap {
 	}
 
 	void swap(int i, int j){
-		Edge left = heap[i];
+		Node left = heap[i];
 		heap[i] = heap[j];
 		heap[j] = left;
 	}
 
-	void makeHeap(Edge[] arr){
+	void makeHeap(int[] arr){
 		for(int i = 0; i < arr.length; i++){
-			Edge node = arr[i];
+			Node node = new Node(arr[i]);
 			heap[++length] = node;
 		}
 		System.out.println("Heap has been created");
@@ -79,7 +79,7 @@ class MinHeap {
 
 	void printHeap(){
 		for(int i = 0; i < length; i++){
-			System.out.println(heap[i + 1].weight);
+			System.out.println(heap[i + 1].value);
 		}
 	}
 
@@ -94,7 +94,7 @@ class MinHeap {
 	}
 
 	private void resize(int capacity){
-		Edge[] newHeap = new Edge[capacity];
+		Node[] newHeap = new Node[capacity];
 		for(int i = 1; i < heap.length; i++){
 			newHeap[i] = heap[i];
 		}
@@ -103,14 +103,14 @@ class MinHeap {
 
 	// Min Priority Queue Functions!
 
-	double minimum(){
-		System.out.println(heap[1].weight);
-		return heap[1].weight;
+	Node minimum(){
+		System.out.println(heap[1].value);
+		return heap[1];
 	}
 
-	Edge extractMin(){
+	Node extractMin(){
 		swap(1, length);
-		Edge min = heap[length];
+		Node min = heap[length];
 		// shrink heap
 		heapSize--;
 		length--;
@@ -121,7 +121,7 @@ class MinHeap {
 	}
 
 	void insert(int num){
-		Edge newNode = new Edge(10,10,Double.MAX_VALUE);
+		Node newNode = new Node(Integer.MAX_VALUE);
 		length++;
 		if(length == heapSize -1){
 			// double size of heap and copy over values 
@@ -136,14 +136,14 @@ class MinHeap {
 	}
 
 	void decreaseKey(int index, int newValue){
-		if(newValue > heap[index].weight){
+		if(newValue > heap[index].value){
 			System.out.println("Invalid Key Decrease Request");
 			return;
 		}
 
-		heap[index].weight = newValue;
+		heap[index].value = newValue;
 
-		while(index > 1 && heap[parentIndex(index)].weight > heap[index].weight){
+		while(index > 1 && heap[parentIndex(index)].value > heap[index].value){
 			swap(index, parentIndex(index));
 			index = parentIndex(index);
 		}
@@ -152,12 +152,12 @@ class MinHeap {
 		printHeap();
 	}
 
-	// public static void main(String[] args){
-	// 	MinHeap m = new MinHeap(new int[] {4, 1, 3, 2, 16, 9, 10, 14, 8, 7});
-	// 	m.extractMin();
-	// 	m.decreaseKey(m.length, 5);
-	// 	m.insert(1);
-	// 	// initial order 
-	// 	// 4 1 3 2 16 9 10 14 8 7
-	// }
+	public static void main(String[] args){
+		MinHeap m = new MinHeap(new int[] {4, 1, 3, 2, 16, 9, 10, 14, 8, 7});
+		m.extractMin();
+		m.decreaseKey(m.length, 5);
+		m.insert(1);
+		// initial order 
+		// 4 1 3 2 16 9 10 14 8 7
+	}
 }
