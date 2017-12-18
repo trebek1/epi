@@ -68,12 +68,13 @@ class EdgeWeightedGraph {
   // // all edges in graph
   ArrayList<Edge> edges(){
     
+    // Idea here is that only larger vertex will be returned so duplicates aren't returned
     ArrayList<Edge> listFinal = new ArrayList<>();
     for(int i = 0; i < V; i++){
       for(Edge e : adj[i]){
-          if(e.other(i) > i){
-            listFinal.add(e);
-          }
+        if(e.other(i) > i){
+          listFinal.add(e);
+        }
       }
     }
 

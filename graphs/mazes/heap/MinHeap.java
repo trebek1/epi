@@ -5,8 +5,21 @@ import java.lang.Math;
 class MinHeap {
 
 	Edge[] heap;
+
+	// the number of elements in the heap from the initial array or size of current memory 
 	int heapSize;
+
+	// position of last element inserted onto the heap
 	int length;
+
+	// create a minHeap implementation that can be dynamically created for 
+	// the prims algorithm 
+	MinHeap(){
+		// create an empty heap with the first spot blank
+		heap = new Edge[1]; 
+		length = 0;
+		heapSize = 0;
+	}
 
 	MinHeap(Edge[] arr){
 		int len = arr.length;
@@ -84,7 +97,7 @@ class MinHeap {
 	}
 
 	int parentIndex(int i){
-		int parentIndex = (int)(Math.floor(i/2));
+		int parentIndex = i/2;
 
 		if(parentIndex <= 0){
 			return 0;
@@ -112,11 +125,12 @@ class MinHeap {
 		swap(1, length);
 		Edge min = heap[length];
 		// shrink heap
-		heapSize--;
+		// heapSize--;
 		length--;
 		minHeapify(1);
-		System.out.println("This is the new Heap!");
-		printHeap();
+		// System.out.println("This is the new Heap!");
+		// printHeap();
+		System.out.println("Extracted " + min.weight);
 		return min;
 	}
 
@@ -135,6 +149,34 @@ class MinHeap {
 
 	}
 
+	// for inserting an edge directly to the queue that already has vertices 
+	void insert(Edge e){
+
+		if(heapSize == 0){
+			resize(2);
+		}
+		
+		if(length == heapSize  - 1 || heapSize == 0){
+			if(heapSize == 0){
+				heapSize++;
+			}
+			// double size of heap and copy over values 
+			resize(heap.length * 2);
+			heapSize = heapSize * 2;
+		}
+		length++;
+		heap[length] = e;
+		
+		swim(length);
+	}
+
+	void swim(int index){
+		while(index > 1 && heap[parentIndex(index)].weight > heap[index].weight){
+			swap(index, parentIndex(index));
+			index = parentIndex(index);
+		}		
+	}
+
 	void decreaseKey(int index, int newValue){
 		if(newValue > heap[index].weight){
 			System.out.println("Invalid Key Decrease Request");
@@ -150,6 +192,12 @@ class MinHeap {
 
 		System.out.println("Heap after decreasing key!!! ");
 		printHeap();
+	}
+
+	void heapSort(){
+		while(length >= 1){
+			extractMin();
+		}
 	}
 
 	// public static void main(String[] args){

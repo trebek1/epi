@@ -18,6 +18,15 @@ class Edge implements Comparable<Edge>{
     }
     return v;
   };
+
+  int getV(){
+    return this.v;
+  }
+
+  int getW(){
+    return this.w;
+  }
+
   public int compareTo(Edge that){
     if(weight < that.weight){
       return -1;
