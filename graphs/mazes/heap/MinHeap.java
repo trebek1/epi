@@ -134,6 +134,7 @@ class MinHeap {
 		return min;
 	}
 
+	// This is simply for testing individual numbers instead of edge weights 
 	void insert(int num){
 		Edge newNode = new Edge(10,10,Double.MAX_VALUE);
 		length++;
