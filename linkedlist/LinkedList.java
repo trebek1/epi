@@ -90,6 +90,35 @@ class LinkedList {
 
 	// O(1) for creating new dummy head variable 
 	// you cant "add" to new linkedlist bc you will be adding the whole list each time 
+
+	public static LinkedList reverse(LinkedList l1){
+		Node current = l1.head;
+		Node prev = null;
+		Node temp = null;
+		if(current == null){
+			return null;
+		}
+
+		while(current != null){
+			// save the next one 
+			temp = current.next;
+
+			// set the working next
+			current.next = prev;
+			
+			// update prev 
+			prev = current;
+
+			// update current;
+			current = temp;
+		}
+		l1.head = prev; 
+
+		l1.printList();
+		return l1;
+		
+	}
+
 	public static LinkedList merge(LinkedList l1, LinkedList l2){
 
 		LinkedList l3 = new LinkedList();
@@ -179,7 +208,7 @@ class LinkedList {
 		LL.add(n10);
 
 
-		LL.printList();
+		// LL.printList();
 
 
 		LinkedList list1 = new LinkedList();
@@ -196,7 +225,11 @@ class LinkedList {
 		list2.add(88);
 		list2.add(1337);
 
-		LinkedList.merge(list1, list2);
+		list2.printList();
+
+		// LinkedList.merge(list1, list2);
+
+		reverse(list2);
 
 
 
