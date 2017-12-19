@@ -78,7 +78,6 @@ class LinkedList {
 	}
 
 	void printList(){
-		System.out.println("printing");
 		Node current = this.head;
 
 		while(current != null){
@@ -88,9 +87,50 @@ class LinkedList {
 			System.out.print(" null " + '\n');
 	}
 
+	public static LinkedList reverseSublist(LinkedList l1, int first, int end){
+		int count = 0;
+		Node current = l1.head;
+		Node temp = null;
+		Node start = null;
+		Node prev;
+
+		while(count < first){
+			temp = current;
+			current = current.next;
+			count++;
+		}
+
+		// save prev as temp
+		prev = temp;
+
+		// save the initial position
+		start = current;
+
+		Node reverseTemp = null;
+		while(count < end){
+			reverseTemp = current.next;
+			current.next = prev;
+			prev = current;
+			current = reverseTemp;
+			count++;
+		}
+		// set the start next first since youll lose it 
+		start.next = current.next;
+
+		// then set current next to finish off loop
+		current.next = prev;
+		
+		// now just point the start at your current node 
+		temp.next = current;
+
+		l1.printList();
+		return l1;
+
+	}
+
 	// O(1) for creating new dummy head variable 
 	// you cant "add" to new linkedlist bc you will be adding the whole list each time 
-
+	// can also do this recursively 
 	public static LinkedList reverse(LinkedList l1){
 		Node current = l1.head;
 		Node prev = null;
@@ -220,16 +260,20 @@ class LinkedList {
 
 		LinkedList list2 = new LinkedList();
 		list2.add(5);
+		list2.add(10);
 		list2.add(15);
 		list2.add(44);
 		list2.add(88);
 		list2.add(1337);
+		list2.add(2084);
 
 		list2.printList();
 
 		// LinkedList.merge(list1, list2);
 
-		reverse(list2);
+		// reverse(list2);
+
+		reverseSublist(list2, 2, 4);
 
 
 
