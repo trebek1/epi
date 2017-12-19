@@ -29,6 +29,26 @@ class LinkedList {
 		this.len++;
 	}
 
+	public static boolean detectCycle(LinkedList l1){
+
+		Node rabbit = l1.head;
+		Node hare = l1.head;
+
+		while(rabbit != null && hare != null){
+			if(hare.next != null && hare.next.next != null){
+				hare = hare.next.next;
+			} else {
+				return false;
+			}
+			rabbit = rabbit.next;
+
+			if(rabbit == hare){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	void add(int val){
 		Node node = new Node(val);
 		Node current, prev;
@@ -267,16 +287,22 @@ class LinkedList {
 		list2.add(1337);
 		list2.add(2084);
 
-		list2.printList();
+		// This creates a cycle, comment out to test other methods
+		Node node = new Node(45);
+		node.next = list2.head.next.next.next;
+		list2.add(node);
+		
+
+		// list2.printList();
 
 		// LinkedList.merge(list1, list2);
 
 		// reverse(list2);
 
-		reverseSublist(list2, 2, 4);
+		// reverseSublist(list2, 2, 4);
 
 
-
+		System.out.println(LinkedList.detectCycle(list2));
 
 
 
