@@ -559,6 +559,54 @@ class LinkedList {
   	return L1;
   }
 
+  static void listPivoting(LinkedList L1, Integer k){
+  	
+  	Node p1 = L1.head; 
+  	
+
+  	Node greater = null;
+  	Node gp = null;
+  	Node equal = null;
+  	Node ep = null;
+  	Node less = null;
+  	Node lp = null;
+
+  	while(p1 != null){
+  		if(p1.value < k){
+  			if(less == null){
+  				less = p1;
+  				lp = p1;
+  			} else {
+				lp.next = p1;
+				lp = lp.next;
+			}
+  		} else if(p1.value > k){
+  			if(greater == null){
+  				greater = p1;
+  				gp = p1;
+  			} else {
+  				gp.next = p1;
+  				gp = gp.next;
+  			}
+  		} else {
+  			if(equal == null){
+  				equal = p1;
+  				ep = p1;
+  			} else {
+  				ep.next = p1;
+  				ep = ep.next;
+  			}
+  		}
+  		p1 = p1.next;
+  	}
+
+  	lp.next = equal;
+  	ep.next = greater;
+  	gp.next = null;
+
+
+  }
+
   public static void main(String[] args){
     LinkedList LL = new LinkedList();
 
@@ -615,6 +663,11 @@ class LinkedList {
     list2.add(node2);
     list2.add(1337);
     list2.add(2084);
+    list2.add(20);
+    list2.add(17);
+    list2.add(77);
+    
+
     // list2.add(2084);
     // list2.add(2084);
 
@@ -652,7 +705,8 @@ class LinkedList {
     
     // cyclicRightShift(list2, 3);
 
-    evenOddMerge(list2);
+    //evenOddMerge(list2);
+    listPivoting(list2, 77);
 
     list2.printList();
 
