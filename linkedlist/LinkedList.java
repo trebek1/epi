@@ -529,8 +529,34 @@ class LinkedList {
 
   }
 
-  static evenOddMerge(LinkedList L1){
+  // start at zero and put even links before odd links 
+  static LinkedList evenOddMerge(LinkedList L1){
 
+  	if(L1 == null){
+  		return null;
+  	}
+
+  	Node head1 = L1.head;
+  	Node head2 = L1.head.next;
+
+  	Node p1 = head1;
+  	Node p2 = head2;
+
+  	while(p1 != null && p1.next != null && p2.next != null){
+  		p1.next = p1.next.next;
+  		p1 = p1.next;
+
+  		p2.next = p2.next.next;
+  		p2 = p2.next;
+  	}
+
+  	if(head2 == null){
+  		return L1;
+  	}
+
+  	p1.next = head2;
+
+  	return L1;
   }
 
   public static void main(String[] args){
@@ -579,7 +605,7 @@ class LinkedList {
     // list2.add(5);
     list2.add(10);
     list2.add(15);
-    // list2.add(15);
+    list2.add(77);
     // list2.add(15);
     // list2.add(15);
 
@@ -625,6 +651,8 @@ class LinkedList {
     // removeDuplicatesFromSorted(list2);
     
     // cyclicRightShift(list2, 3);
+
+    evenOddMerge(list2);
 
     list2.printList();
 
