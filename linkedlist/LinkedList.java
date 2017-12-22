@@ -626,6 +626,52 @@ class LinkedList {
   	return true;
   }
 
+  // have to add to both to find longer of two lists ....
+  static LinkedList listAddition(LinkedList l1, LinkedList l2){
+  	Node p1 = l1.head;
+  	Node p2 = l2.head;
+  	Node prev = null;
+  	int carry = 0;
+
+  	while(p1 != null && p2 != null){
+  		p2.value = p2.value + p1.value + carry;
+  		carry = 0;
+  		if(p2.value > 9){
+  			p2.value -= 10; 
+  			carry = 1;
+  		}
+  		prev = p2;
+  		p1 = p1.next;
+  		p2 = p2.next;
+  	}
+  	if(carry > 0 && p1 == null && p2 == null){
+  		Node next = new Node(carry);
+  		prev.next = next;
+  	}
+
+  	while(p2 != null){
+  		p2.value = p2.value + carry;
+  		carry = 0;
+  		if(p2.value > 9){
+  			p2.value -= 10; 
+  			carry = 1;
+  		}
+  		p2 = p2.next;
+  	}
+
+  	while(p1 != null){
+  		p1.value = p1.value + carry;
+  		carry = 0;
+  		if(p1.value > 9){
+  			p1.value -= 10; 
+  			carry = 1;
+  		}
+  		p1 = p1.next;
+  	}
+
+  	return l2;
+  }
+
   public static void main(String[] args){
     LinkedList LL = new LinkedList();
 
@@ -730,17 +776,40 @@ class LinkedList {
     // list2.printList();
 
 
-    LinkedList l3 = new LinkedList();
-    l3.add(1);
-    l3.add(3);
-    l3.add(3);
-    l3.add(7);
-    l3.add(7);
-    l3.add(3);
-    l3.add(3);
-    l3.add(1);
+    // LinkedList l3 = new LinkedList();
+    // l3.add(1);
+    // l3.add(3);
+    // l3.add(3);
+    // l3.add(7);
+    // l3.add(7);
+    // l3.add(3);
+    // l3.add(3);
+    // l3.add(1);
     
-    System.out.println("Is there a palindrome here ? " + isPalindrome(l3));
+    // System.out.println("Is there a palindrome here ? " + isPalindrome(l3));
+
+
+    LinkedList la = new LinkedList();
+    la.add(5);
+    la.add(3);
+    la.add(6);
+    la.add(4);
+    la.add(2);
+
+    LinkedList lb = new LinkedList();
+    lb.add(9);
+    lb.add(9);
+    lb.add(9);
+    lb.add(9);
+    lb.add(9);
+
+    la.printList();
+    lb.printList();
+
+    LinkedList add = listAddition(la, lb);
+
+    add.printList();
+
 	}
 
 }
