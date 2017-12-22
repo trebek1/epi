@@ -603,8 +603,27 @@ class LinkedList {
   	lp.next = equal;
   	ep.next = greater;
   	gp.next = null;
+  }
 
+  static boolean isPalindrome(LinkedList l1){
+  	Node slow = l1.head;
+  	Node fast = l1.head;
+  	Node start = l1.head;
 
+  	while(fast != null && fast.next != null){
+  		fast = fast.next.next;
+  		slow = slow.next;
+  	}
+  	LinkedList reverse = reverse(new LinkedList(slow));
+  	slow = reverse.head;
+  	while(slow != null){
+  		if(slow.value != start.value){
+  			return false;
+  		}
+  		slow = slow.next;
+  		start = start.next;
+  	}
+  	return true;
   }
 
   public static void main(String[] args){
@@ -672,7 +691,7 @@ class LinkedList {
     // list2.add(2084);
 
     // list1.printList();
-    list2.printList();
+    // list2.printList();
 
     // list2.deleteNode(44);
     // Node nodeToDelete = list2.head.next.next.next.next.next.next;
@@ -706,10 +725,26 @@ class LinkedList {
     // cyclicRightShift(list2, 3);
 
     //evenOddMerge(list2);
-    listPivoting(list2, 77);
+    // listPivoting(list2, 77);
 
-    list2.printList();
+    // list2.printList();
 
 
-  }
+    LinkedList l3 = new LinkedList();
+    l3.add(1);
+    l3.add(3);
+    l3.add(3);
+    l3.add(7);
+    l3.add(7);
+    l3.add(3);
+    l3.add(3);
+    l3.add(1);
+    
+    System.out.println("Is there a palindrome here ? " + isPalindrome(l3));
+	}
+
 }
+
+
+
+
