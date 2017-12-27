@@ -20,6 +20,23 @@ class BinaryTree {
     root = null;
   }
 
+  boolean isNodeSymmetric(Node left, Node right){
+    // if both are null then they are symmetric 
+    if(left == null && right == null){
+      return true;
+      // if both are not...
+    } else if(left != null && right != null){
+      return left.value == right.value && isNodeSymmetric(left.right, right.left) && isNodeSymmetric(left.left, right.right);
+    }
+
+    // if one is null but one is not 
+    return false; 
+  }
+
+  boolean isSymmetric(){
+    return isNodeSymmetric(this.root.left, this.root.right);
+  }
+
   int isNodeBalanced(Node node){
     if(node == null){
       return 0;
@@ -369,29 +386,47 @@ class BinaryTree {
 
   public static void main(String[] args){
     // Create Binary Tree 
-    BinaryTree tree = new BinaryTree();
-    tree.add(25);
-    tree.add(11);
-    tree.add(40);
-    tree.add(6);
-    tree.add(15);
-    tree.add(35);
-    tree.add(55);
-    tree.add(1);
-    tree.add(33);
-    tree.add(30);
+    // BinaryTree tree = new BinaryTree();
+    // tree.add(25);
+    // tree.add(11);
+    // tree.add(40);
+    // tree.add(6);
+    // tree.add(15);
+    // tree.add(35);
+    // tree.add(55);
+    // tree.add(1);
+    // tree.add(33);
+    // tree.add(30);
 
-    //       25
-    //    11.    40
-    //  6.  15. 35. 55
-    // 1.      33
+    // //       25
+    // //    11.    40
+    // //  6.  15. 35. 55
+    // // 1.      33
     
 
 
     // ----------------------------------------
 
-      // 10.1 Is the tree balanced?
-      System.out.println(tree.isBalanced());
+    // 10.1 Is the tree balanced?
+      // System.out.println(tree.isBalanced());
+
+    // 10.2 Test if a binary tree is symmetric
+      BinaryTree tree = new BinaryTree();
+      tree.add(77);
+      tree.root.left = new Node(88);
+      tree.root.right = new Node(88);
+      tree.root.left.right = new Node(15);
+      tree.root.right.left = new Node(15);
+      tree.root.left.left = new Node(99);
+      tree.root.right.right = new Node(99);
+      tree.root.left.left.left = new Node(1);
+      tree.root.right.right.right = new Node(1);
+
+      //       77
+      //    88.    88
+      //  99.  15. 15. 99
+      // 1.              1.
+      System.out.println(tree.isSymmetric());
 
     // ----------------------------------------
 
