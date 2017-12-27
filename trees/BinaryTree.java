@@ -382,25 +382,25 @@ class BinaryTree {
 
     // tree.successor(39);
 
-  tree.add(25);
-  tree.add(11);
-  tree.add(40);
-  tree.add(6);
-  tree.add(15);
-  tree.add(35);
-  tree.add(55);
-  tree.add(1);
-  tree.add(33);
-  tree.add(54);
-  tree.printTree();
-  tree.deleteNode(40);
-  System.out.println("After Delete");
-  tree.printTree();
+    tree.add(25);
+    tree.add(11);
+    tree.add(40);
+    tree.add(6);
+    tree.add(15);
+    tree.add(35);
+    tree.add(55);
+    tree.add(1);
+    tree.add(33);
+    tree.add(54);
+    tree.printTree();
+    tree.deleteNode(40);
+    System.out.println("After Delete");
+    tree.printTree();
 
- //       25
- //    11.    40
- //  6.  15. 35. 55
- // 1.      33
+    //       25
+    //    11.    40
+    //  6.  15. 35. 55
+    // 1.      33
 
     // expect to get 25 11 40 6 15 35 55 1 33 
     // tree.printTree();
