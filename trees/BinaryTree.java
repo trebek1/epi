@@ -147,7 +147,6 @@ class BinaryTree {
 
     while(!q.isEmpty()){
       Node node = q.poll();
-
       System.out.println(node.value);
       if(node.left != null){
         q.add(node.left);
@@ -167,10 +166,6 @@ class BinaryTree {
     inorderTraversalRecur(root.right);
   }
 
-  void treeSearch(){
-
-  }
-
   Node min(){
     Node current = this.root;
     if(current == null){
@@ -180,7 +175,6 @@ class BinaryTree {
     while(current.left != null){
       current = current.left;
     }
-
     System.out.println(current.value);
     return current;
   }
@@ -194,7 +188,6 @@ class BinaryTree {
     while(current.left != null){
       current = current.left;
     }
-
     System.out.println(current.value);
     return current;
   }
@@ -205,15 +198,11 @@ class BinaryTree {
       System.out.println("Error tree is empty");
       return null;
     }
-
     while(current.right != null){
       current = current.right;
     }
-
     System.out.println(current.value);
-
     return current;
-
   }
 
   Node max(Node node){
@@ -222,15 +211,11 @@ class BinaryTree {
       System.out.println("Error tree is empty");
       return null;
     }
-
     while(current.right != null){
       current = current.right;
     }
-
     System.out.println(current.value);
-
     return current;
-
   }
 
   Node treeSearch(int val){
@@ -239,14 +224,11 @@ class BinaryTree {
       System.out.println("Tree is empty");
       return null;
     }
-
     while(true){
-
       if(current == null){
         System.out.println(val + " is not in the tree");
         return null;
       }
-
       if(current.value > val){
         current = current.left;
       } else if(current.value < val){
@@ -255,7 +237,6 @@ class BinaryTree {
         System.out.println("found " + val);
         return current;
       }
-
     }  
   }
 
@@ -267,13 +248,11 @@ class BinaryTree {
       System.out.println("Node is not in the tree to have a successor");
       return successor;
     }
-
     if(node.right != null){
       successor = this.min(node.right);
       System.out.println("Successor is " + successor.value);
       return successor;
     }
-
     while(node.p.left != node){
       node = node.p;
       if(node.value == this.root.value){
@@ -281,12 +260,9 @@ class BinaryTree {
         return null;
       }
     }
-
     successor = node.p;
-
     System.out.println("Successor is " + successor.value);
     return successor;
-
   }
 
   Node predecessor(int val){
@@ -297,13 +273,11 @@ class BinaryTree {
       System.out.println("Node is not in the tree to have a predecessor");
       return successor;
     }
-
     if(node.left != null){
       successor = node.left;
       System.out.println("Predecessor is " + successor.value);
       return successor;
     }
-
     while(node.p.right != node){
       node = node.p;
       if(node.value == this.root.value){
@@ -311,19 +285,14 @@ class BinaryTree {
         return null;
       }
     }
-
     successor = node.p;
-
     System.out.println("Predecessor is " + successor.value);
     return successor;
-
   }
 
 
   void deleteNode(int val){
-
     Node node = this.treeSearch(val);
-
     boolean left = node.left != null; 
     boolean right = node.right != null;
 
@@ -345,16 +314,12 @@ class BinaryTree {
       // this case if for having two children
       Node min = min(node.right);
       node.value = min.value;
-
       if(min.p.left == min){
         min.p.left = null;
       } else if(min.p.right == min){
         min.p.right = null;
       }
     }
-
-
-
 
   // case 1: No children: Modify parent to point to null
   // case 2: One child: "Splice out node so that parent points to child"
@@ -364,10 +329,7 @@ class BinaryTree {
   // replace value of the node to be removed with found minimum. Now, right subtree contains a duplicate!
   // apply remove to the right subtree to remove a duplicate.
   // Notice, that the node with minimum value has no left child and, therefore, it's removal may result in first or second cases only.
-
-
-    
-    
+  
   }
 
   public static void main(String[] args){
