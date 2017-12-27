@@ -322,6 +322,40 @@ class BinaryTree {
 
   void deleteNode(int val){
 
+    Node node = this.treeSearch(val);
+
+    boolean left = node.left != null; 
+    boolean right = node.right != null;
+
+    // case for having no children and using a pointer to the parent 
+    if(!left && !right){
+      if(node.p.left == node){
+        node.p.left = null;
+      } else if(node.p.right == node){
+        node.p.right = null;
+      }
+    } else if((left || right) && !(left && right)){
+      // this case if for having one child 
+      if(left){
+        node.p.left = node.left;
+      } else {
+        node.p.right = node.right;
+      }
+    } else {
+      // this case if for having two children
+      Node min = min(node.right);
+      node.value = min.value;
+
+      if(min.p.left == min){
+        min.p.left = null;
+      } else if(min.p.right == min){
+        min.p.right = null;
+      }
+    }
+
+
+
+
   // case 1: No children: Modify parent to point to null
   // case 2: One child: "Splice out node so that parent points to child"
   // case 3: Two Children: 
@@ -339,24 +373,29 @@ class BinaryTree {
   public static void main(String[] args){
     BinaryTree tree = new BinaryTree();
     
-    tree.add(40);
-    tree.add(35);
-    tree.add(36);
-    tree.add(37);
-    tree.add(38);
-    tree.add(39);
+    // tree.add(40);
+    // tree.add(35);
+    // tree.add(36);
+    // tree.add(37);
+    // tree.add(38);
+    // tree.add(39);
 
-    tree.successor(39);
+    // tree.successor(39);
 
-  // tree.add(25);
-  // tree.add(11);
-  // tree.add(40);
-  // tree.add(6);
-  // tree.add(15);
-  // tree.add(35);
-  // tree.add(55);
-  // tree.add(1);
-  // tree.add(33);
+  tree.add(25);
+  tree.add(11);
+  tree.add(40);
+  tree.add(6);
+  tree.add(15);
+  tree.add(35);
+  tree.add(55);
+  tree.add(1);
+  tree.add(33);
+  tree.add(54);
+  tree.printTree();
+  tree.deleteNode(40);
+  System.out.println("After Delete");
+  tree.printTree();
 
  //       25
  //    11.    40
