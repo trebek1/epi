@@ -20,6 +20,41 @@ class BinaryTree {
     root = null;
   }
 
+  int isNodeBalanced(Node node){
+    if(node == null){
+      return 0;
+    }
+
+    int leftH = isNodeBalanced(node.left);
+    if(leftH == -1){
+      return -1;
+    }
+    int rightH = isNodeBalanced(node.right);
+    if(rightH == -1){
+      return -1;
+    }
+    int diff = leftH - rightH;
+    if(Math.abs(diff) > 1){
+      return -1;
+    }
+
+    return 1 + Math.max(leftH, rightH);
+  }
+
+  boolean isBalanced(){
+    
+    // do a postorder traversal just returning the number for each node.
+    // if the number is -1 then the tree is not balanced somewhere
+    // O(N) time complexity. O(H) space complexity since call stack wont be more than height of tree
+
+    int res = isNodeBalanced(this.root);
+
+    if(res > 0){
+      return true;
+    }
+    return false;
+  }
+
   void add(int value){
     if(root == null){
       Node node = new Node(value);
@@ -333,17 +368,8 @@ class BinaryTree {
   }
 
   public static void main(String[] args){
+    // Create Binary Tree 
     BinaryTree tree = new BinaryTree();
-    
-    // tree.add(40);
-    // tree.add(35);
-    // tree.add(36);
-    // tree.add(37);
-    // tree.add(38);
-    // tree.add(39);
-
-    // tree.successor(39);
-
     tree.add(25);
     tree.add(11);
     tree.add(40);
@@ -353,16 +379,37 @@ class BinaryTree {
     tree.add(55);
     tree.add(1);
     tree.add(33);
-    tree.add(54);
-    tree.printTree();
-    tree.deleteNode(40);
-    System.out.println("After Delete");
-    tree.printTree();
+    tree.add(30);
 
     //       25
     //    11.    40
     //  6.  15. 35. 55
     // 1.      33
+    
+
+
+    // ----------------------------------------
+
+      // 10.1 Is the tree balanced?
+      System.out.println(tree.isBalanced());
+
+    // ----------------------------------------
+
+
+    // tree.add(40);
+    // tree.add(35);
+    // tree.add(36);
+    // tree.add(37);
+    // tree.add(38);
+    // tree.add(39);
+
+    // tree.successor(39);
+
+    // tree.add(54);
+    // tree.printTree();
+    // tree.deleteNode(40);
+    // System.out.println("After Delete");
+    // tree.printTree();    
 
     // expect to get 25 11 40 6 15 35 55 1 33 
     // tree.printTree();
