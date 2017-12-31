@@ -23,6 +23,13 @@ class Node implements Comparable<Node> {
     p = null;
   }
 
+  Node(int val, Node left, Node right){
+    value = val; 
+    this.left = left;
+    this.right = right;
+    p = null;
+  }
+
   @Override 
   public int compareTo(Node that){
     if(this.value > that.value){

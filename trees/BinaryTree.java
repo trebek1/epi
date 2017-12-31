@@ -1,6 +1,10 @@
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 class BinaryTree {
 
@@ -576,6 +580,36 @@ class BinaryTree {
     return;
   }
 
+  Node treeFromTraversalData(List<Integer> preorder, List<Integer> inorder){
+
+    Map<Integer, Integer> indexToInorderNode = new HashMap<>();
+
+    for(int i = 0; i < inorder.size(); i++){
+      indexToInorderNode.put(inorder.get(i), i);
+    }
+
+    return binaryTreeFromPreorderInorderHelper(preorder, 0, preorder.size(), 0, inorder.size(), indexToInorderNode);
+
+  }
+
+  private static Node binaryTreeFromPreorderInorderHelper(List<Integer> preorder, int preorderStart, int preorderEnd, int inorderStart, int inorderEnd, Map<Integer, Integer> indexToInorderNode){
+    
+    // have to have lists left to iterate over
+
+    if(preorderEnd <= preorderStart || inorderEnd <= inorderStart){
+      return null;
+    }
+    // System.out.println(preorder.size());
+    // System.out.println(preorder.get(preorderStart));
+    int rootInorderIdx = indexToInorderNode.get(preorder.get(preorderStart));
+    int leftSubtreeSize = rootInorderIdx - inorderStart;
+    return new Node(preorder.get(preorderStart),
+      binaryTreeFromPreorderInorderHelper(preorder, preorderStart + 1, preorderStart + 1 + leftSubtreeSize, inorderStart, rootInorderIdx, indexToInorderNode), 
+      binaryTreeFromPreorderInorderHelper(preorder, preorderStart + 1 + leftSubtreeSize, preorderEnd, rootInorderIdx + 1, inorderEnd, indexToInorderNode)); 
+
+  }
+
+
   public static void main(String[] args){
     // Create Binary Tree 
     // BinaryTree tree = new BinaryTree();
@@ -745,16 +779,16 @@ class BinaryTree {
 
     // 10.8 Successor
 
-      BinaryTree tree = new BinaryTree();  
-      tree.add(25);
-      tree.add(11);
-      tree.add(40);
-      tree.add(6);
-      tree.add(15);
-      tree.add(35);
-      tree.add(55);
-      tree.add(1);
-      tree.add(33);
+      // BinaryTree tree = new BinaryTree();  
+      // tree.add(25);
+      // tree.add(11);
+      // tree.add(40);
+      // tree.add(6);
+      // tree.add(15);
+      // tree.add(35);
+      // tree.add(55);
+      // tree.add(1);
+      // tree.add(33);
       // tree.add(30);
 
       //       25
@@ -770,18 +804,56 @@ class BinaryTree {
 
       // 10.9 Efficient Inorder
 
-      BinaryTree tree = new BinaryTree();  
-      tree.add(25);
-      tree.add(11);
-      tree.add(40);
-      tree.add(6);
-      tree.add(15);
-      tree.add(35);
-      tree.add(55);
-      tree.add(1);
-      tree.add(33);
+      // BinaryTree tree = new BinaryTree();  
+      // tree.add(25);
+      // tree.add(11);
+      // tree.add(40);
+      // tree.add(6);
+      // tree.add(15);
+      // tree.add(35);
+      // tree.add(55);
+      // tree.add(1);
+      // tree.add(33);
 
-      tree.efficientInorder();
+      // tree.efficientInorder();
+
+
+      // 10.10 Construct Tree from Traversal Data
+
+      // 1, 6, 11, 15, 25, 33, 35, 40, 55
+
+      BinaryTree tree = new BinaryTree();
+
+      List<Integer> inorder = new ArrayList<>();
+      List<Integer> preorder = new ArrayList<>();
+      inorder.add(1);
+      inorder.add(6);
+      inorder.add(11);
+      inorder.add(15);
+      inorder.add(25);
+      inorder.add(33);
+      inorder.add(35);
+      inorder.add(40);
+      inorder.add(55);
+
+      //       25
+      //    11.    40
+      //  6.  15. 35. 55
+      // 1.      33
+
+      preorder.add(25);
+      preorder.add(11);
+      preorder.add(6);
+      preorder.add(1);
+      preorder.add(15);
+      preorder.add(40);
+      preorder.add(35);
+      preorder.add(33);
+      preorder.add(55);
+
+      tree.root = tree.treeFromTraversalData(preorder, inorder);
+      tree.printTree();
+
 
     // ----------------------------------------
 
