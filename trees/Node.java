@@ -4,10 +4,20 @@ class Node implements Comparable<Node> {
 
   int value;
   Node right, left, p;
+  int nodes;
 
-  // CLRS wants a poninter to the parent node 
+  // CLRS wants pointer to parent node 
+  // nodes is number of nodes in subtree for specific problem  
+  Node(int val, int nodes){
+    value = val; 
+    left = null;
+    right = null;
+    p = null;
+    this.nodes = nodes;
+  }
+
   Node(int val){
-  value = val; 
+    value = val; 
     left = null;
     right = null;
     p = null;

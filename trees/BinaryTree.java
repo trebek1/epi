@@ -20,8 +20,97 @@ class BinaryTree {
     root = null;
   }
 
+  TreeInfo lCAHelperFunction(Node root, Node node1, Node node2){
+    if(root == null){
+      return new TreeInfo(0, null);
+    }
+
+    TreeInfo left = lCAHelperFunction(root.left, node1, node2);
+    if(left.numberOfNodes == 2){
+      return left;
+    }
+    TreeInfo right = lCAHelperFunction(root.right, node1, node2); 
+    if(right.numberOfNodes == 2){
+      return right;
+    }
+
+    int numberOfNodes = left.numberOfNodes + right.numberOfNodes + (root == node1 ? 1 : 0) + (root == node2 ? 1 : 0);
+    return new TreeInfo(numberOfNodes, numberOfNodes == 2 ? root : null);
+  }
+
+  int getDepth(Node n1){
+    int level = 0; 
+
+    while(n1.p != null){
+      n1 = n1.p;
+      level++;
+    }
+    return level; 
+  }
+
+  int sumPath(int sum, Node node){
+    if(node == null){
+      return 0;
+    }
+
+    // leaf
+    if(node.left == null && node.right == null){
+      return sum;
+    }
+
+    int newSum = 2 * sum + node.value;
+
+    return sumPath(newSum, node.left) + sumPath(newSum, node.right);
+  }
+
+  String sumRootToLeafPaths(){
+    return Integer.toBinaryString(sumPath(0, this.root));
+  }
+
+  Node lowestCommonAncestorWithParentPointer(int n1, int n2){
+      Node node1 = treeSearch(n1);
+      Node node2 = treeSearch(n2);
+      if(node1 == null || node2 == null){
+        System.out.println("At least one of the nodes is not in the tree");
+        return null;
+      }
+
+      int depth1 = getDepth(node1);
+      int depth2 = getDepth(node2); 
+
+      if(depth1 > depth2){
+        while(depth1 > depth2){
+          node1 = node1.p;
+          depth1--;
+        }
+      } else if(depth2 > depth1){
+        while(depth2 > depth1){
+          node2 = node2.p;
+          depth2--;
+        }
+      }
+
+      while(node1 != node2){
+        node1 = node1.p;
+        node2 = node2.p;
+      }
+
+      return node1;
+  }
+
+  Node lowestCommonAncestor(int n1, int n2){
+      Node node1 = treeSearch(n1);
+      Node node2 = treeSearch(n2);
+      if(node1 == null || node2 == null){
+        System.out.println("At least one of the nodes is not in the tree");
+        return null;
+      }
+      return lCAHelperFunction(this.root, node1, node2).ancestor;
+  }
+
   boolean isNodeSymmetric(Node left, Node right){
-    // if both are null then they are symmetric 
+    
+    // if both are null then they are symmetric, base case 
     if(left == null && right == null){
       return true;
       // if both are not...
@@ -227,7 +316,7 @@ class BinaryTree {
     while(current.left != null){
       current = current.left;
     }
-    System.out.println(current.value);
+    // System.out.println(current.value);
     return current;
   }
 
@@ -240,7 +329,7 @@ class BinaryTree {
     while(current.left != null){
       current = current.left;
     }
-    System.out.println(current.value);
+    // System.out.println(current.value);
     return current;
   }
 
@@ -286,7 +375,7 @@ class BinaryTree {
       } else if(current.value < val){
         current = current.right;
       } else {
-        System.out.println("found " + val);
+        // System.out.println("found " + val);
         return current;
       }
     }  
@@ -384,6 +473,109 @@ class BinaryTree {
   
   }
 
+  boolean sumHelper(int num, Node current, int sum){
+    if(current == null){
+      return false;
+    }
+
+    // at a leaf
+    if(current.left == null && current.right == null){
+      return (sum + current.value) == num;
+    }
+
+    return sumHelper(num, current.left, sum + current.value) || sumHelper(num, current.right, sum + current.value);
+
+  }
+
+
+  boolean hasSum(int num){
+    return sumHelper(num, this.root, 0);
+  }
+
+
+  // root has all nodes in subtree + 1 including itself 
+  // left has left child number of nodes + 1 including self 
+
+  // if in left half of nodes go left 
+  // look left until in right half or find exact node where it is in
+
+
+  int nthInorderNode(int k){
+    Node current = this.root;
+    if(current == null){
+      return 0;
+    }
+
+    int left;
+
+    while(current != null){
+      left = (current.left != null) ? current.left.nodes : 0;
+
+      if(left + 1 == k){
+        return current.value;
+      } else if (left + 1 > k) {
+        current = current.left;
+      } else {
+        k -= (left + 1);
+        current = current.right;
+      }
+    }
+    return 0;
+  }
+
+  int succ(int num){
+    Node node = treeSearch(num);
+    if(node == null){
+      return -1;
+    }
+
+    // if there is a right child --> smallest of the right children
+    // if no right child then look up tree to find what the node is a left child of
+
+    if(node.right != null){
+      return min(node.right).value;
+    } else {
+      while(node != node.p.left){
+        node = node.p;
+      }
+      return node.p.value;
+    }
+  }
+
+  void efficientInorder(){
+    Node current = this.root;
+    Node prev = null;
+    Node next = null;
+
+    if(current == null){
+      return;
+    }
+
+    while(current != null){
+      // came down tree
+      if(current.p == prev){
+        if(current.left != null){
+          next = current.left;
+        } else {
+          System.out.println(current.value);
+          next = (current.right != null) ? current.right : current.p;
+        }
+       // came up from left
+      } else if(current.left == prev){
+        System.out.println(current.value);
+        next = (current.right != null) ? current.right : current.p;
+
+        // came up from right
+      } else {  
+        next = current.p;
+      }
+
+      prev = current;
+      current = next;
+    }
+    return;
+  }
+
   public static void main(String[] args){
     // Create Binary Tree 
     // BinaryTree tree = new BinaryTree();
@@ -409,26 +601,191 @@ class BinaryTree {
 
     // 10.1 Is the tree balanced?
       // System.out.println(tree.isBalanced());
-
     // 10.2 Test if a binary tree is symmetric
-      BinaryTree tree = new BinaryTree();
-      tree.add(77);
-      tree.root.left = new Node(88);
-      tree.root.right = new Node(88);
-      tree.root.left.right = new Node(15);
-      tree.root.right.left = new Node(15);
-      tree.root.left.left = new Node(99);
-      tree.root.right.right = new Node(99);
-      tree.root.left.left.left = new Node(1);
-      tree.root.right.right.right = new Node(1);
+      // BinaryTree tree = new BinaryTree();
+      // tree.add(77);
+      // tree.root.left = new Node(88);
+      // tree.root.right = new Node(88);
+      // tree.root.left.right = new Node(15);
+      // tree.root.right.left = new Node(15);
+      // tree.root.left.left = new Node(99);
+      // tree.root.right.right = new Node(99);
+      // tree.root.left.left.left = new Node(1);
+      // tree.root.right.right.right = new Node(1);
 
       //       77
       //    88.    88
       //  99.  15. 15. 99
       // 1.              1.
-      System.out.println(tree.isSymmetric());
+      // System.out.println(tree.isSymmetric());
+    
+    // 10.3 Find LCA without a pointer to parent 
+      // BinaryTree tree = new BinaryTree();  
+      // tree.add(25);
+      // tree.add(11);
+      // tree.add(40);
+      // tree.add(6);
+      // tree.add(15);
+      // tree.add(35);
+      // tree.add(55);
+      // tree.add(1);
+      // tree.add(33);
+      // tree.add(30);
+
+      //       25
+      //    11.    40
+      //  6.  15. 35. 55
+      // 1.      33
+
+      // System.out.println(tree.lowestCommonAncestor(1, 15).value);
+
+    // 10.4 Find LCA with Pointer to Parent 
+      // BinaryTree tree = new BinaryTree();  
+      // tree.add(25);
+      // tree.add(11);
+      // tree.add(40);
+      // tree.add(6);
+      // tree.add(15);
+      // tree.add(35);
+      // tree.add(55);
+      // tree.add(1);
+      // tree.add(33);
+      // tree.add(30);
+
+      //       25
+      //    11.    40
+      //  6.  15. 35. 55
+      // 1.      33
+
+      // System.out.println(tree.lowestCommonAncestorWithParentPointer(1,15).value);
+
+    // 10.5 Find Sum of Root to leaf paths in binary tree
+
+      // BinaryTree tree = new BinaryTree();
+      // tree.add(1);
+      // tree.root.left = new Node(0);
+      // tree.root.right = new Node(0);
+      // tree.root.left.left = new Node(0);
+      // tree.root.left.right = new Node(1);
+
+      // tree.root.left.right.right = new Node(1);
+      // tree.root.left.right.right.left = new Node(0);
+      
+      // tree.root.right.left = new Node(0);
+      // tree.root.right.left.right = new Node(0);
+      
+      // tree.root.right.left.right.left = new Node(1);
+      // tree.root.right.left.right.left.right = new Node(1);
+      // tree.root.right.left.right.right = new Node(0);
+
+      // tree.root.right.right = new Node(0);
+
+      // tree.root.right.right.right = new Node(0);
+
+      // tree.root.left.left.left = new Node(0);
+      // tree.root.left.left.right = new Node(1);
+
+      //        1
+      //    0        1 
+      //   0  1     0  0 
+      //  0 1   1     0  0
+      //      0      1 0
+      //               1
+      // System.out.println(tree.sumRootToLeafPaths());
+
+    // 10.6 Find If a specific sum exists in the tree
+
+      // BinaryTree tree = new BinaryTree();  
+      // tree.add(25);
+      // tree.add(11);
+      // tree.add(40);
+      // tree.add(6);
+      // tree.add(15);
+      // tree.add(35);
+      // tree.add(55);
+      // tree.add(1);
+      // tree.add(33);
+      // tree.add(30);
+
+      //       25
+      //    11.    40
+      //  6.  15. 35. 55
+      // 1.      33
+
+      // Should be false then true 
+      // System.out.println(tree.hasSum(42));
+      // System.out.println(tree.hasSum(43));
+
+
+    // 10.7 Kth Node in an inorder traversal given more information (number of nodes in subtree)
+    // Node: Includes current node in its own subtree -- this is a must. Think from root node prospective 
+    // This is a divide and conqueror algorithm 
+
+      // BinaryTree tree = new BinaryTree();  
+      // tree.add(new Node(25, 9));
+      // tree.add(new Node(11, 4));
+      // tree.add(new Node(40, 4));
+      // tree.add(new Node(6, 2));
+      // tree.add(new Node(15, 1));
+      // tree.add(new Node(1, 1));
+      // tree.add(new Node(35, 2));
+      // tree.add(new Node(55, 1));
+      // tree.add(new Node(33, 1));
+      
+      // System.out.println(tree.nthInorderNode(9));
+      // System.out.println(tree.nthInorderNode(5));
+      // System.out.println(tree.nthInorderNode(4)); // 15 
+      // System.out.println(tree.nthInorderNode(3)); // 11
+      // System.out.println(tree.nthInorderNode(2));
+      // System.out.println(tree.nthInorderNode(1));
+      //       25
+      //    11.    40
+      //  6.  15. 35. 55
+      // 1.      33
+
+    // 10.8 Successor
+
+      BinaryTree tree = new BinaryTree();  
+      tree.add(25);
+      tree.add(11);
+      tree.add(40);
+      tree.add(6);
+      tree.add(15);
+      tree.add(35);
+      tree.add(55);
+      tree.add(1);
+      tree.add(33);
+      // tree.add(30);
+
+      //       25
+      //    11.    40
+      //  6.  15. 35. 55
+      // 1.      33
+
+      // System.out.println(tree.succ(25)); // 33
+      // System.out.println(tree.succ(15)); // 25
+      // System.out.println(tree.succ(6)); // 11
+      // System.out.println(tree.succ(11)); // 15
+      // System.out.println(tree.succ(35)); // 40
+
+      // 10.9 Efficient Inorder
+
+      BinaryTree tree = new BinaryTree();  
+      tree.add(25);
+      tree.add(11);
+      tree.add(40);
+      tree.add(6);
+      tree.add(15);
+      tree.add(35);
+      tree.add(55);
+      tree.add(1);
+      tree.add(33);
+
+      tree.efficientInorder();
 
     // ----------------------------------------
+
+
 
 
     // tree.add(40);
