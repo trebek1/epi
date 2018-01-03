@@ -806,6 +806,55 @@ class BinaryTree {
     return node.p.left == node;
   }
 
+  boolean unlock(Node node){
+    if(node.locked == false){
+      return true;
+    }
+
+    Node current = node;
+    current.locked = false;
+
+    while(current.p != null){
+      current = current.p;
+      current.decendentsLocked--;
+    }
+    return true;
+  }
+
+  boolean lock(Node node){
+    // if already locked then cant
+    if(node.locked){
+      return true;
+    }
+    // if decendents are locked cant 
+    if(node.decendentsLocked > 0){
+      return false;
+    }
+
+    Node current = node;
+    // if ancestors are locked, cant 
+    while(current.p != null){
+      if(current.p.locked){
+        return false;
+      } else {
+        current = current.p;
+      }
+    }
+
+    node.locked = true;
+    current = node;
+    while(current.p != null){
+      current = current.p;
+      current.decendentsLocked++;
+    }
+    return true;
+
+  } 
+
+  boolean isLocked(Node node){
+    return node.locked;
+  }
+
 
 
   public static void main(String[] args){
@@ -1146,38 +1195,81 @@ class BinaryTree {
       //   System.out.println(node.value);
       // }
 
-        // 10.14 Add correct level next field given perfect binary tree
+    // 10.14 Add correct level next field given perfect binary tree
 
-      BinaryTree tree = new BinaryTree();
-      tree.add(25);
-      tree.add(11);
-      tree.add(40);
-      tree.add(6);
-      tree.add(15);
-      tree.add(35);
-      tree.add(55);
-      tree.add(1);
-      tree.add(7);
-      tree.add(14);
-      tree.add(16);
-      tree.add(33);
-      tree.add(37);
-      tree.add(50);
-      tree.add(60);
+    //   BinaryTree tree = new BinaryTree();
+    //   tree.add(25);
+    //   tree.add(11);
+    //   tree.add(40);
+    //   tree.add(6);
+    //   tree.add(15);
+    //   tree.add(35);
+    //   tree.add(55);
+    //   tree.add(1);
+    //   tree.add(7);
+    //   tree.add(14);
+    //   tree.add(16);
+    //   tree.add(33);
+    //   tree.add(37);
+    //   tree.add(50);
+    //   tree.add(60);
+      
+
+    // //        25
+    // //    11       40
+    // //  6   15    35    55
+    // // 1 7 14 16 33 37 50 60
+    //     tree.addLevelNextNoParentPointer();
+    //    // tree.addLevelNext();
+    //    tree.printTree();
+
+      // for(Node node : list){
+      //   System.out.println(node.value);
+      // }
+
+    // 10.15 Locking in a tree
+
+      // BinaryTree tree = new BinaryTree();
+      // tree.add(25);
+      // tree.add(11);
+      // tree.add(40);
+      // tree.add(6);
+      // tree.add(15);
+      // tree.add(35);
+      // tree.add(55);
+      // tree.add(1);
+      // tree.add(7);
+      // tree.add(14);
+      // tree.add(16);
+      // tree.add(33);
+      // tree.add(37);
+      // tree.add(50);
+      // tree.add(60);
+
+      // Node l1 = tree.treeSearch(1);
+      // Node n1 = tree.treeSearch(11);
+      // Node l4 = tree.treeSearch(16);
+      // Node r = tree.treeSearch(25);
+      // Node rl4 = tree.treeSearch(50);
+      // Node n2 = tree.treeSearch(40);
+
+      // System.out.println(tree.lock(l1));
+      // System.out.println(tree.lock(n1));
+      // System.out.println(tree.lock(l4));
+      // System.out.println(tree.lock(r));
+      // System.out.println(tree.lock(rl4));
+      // System.out.println(tree.lock(n2));
       
 
     //        25
     //    11       40
     //  6   15    35    55
     // 1 7 14 16 33 37 50 60
-        tree.addLevelNextNoParentPointer();
-       // tree.addLevelNext();
-       tree.printTree();
 
-      // for(Node node : list){
-      //   System.out.println(node.value);
-      // }
-
+    // Lock a node 
+    // Unlock a node 
+    // Is node locked
+    
 
     // ----------------------------------------
 

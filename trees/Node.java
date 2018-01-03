@@ -5,6 +5,8 @@ class Node implements Comparable<Node> {
   int value;
   Node right, left, p, levelNext;
   int nodes;
+  int decendentsLocked;
+  boolean locked;
 
 
   // CLRS wants pointer to parent node 
@@ -15,6 +17,8 @@ class Node implements Comparable<Node> {
     right = null;
     p = null;
     levelNext = null;
+    decendentsLocked = 0;
+    locked = false;
     this.nodes = nodes;
   }
 
@@ -23,6 +27,8 @@ class Node implements Comparable<Node> {
     left = null;
     right = null;
     p = null;
+    decendentsLocked = 0;
+    locked = false;
     levelNext = null;
   }
 
@@ -31,6 +37,8 @@ class Node implements Comparable<Node> {
     this.left = left;
     this.right = right;
     p = null;
+    decendentsLocked = 0;
+    locked = false;
     levelNext = null;
   }
 
