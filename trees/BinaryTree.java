@@ -10,6 +10,7 @@ class BinaryTree {
 
   Node root;
   Queue<Node> q = new LinkedList<>();
+  static Integer currentIndex = 0;
 
   BinaryTree(Node node){
     root = node;
@@ -588,27 +589,165 @@ class BinaryTree {
       indexToInorderNode.put(inorder.get(i), i);
     }
 
+    // map will look like: 
+    // 1: 0
+    // 6: 1 
+    // 11: 2
+    // 15: 3
+    // 25: 4
+    // ...
+
     return binaryTreeFromPreorderInorderHelper(preorder, 0, preorder.size(), 0, inorder.size(), indexToInorderNode);
 
   }
 
   private static Node binaryTreeFromPreorderInorderHelper(List<Integer> preorder, int preorderStart, int preorderEnd, int inorderStart, int inorderEnd, Map<Integer, Integer> indexToInorderNode){
-    
+    // preorder, preorder start, end, inorder start, end, mapToInorder
+
+    // inorder 
+    // 1 
+    // 6
+    // 11
+    // 15
+    // 25
+
+    //preorder
+    // 25
+    // 11
+    // 6
+    // 1 
+
     // have to have lists left to iterate over
 
     if(preorderEnd <= preorderStart || inorderEnd <= inorderStart){
       return null;
     }
-    // System.out.println(preorder.size());
-    // System.out.println(preorder.get(preorderStart));
+    // get the preorder node value, look up in table and return index
     int rootInorderIdx = indexToInorderNode.get(preorder.get(preorderStart));
+    // preorder.get(0) ==> 25 --> (25 --> 4)
+
     int leftSubtreeSize = rootInorderIdx - inorderStart;
+    // left subtree size will be the index looked up - start of the subtree, zero for left most tree, + 1 for rt
+    // 4 - 0 = 4
+
+    //       25
+    //    11.    40
+    //  6.  15. 35. 55
+    // 1.      33
+
+    int nextPreorderPosition = preorderStart + 1;
+
+    // next preorder position will always be current + 1 for left and current + 1 + leftSubtreeSize for rt 
+    // preorder end is nexPreorderPosition + left SubtreeSize for left subtree and preorder end for rt (current node for left, last node for right)
+    // inorder index goes from zero(inorderStart) on left tree to looked up value + 1 in rt
+    // inorder end is looked up value in left or end in rt 
+
     return new Node(preorder.get(preorderStart),
-      binaryTreeFromPreorderInorderHelper(preorder, preorderStart + 1, preorderStart + 1 + leftSubtreeSize, inorderStart, rootInorderIdx, indexToInorderNode), 
-      binaryTreeFromPreorderInorderHelper(preorder, preorderStart + 1 + leftSubtreeSize, preorderEnd, rootInorderIdx + 1, inorderEnd, indexToInorderNode)); 
+      binaryTreeFromPreorderInorderHelper(preorder, nextPreorderPosition, nextPreorderPosition + leftSubtreeSize, inorderStart, rootInorderIdx, indexToInorderNode),
+      binaryTreeFromPreorderInorderHelper(preorder, nextPreorderPosition + leftSubtreeSize, preorderEnd, rootInorderIdx + 1, inorderEnd, indexToInorderNode));
+
+    // node.value --> preorder(0)
+    // node.left --> preorder, 1, 1 + 4, 0, 4
+    // node.left --> preorder, 1, 5, 0, 4
+
+    // left subtree 
+    // preorder start 1
+    // preorder end   5
+    // inorder start  0
+    // inorder end    4 
+
+    // node.right --> preorder, 1 + 4, 9, 4 + 1, 9
+    // node.right --> preorder, 5, 9, 5, 9
+
+    // right subtree 
+    // preorder start 5
+    // preorder end   9
+    // inorder start  5
+    // inorder end    9  
+
+    // index    0  1  2  3  4  5  6  7  8 
+    // inorder  1  6  11 15 25 33 35 40 55 
+    // preorder 25 11 6  1. 15 40 35 33 55
 
   }
 
+  Node treeFromPreorderMarkers(List<Integer> preorder){
+    currentIndex = 0;
+    return traverse(preorder);
+  }
+
+  private static Node traverse(List<Integer> preorder){
+
+    Integer value = preorder.get(currentIndex);
+    currentIndex++;
+    if(value == -1){
+      return null;
+    }
+
+    Node leftNode = traverse(preorder);
+    Node rightNode = traverse(preorder);
+    return new Node(value, leftNode, rightNode);
+  }
+
+  private void getLeaves(Node current, List<Node> leaves){
+      
+      if(current == null){
+        return;
+      }
+    
+      if(current.left == null && current.right == null){
+        leaves.add(current);
+      }  
+      getLeaves(current.left, leaves);
+      getLeaves(current.right, leaves);
+  }
+
+  List<Node> listOfBinaryTreeLeaves(){
+    List<Node> leaves = new LinkedList<Node>();
+    getLeaves(this.root, leaves);
+    return leaves;
+
+  }
+
+  boolean isLeaf(Node node){
+    return (node.left == null) && (node.right == null);
+  }
+
+  List<Node> leftBoundary(Node node, boolean side){
+    List<Node> nodes = new LinkedList<Node>();
+    if(node != null){
+      if(side == true || isLeaf(node)){
+      nodes.add(node);
+      }
+      nodes.addAll(leftBoundary(node.left, side));
+      nodes.addAll(leftBoundary(node.right, side && node.left == null));  
+    }
+    
+    return nodes;
+  }
+
+  List<Node> rightBoundary(Node node, boolean side){
+    List<Node> nodes = new LinkedList<Node>();
+    if(node != null){
+      if(side == true || isLeaf(node)){
+        nodes.add(node);
+      }
+      nodes.addAll(rightBoundary(node.left, side && node.right == null));
+      nodes.addAll(rightBoundary(node.right, side));
+    }
+    return nodes;
+  }
+
+
+  List<Node> boundaryOfTree(){
+    List<Node> boundary = new LinkedList<Node>();
+    if(this.root != null){
+      boundary.add(this.root);
+      boundary.addAll(leftBoundary(this.root.left, true));
+      boundary.addAll(rightBoundary(this.root.right, true));
+    }
+    return boundary;
+  }
 
   public static void main(String[] args){
     // Create Binary Tree 
@@ -822,37 +961,131 @@ class BinaryTree {
 
       // 1, 6, 11, 15, 25, 33, 35, 40, 55
 
+      // BinaryTree tree = new BinaryTree();
+
+      // List<Integer> inorder = new ArrayList<>();
+      // List<Integer> preorder = new ArrayList<>();
+      // inorder.add(1);
+      // inorder.add(6);
+      // inorder.add(11);
+      // inorder.add(15);
+      // inorder.add(25);
+      // inorder.add(33);
+      // inorder.add(35);
+      // inorder.add(40);
+      // inorder.add(55);
+
+      // //       25
+      // //    11.    40
+      // //  6.  15. 35. 55
+      // // 1.      33
+
+      // preorder.add(25);
+      // preorder.add(11);
+      // preorder.add(6);
+      // preorder.add(1);
+      // preorder.add(15);
+      // preorder.add(40);
+      // preorder.add(35);
+      // preorder.add(33);
+      // preorder.add(55);
+
+      // tree.root = tree.treeFromTraversalData(preorder, inorder);
+      // tree.printTree();
+
+      // index    0  1  2  3  4  5  6  7  8 
+      // inorder  1  6  11 15 25 33 35 40 55 
+      // preorder 25 11 6  1. 15 40 35 33 55 
+
+      // 10.11 Reconstruct a binary tree from a preorder traversal with markers 
+
+      // 1, 6, 11, 15, 25, 33, 35, 40, 55
+
+      // BinaryTree tree = new BinaryTree();
+      // List<Integer> preorder = new ArrayList<>();
+
+      // //       25
+      // //    11.    40
+      // //  6.  15. 35. 55
+      // // 1.      33
+
+      // preorder.add(25);
+      // preorder.add(11);
+      // preorder.add(6);
+      // preorder.add(1);
+      // preorder.add(-1);
+      // preorder.add(-1);
+      // preorder.add(-1);
+      // preorder.add(15);
+      // preorder.add(-1);
+      // preorder.add(-1);
+      // preorder.add(40);
+      // preorder.add(35);
+      // preorder.add(33);
+      // preorder.add(-1);
+      // preorder.add(-1);
+      // preorder.add(-1);
+      // preorder.add(55);
+      // preorder.add(-1);
+      // preorder.add(-1);
+
+      // tree.root = tree.treeFromPreorderMarkers(preorder);
+      // tree.printTree();
+
+
+    // 10.12 Get List of leaves of binary tree
+
+      // 1, 6, 11, 15, 25, 33, 35, 40, 55
+
+      // BinaryTree tree = new BinaryTree();
+      // tree.add(25);
+      // tree.add(11);
+      // tree.add(40);
+      // tree.add(6);
+      // tree.add(15);
+      // tree.add(35);
+      // tree.add(55);
+      // tree.add(1);
+      // tree.add(33);
+      // tree.add(30);
+
+      // //       25
+      // //    11.    40
+      // //  6.  15. 35. 55
+      // // 1.      33
+      
+      // List<Node> list = tree.listOfBinaryTreeLeaves();
+
+      // for(Node node : list){
+      //   System.out.println(node.value);
+      // }
+
+    // 10.12 Get Perimeter of binary tree 
+
+      // 1, 6, 11, 15, 25, 33, 35, 40, 55
+
       BinaryTree tree = new BinaryTree();
+      tree.add(25);
+      tree.add(11);
+      tree.add(40);
+      tree.add(6);
+      tree.add(15);
+      tree.add(35);
+      tree.add(55);
+      tree.add(1);
+      tree.add(33);
+      
 
-      List<Integer> inorder = new ArrayList<>();
-      List<Integer> preorder = new ArrayList<>();
-      inorder.add(1);
-      inorder.add(6);
-      inorder.add(11);
-      inorder.add(15);
-      inorder.add(25);
-      inorder.add(33);
-      inorder.add(35);
-      inorder.add(40);
-      inorder.add(55);
+      // //       25
+      // //    11.    40
+      // //  6.  15. 35. 55
+      // // 1.      33
+      
+      List<Node> list = tree.boundaryOfTree();
 
-      //       25
-      //    11.    40
-      //  6.  15. 35. 55
-      // 1.      33
-
-      preorder.add(25);
-      preorder.add(11);
-      preorder.add(6);
-      preorder.add(1);
-      preorder.add(15);
-      preorder.add(40);
-      preorder.add(35);
-      preorder.add(33);
-      preorder.add(55);
-
-      tree.root = tree.treeFromTraversalData(preorder, inorder);
-      tree.printTree();
+      for(Node node : list){
+        System.out.println(node.value);
+      }
 
 
     // ----------------------------------------
