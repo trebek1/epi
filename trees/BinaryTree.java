@@ -293,7 +293,12 @@ class BinaryTree {
 
     while(!q.isEmpty()){
       Node node = q.poll();
-      System.out.println(node.value);
+      System.out.print(node.value);
+      if(node.levelNext != null){
+        System.out.print(" Node next ---> " + node.levelNext.value);
+      }
+      System.out.println();
+
       if(node.left != null){
         q.add(node.left);
       }
@@ -749,6 +754,60 @@ class BinaryTree {
     return boundary;
   }
 
+  // add level next to a perfect binary tree
+  public void addLevelNext(){
+    Node current = this.root;
+    addLevelNextHelper(current);
+  }
+
+  public void addLevelNextHelper(Node node){
+    if(node == null){
+      return;
+    }
+    // at root
+    if(node.p == null){
+      addLevelNextHelper(node.left);
+      addLevelNextHelper(node.right);
+      return;
+    }
+
+    if(isLeftChild(node)){
+      node.levelNext = node.p.right;
+    } else {
+      if(node.p.levelNext != null){
+        node.levelNext = node.p.levelNext.left;
+      }
+    }
+    addLevelNextHelper(node.left);
+    addLevelNextHelper(node.right);
+  }
+
+  public void addLevelNextNoParentPointer(){
+    Node start = this.root;
+    while(start != null && start.left != null){
+      populateNextLevel(start);
+      start = start.left;
+    }
+
+  }
+
+  private static void populateNextLevel(Node start){
+    Node iter = start;
+    while(iter != null){
+      iter.left.levelNext = iter.right;
+      if(iter.levelNext != null){
+        iter.right.levelNext = iter.levelNext.left;
+      }
+      iter = iter.levelNext;
+    }
+  }
+
+  boolean isLeftChild(Node node){
+    return node.p.left == node;
+  }
+
+
+
   public static void main(String[] args){
     // Create Binary Tree 
     // BinaryTree tree = new BinaryTree();
@@ -1060,9 +1119,34 @@ class BinaryTree {
       //   System.out.println(node.value);
       // }
 
-    // 10.12 Get Perimeter of binary tree 
+    // 10.13 Get Perimeter of binary tree 
 
       // 1, 6, 11, 15, 25, 33, 35, 40, 55
+
+      // BinaryTree tree = new BinaryTree();
+      // tree.add(25);
+      // tree.add(11);
+      // tree.add(40);
+      // tree.add(6);
+      // tree.add(15);
+      // tree.add(35);
+      // tree.add(55);
+      // tree.add(1);
+      // tree.add(33);
+      
+
+      // // //       25
+      // // //    11.    40
+      // // //  6.  15. 35. 55
+      // // // 1.      33
+      
+      // List<Node> list = tree.boundaryOfTree();
+
+      // for(Node node : list){
+      //   System.out.println(node.value);
+      // }
+
+        // 10.14 Add correct level next field given perfect binary tree
 
       BinaryTree tree = new BinaryTree();
       tree.add(25);
@@ -1073,19 +1157,26 @@ class BinaryTree {
       tree.add(35);
       tree.add(55);
       tree.add(1);
+      tree.add(7);
+      tree.add(14);
+      tree.add(16);
       tree.add(33);
+      tree.add(37);
+      tree.add(50);
+      tree.add(60);
       
 
-      // //       25
-      // //    11.    40
-      // //  6.  15. 35. 55
-      // // 1.      33
-      
-      List<Node> list = tree.boundaryOfTree();
+    //        25
+    //    11       40
+    //  6   15    35    55
+    // 1 7 14 16 33 37 50 60
+        tree.addLevelNextNoParentPointer();
+       // tree.addLevelNext();
+       tree.printTree();
 
-      for(Node node : list){
-        System.out.println(node.value);
-      }
+      // for(Node node : list){
+      //   System.out.println(node.value);
+      // }
 
 
     // ----------------------------------------

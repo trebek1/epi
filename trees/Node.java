@@ -3,8 +3,9 @@ import java.lang.Comparable;
 class Node implements Comparable<Node> {
 
   int value;
-  Node right, left, p;
+  Node right, left, p, levelNext;
   int nodes;
+
 
   // CLRS wants pointer to parent node 
   // nodes is number of nodes in subtree for specific problem  
@@ -13,6 +14,7 @@ class Node implements Comparable<Node> {
     left = null;
     right = null;
     p = null;
+    levelNext = null;
     this.nodes = nodes;
   }
 
@@ -21,6 +23,7 @@ class Node implements Comparable<Node> {
     left = null;
     right = null;
     p = null;
+    levelNext = null;
   }
 
   Node(int val, Node left, Node right){
@@ -28,6 +31,7 @@ class Node implements Comparable<Node> {
     this.left = left;
     this.right = right;
     p = null;
+    levelNext = null;
   }
 
   @Override 
