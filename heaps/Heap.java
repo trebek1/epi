@@ -112,6 +112,44 @@ class Heap {
   	return result;
   }
 
+  public static List<Star> findClosestKStars(int k, List<Star> stars){
+
+  	List<Star> result;
+
+  	PriorityQueue<Star> pq = new PriorityQueue<>(16, Collections.reverseOrder());
+
+  	for(int i = 0; i < k; i++){
+  		pq.add(stars.get(i));
+  	}
+
+  	Star earth = new Star(0, 0, 0);
+  	double maxDistance;
+
+  	maxDistance = pq.peek().distance();
+
+  	for(int i = k; i < stars.size(); i++){
+  		Star current = stars.get(i);
+  		if(current.distance() < maxDistance){
+
+  			pq.poll();
+  			pq.add(current);
+
+  			maxDistance = pq.peek().distance();
+  		}
+  		// if distance of current < max remove head and add new star to PQ;
+  	}
+
+
+  	result = new ArrayList<>(pq);
+  	Collections.sort(result);
+
+  	for(Star a : result){
+      	System.out.println(a.x + " " + a.y + " " + a.z);
+      }	
+
+  	return result;
+  }
+
 
 
   public static void main(String[] args){
@@ -169,7 +207,7 @@ class Heap {
 
       // Heap.sortIncreasingDecreasingArray(ints);
 
-      // 11.2 Sort an Almost Sorted Array -- number are at most k positions from their final position 
+      // 11.3 Sort an Almost Sorted Array -- number are at most k positions from their final position 
       // Idea --> place k items on min heap (first number can be k numbers away from first position)
       // Smallest must be the min on the heap
       // then add the next number to the heap (and remove the smallest) and continue until list is empty and then just 
@@ -180,17 +218,48 @@ class Heap {
   	  // O(nlog(k)) time complexity 
   	  // O(k) memory 
 
-      System.out.println("----------");
-      List<Integer> ints = new ArrayList<>();
-      ints.add(3);
-      ints.add(-1);
-      ints.add(2);
-      ints.add(6);
-      ints.add(4);
-      ints.add(5);
-      ints.add(8);
+      // System.out.println("----------");
+      // List<Integer> ints = new ArrayList<>();
+      // ints.add(3);
+      // ints.add(-1);
+      // ints.add(2);
+      // ints.add(6);
+      // ints.add(4);
+      // ints.add(5);
+      // ints.add(8);
 
-      Heap.sortAlmostSorted(ints, 2);
+      // Heap.sortAlmostSorted(ints, 2);
+
+
+      // 11.4 Compute k closest stars 
+
+  	  // coordinate system with earth at (0, 0, 0)
+  	  // 10^12 stars, coordinates in a file
+      // how would you compute the k stars closest to Earth? 
+
+  	  // Use a max heap --> store 12 closest then update by kicking off maximum if one is smaller than it 
+  	  // after going through all stars you have 12 smallest in O(nlog(k)) time and O(k) space
+
+      // java review 
+  	  // compareTo function in java returns 1, -1, 0. If 1 is returned first number > second so swap is required! 
+  	  // jedi swap. So, sort assumes low to high sorting off the bat. 
+
+  	  // To reverse order of Priority Queue (Normally minPQ) use new PriorityQueue(initialCapacity, Collections.reverseOrder());
+
+      System.out.println("----------");
+      List<Star> stars  = new ArrayList<>();
+      stars.add(new Star(1.0, 2.0, 3.0));
+      stars.add(new Star(77.0, 22.0, 44.0));
+      stars.add(new Star(4.0, 5.0, 6.0));
+      stars.add(new Star(40.0,52.0,22.0));
+      stars.add(new Star(4.0, 4.0, 4.0));
+      stars.add(new Star(88.0, 23.0, 24.0));
+      stars.add(new Star(11.0, 17.0, 1337.0));
+      
+      int k = 4;
+
+
+      Heap.findClosestKStars(k, stars);
 
 
 
