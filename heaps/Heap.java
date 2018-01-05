@@ -116,7 +116,7 @@ class Heap {
 
   	List<Star> result;
 
-  	PriorityQueue<Star> pq = new PriorityQueue<>(16, Collections.reverseOrder());
+  	PriorityQueue<Star> pq = new PriorityQueue<>(k, Collections.reverseOrder());
 
   	for(int i = 0; i < k; i++){
   		pq.add(stars.get(i));
@@ -139,7 +139,6 @@ class Heap {
   		// if distance of current < max remove head and add new star to PQ;
   	}
 
-
   	result = new ArrayList<>(pq);
   	Collections.sort(result);
 
@@ -150,7 +149,41 @@ class Heap {
   	return result;
   }
 
+  public static void findRunningMedian(List<Integer> numbers){
+  	int initialCapacity = 16;
 
+  	// larger numbers 
+  	PriorityQueue<Integer> minPQ = new PriorityQueue<>();
+
+  	// smaller numbers 
+  	PriorityQueue<Integer> maxPQ = new PriorityQueue<>(initialCapacity, Collections.reverseOrder());
+
+  	if(minPQ.isEmpty()){
+  		minPQ.add(numbers.get(0));
+  	}
+
+  	for(int i = 1; i < numbers.size(); i++){
+  		int current = numbers.get(i);
+
+  		if(current < minPQ.peek()){
+  			maxPQ.add(current);
+  		} else {
+  			minPQ.add(current);
+  		}
+
+  		if(minPQ.size() > maxPQ.size() + 1){
+  			maxPQ.add(minPQ.poll());
+  		} else if(maxPQ.size() > minPQ.size()){
+  			minPQ.add(maxPQ.poll());
+  		}
+
+  		if(maxPQ.size() == minPQ.size()){
+  			System.out.println(0.5 * (minPQ.peek() + maxPQ.peek()));
+  		} else {
+  			System.out.println(minPQ.peek());
+  		}
+  	}
+  }
 
   public static void main(String[] args){
 
@@ -246,22 +279,45 @@ class Heap {
 
   	  // To reverse order of Priority Queue (Normally minPQ) use new PriorityQueue(initialCapacity, Collections.reverseOrder());
 
-      System.out.println("----------");
-      List<Star> stars  = new ArrayList<>();
-      stars.add(new Star(1.0, 2.0, 3.0));
-      stars.add(new Star(77.0, 22.0, 44.0));
-      stars.add(new Star(4.0, 5.0, 6.0));
-      stars.add(new Star(40.0,52.0,22.0));
-      stars.add(new Star(4.0, 4.0, 4.0));
-      stars.add(new Star(88.0, 23.0, 24.0));
-      stars.add(new Star(11.0, 17.0, 1337.0));
+      // System.out.println("----------");
+      // List<Star> stars  = new ArrayList<>();
+      // stars.add(new Star(1.0, 2.0, 3.0));
+      // stars.add(new Star(77.0, 22.0, 44.0));
+      // stars.add(new Star(4.0, 5.0, 6.0));
+      // stars.add(new Star(40.0,52.0,22.0));
+      // stars.add(new Star(4.0, 4.0, 4.0));
+      // stars.add(new Star(88.0, 23.0, 24.0));
+      // stars.add(new Star(11.0, 17.0, 1337.0));
       
-      int k = 4;
+      // int k = 4;
 
 
-      Heap.findClosestKStars(k, stars);
+      // Heap.findClosestKStars(k, stars);
+
+      // 11.4 Compute the running median 
+  	  // idea is to keep two heaps
+  	  // use max heap for the smaller numbers and min heap for the larger numbers 
+      // keep the heaps balanced. As the numbers come in add to heap. 
+  	  // median is the avg of 2 numbers if sizes are equal heaps and the larger heap top number if they are not.
+  	  // efficiency is O(log(n)) for inserting and deleting elements 
+  	  // space is O(n)
 
 
+  	  List<Integer> numbers = new ArrayList<>();
+
+  	  numbers.add(10);
+  	  numbers.add(45);
+  	  numbers.add(72);
+  	  numbers.add(12);
+  	  numbers.add(3);
+  	  numbers.add(55);
+  	  numbers.add(54);
+  	  numbers.add(33);
+  	  numbers.add(99);
+  	  numbers.add(1000);
+  	  numbers.add(1337);
+
+  	  Heap.findRunningMedian(numbers); // expect 54
 
     // -------------------------------------
 

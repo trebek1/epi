@@ -15,6 +15,7 @@ public class Star implements Comparable<Star>{
 
 	// java review! compareTo takes one arg to compare to while compare compares 2 objects 
 	// comparator --> compare Comparable ---> compareTo
+	// compare returns distance, -distance or 0! 
 
 	@Override
 	public int compareTo(Star that){
