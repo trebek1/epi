@@ -185,6 +185,36 @@ class Heap {
   	}
   }
 
+  public static List<Integer> computeKLargestElementsInMaxHeap(int k, List<Integer> numbers){
+
+  	List<Integer> result = new ArrayList<>();
+
+  	PriorityQueue<Integer> maxPQ = new PriorityQueue<>(16, Collections.reverseOrder());
+
+  	maxPQ.add(numbers.get(0));
+
+  	for(int i = 0; i < k; i++){
+  		Integer current = maxPQ.poll();
+  		result.add(current);
+
+  		int left = 2 * i + 1;
+  		int right = 2 * i + 2;
+
+  		if(left < numbers.size()){
+  			maxPQ.add(numbers.get(left));
+  		}
+  		if(right < numbers.size()){
+  			maxPQ.add(numbers.get(right));
+  		}
+  	}
+
+  	for(Integer i : result){
+  		System.out.println(i);
+  	}
+
+  	return result;
+  }
+
   public static void main(String[] args){
 
     // -------------------------------------
@@ -294,7 +324,7 @@ class Heap {
 
       // Heap.findClosestKStars(k, stars);
 
-      // 11.4 Compute the running median 
+      // 11.5 Compute the running median 
   	  // idea is to keep two heaps
   	  // use max heap for the smaller numbers and min heap for the larger numbers 
       // keep the heaps balanced. As the numbers come in add to heap. 
@@ -303,21 +333,85 @@ class Heap {
   	  // space is O(n)
 
 
-  	  List<Integer> numbers = new ArrayList<>();
+  	  // List<Integer> numbers = new ArrayList<>();
 
-  	  numbers.add(10);
-  	  numbers.add(45);
-  	  numbers.add(72);
-  	  numbers.add(12);
-  	  numbers.add(3);
-  	  numbers.add(55);
-  	  numbers.add(54);
-  	  numbers.add(33);
-  	  numbers.add(99);
-  	  numbers.add(1000);
-  	  numbers.add(1337);
+  	  // numbers.add(10);
+  	  // numbers.add(45);
+  	  // numbers.add(72);
+  	  // numbers.add(12);
+  	  // numbers.add(3);
+  	  // numbers.add(55);
+  	  // numbers.add(54);
+  	  // numbers.add(33);
+  	  // numbers.add(99);
+  	  // numbers.add(1000);
+  	  // numbers.add(1337);
 
-  	  Heap.findRunningMedian(numbers); // expect 54
+  	  // Heap.findRunningMedian(numbers); // expect 54
+
+  	  // 11.6 Compute k largest elements in a max heap
+
+  	  // Idea: use a second heap to store candidates using heap rule and spit out the largest ones.
+  	  // reason this works is because we are only looking at largest nodes in candidate max heap so we always 
+  	  // only traverse the larger ones 
+  	  // solution is Time: O(klog(k))
+  	  // space(O(2k) = O(k))
+
+  	  // List<Integer> numbers = new ArrayList<>();
+
+  	  // numbers.add(16);
+  	  // numbers.add(14);
+  	  // numbers.add(10);
+  	  // numbers.add(8);
+  	  // numbers.add(7);
+  	  // numbers.add(9);
+  	  // numbers.add(3);
+  	  // numbers.add(2);
+  	  // numbers.add(4);
+  	  // numbers.add(1);
+
+  	  // // array representation of below heap
+  	  // //
+  	  // //       16
+  	  // //    14     10
+  	  // //   8   7   9   3 
+     //  //  2 4 1
+ 
+  	  // Heap.computeKLargestElementsInMaxHeap(4, numbers);
+
+
+  	// 11.7 Implement a Stack using a Heap
+
+  	  HeapStack heap = new HeapStack();
+
+  	  heap.push(16);
+  	  heap.push(14);
+  	  heap.push(10);
+  	  heap.push(8);
+  	  heap.push(7);
+  	  heap.push(9);
+  	  heap.push(3);
+  	  heap.push(2);
+  	  heap.push(4);
+  	  heap.push(1);
+
+  	  heap.peek();
+  	  heap.pop();
+  	  heap.pop();
+  	  heap.pop();
+  	  heap.pop();
+  	  heap.pop();
+  	  heap.peek();
+
+  	  // // array representation of below heap
+  	  // //
+  	  // //       16
+  	  // //    14     10
+  	  // //   8   7   9   3 
+     //  //  2 4 1
+ 
+
+
 
     // -------------------------------------
 
