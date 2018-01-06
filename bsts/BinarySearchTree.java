@@ -55,6 +55,7 @@ class BinarySearchTree<T>{
 		tree.add(node15);
 		tree.add(node16);
 
+		// have to cast into whatever the defined type is 
 		this.root = (T)(tree.root);
 
 		System.out.println("tree created");
@@ -90,6 +91,8 @@ class BinarySearchTree<T>{
 	@SuppressWarnings("unchecked")
 	void printTree(){
 		Queue<Node<Integer>> q = new LinkedList<>();
+
+		// Have to cast out of generic type 
 		Node<Integer> current = (Node<Integer>)this.root;
 		q.add(current);
 		while(!q.isEmpty()){
@@ -103,13 +106,114 @@ class BinarySearchTree<T>{
 			}
 		}
 	}
+	@SuppressWarnings("unchecked")
+	Node<Integer> getTreeNode(int data){
+		Node<Integer> current = (Node<Integer>)this.root;
+		while(current != null){
+			if(current.data == data){
+				return current;
+			} else if(data < current.data){
+				current = current.left;
+			} else {
+				current = current.right;
+			}
+		}
+		return null;
+	}
+
+	public static boolean isTreeBST(BinarySearchTree<Node<Integer>> tree){
+		Node<Integer> root = tree.root;
+		if(root == null){
+			return true;
+		}
+
+		Node<Integer> current = root;
+		Integer max = Integer.MAX_VALUE;
+		Integer min = Integer.MIN_VALUE;
+
+		return bstCheckHelper(root, max, min);
+	}
+
+	public static boolean bstCheckHelper(Node<Integer> node, Integer max, Integer min){
+
+		if(node == null){
+			return true;
+		} else if(node.data > max || node.data < min){
+			return false;
+		}
+
+		return bstCheckHelper(node.left, node.data, min) && bstCheckHelper(node.right, max, node.data);
+	}
+
+	@SuppressWarnings("unchecked")
+	void findFirstInstance(int number){
+		Node<Integer> current = (Node<Integer>) this.root;
+
+		Node<Integer> found = null;
+		while(current != null){
+			if(current.data == number){
+				found = current;
+				if((current.left != null && current.left.data != number) || current.left == null){
+					break;
+				}
+				System.out.println("found it but going left!");
+				current = current.left;
+			} else if(current.data < number){
+				current = current.right;
+			} else if(current.data > number){
+				current = current.left;
+			}
+		}
+
+		 System.out.println("found it");
+		 System.out.println(found.data);
+	}
 
 	public static void main(String[] args){	
 	  // 15.1 Is the Binary Tree a BST ? 
+
+	  // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+	  // tree.createTempTree();
+	  // tree.printTree();
+
+	  // // expect true
+	  // System.out.println(BinarySearchTree.isTreeBST(tree));
+
+	  // Node<Integer> test = tree.getTreeNode(17);
+	  // test.right = new Node<Integer>(25);
+
+	  // // expect false
+	  // System.out.println(BinarySearchTree.isTreeBST(tree));
+
+	  // Notes: Instead of checking each node you can do an inorder traversal as well. This 
+	  // would show a violation if ever come across a node that is smaller than the previous since 
+	  // inorder traversal finds nodes from smallest to largest 
+	  // if space is not a constraint and want to find node faster you can do a BFS storing nodes so that 
+	  // all the nodes dont have to be visited 
+
+
+
+
+
+
+	  //15.2 Find first occurrence of a key (inorder traversal order)
+	  // Note: This assumes that duplicates are Okay!. Left Child is <= Node and Right Child is >= Node
+	  // Do regular traversal until you find one
+	  // After finding one look all the way left to see if there are any more instances else youve found it 
+
 	  BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
 	  tree.createTempTree();
-	  tree.printTree();
-	  
+
+	  Node<Integer> test = tree.getTreeNode(11);
+	  test.left = new Node<Integer>(11);
+
+	  tree.findFirstInstance(11);
+
 
 	}
 }
+
+
+
+
+
