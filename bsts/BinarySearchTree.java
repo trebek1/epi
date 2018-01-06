@@ -168,47 +168,80 @@ class BinarySearchTree<T>{
 		 System.out.println("found it");
 		 System.out.println(found.data);
 	}
+	@SuppressWarnings("unchecked")
+	void findNextElement(int number){
+		Node<Integer> current = (Node<Integer>) this.root;
+		Node<Integer> candidate = null;
+
+		while(current != null){
+			if(current.data != number){
+				if(current.data > number){
+					if(candidate == null || candidate.data > current.data){
+						candidate = current;
+					}
+					current = current.left;
+				} else if(current.data < number){
+					current = current.right;
+				}
+			} else {
+				System.out.println("Next: " + candidate.data);
+				return;
+			}
+		}
+	}
 
 	public static void main(String[] args){	
 	  // 15.1 Is the Binary Tree a BST ? 
 
-	  // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
-	  // tree.createTempTree();
-	  // tree.printTree();
+		  // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		  // tree.createTempTree();
+		  // tree.printTree();
 
-	  // // expect true
-	  // System.out.println(BinarySearchTree.isTreeBST(tree));
+		  // // expect true
+		  // System.out.println(BinarySearchTree.isTreeBST(tree));
 
-	  // Node<Integer> test = tree.getTreeNode(17);
-	  // test.right = new Node<Integer>(25);
+		  // Node<Integer> test = tree.getTreeNode(17);
+		  // test.right = new Node<Integer>(25);
 
-	  // // expect false
-	  // System.out.println(BinarySearchTree.isTreeBST(tree));
+		  // // expect false
+		  // System.out.println(BinarySearchTree.isTreeBST(tree));
 
-	  // Notes: Instead of checking each node you can do an inorder traversal as well. This 
-	  // would show a violation if ever come across a node that is smaller than the previous since 
-	  // inorder traversal finds nodes from smallest to largest 
-	  // if space is not a constraint and want to find node faster you can do a BFS storing nodes so that 
-	  // all the nodes dont have to be visited 
+		  // Notes: Instead of checking each node you can do an inorder traversal as well. This 
+		  // would show a violation if ever come across a node that is smaller than the previous since 
+		  // inorder traversal finds nodes from smallest to largest 
+		  // if space is not a constraint and want to find node faster you can do a BFS storing nodes so that 
+		  // all the nodes dont have to be visited 
 
+	  // 15.2 Find first occurrence of a key (inorder traversal order)
+		  // Note: This assumes that duplicates are Okay!. Left Child is <= Node and Right Child is >= Node
+		  // Do regular traversal until you find one
+		  // After finding one look all the way left to see if there are any more instances else youve found it 
 
+		  // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		  // tree.createTempTree();
 
+		  // Node<Integer> test = tree.getTreeNode(11);
+		  // test.left = new Node<Integer>(11);
 
+		  // tree.findFirstInstance(11);
+	  // 15.3 Find the first key larger than a given value in a BST 
 
+		  // Brute fore is to do inorder traversal and then return the next node in the traversal 
 
-	  //15.2 Find first occurrence of a key (inorder traversal order)
-	  // Note: This assumes that duplicates are Okay!. Left Child is <= Node and Right Child is >= Node
-	  // Do regular traversal until you find one
-	  // After finding one look all the way left to see if there are any more instances else youve found it 
+		  // idea is to find the value and look right. 
+		  // if right is null then look up until you find a node that is a left child
+		  // if no node exists then there is none greater 
 
-	  BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
-	  tree.createTempTree();
+		  // or if you dont have pointer to parent you can traverse tree and keep track of possible candidate 
+		  // up to that point. Then once finding node you have the answer -- greedy solution 
+		  // will implement this since nodes in BST dont have pointer to parent 
 
-	  Node<Integer> test = tree.getTreeNode(11);
-	  test.left = new Node<Integer>(11);
-
-	  tree.findFirstInstance(11);
-
+		  // This solution assumes that the node exists in the tree
+		  
+		  // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		  // tree.createTempTree();
+		  // tree.findNextElement(31); // should be 37;
+			
 
 	}
 }
