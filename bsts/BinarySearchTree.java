@@ -1,6 +1,7 @@
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.List;
 
 class BinarySearchTree<T>{
 	T root;
@@ -214,6 +215,83 @@ class BinarySearchTree<T>{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	void findLCA(int a, int b){
+		Node<Integer> current = (Node<Integer>) this.root;
+		LCAHelper(current, a, b);
+	}
+
+	void LCAHelper(Node<Integer> current, int a, int b){
+		if(current == null){
+			System.out.println("No LCA in tree");
+			return;
+		}
+		if(current.data == a || current.data == b){
+			System.out.println("LCA is " + current.data);
+			return;
+		}
+		int currentData = current.data;
+		if(a < currentData && b < currentData){
+			LCAHelper(current.left, a, b);
+		} else if(a > currentData && b > currentData){
+			LCAHelper(current.right, a, b);
+		} else {
+			System.out.println("Found LCA " + current.data);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	List<Node<Integer>> inorder(){
+		List<Node<Integer>> list = new LinkedList<>();
+		Node<Integer> current = (Node<Integer>) this.root;
+		inorderHelper(current, list);
+		return list;
+
+	}
+
+	void inorderHelper(Node<Integer> current, List<Node<Integer>> list){
+		if(current == null){
+			return;
+		}
+		inorderHelper(current.left, list);
+		list.add(current);
+		inorderHelper(current.right, list);
+	}
+	@SuppressWarnings("unchecked")
+	List<Node<Integer>> preorder(){
+		List<Node<Integer>> list = new LinkedList<>();
+		Node<Integer> current = (Node<Integer>) this.root;
+		preorderHelper(current, list);
+		return list;
+
+	}
+
+	void preorderHelper(Node<Integer> current, List<Node<Integer>> list){
+		if(current == null){
+			return;
+		}
+		list.add(current);
+		preorderHelper(current.left, list);
+		preorderHelper(current.right, list);
+	}
+
+	@SuppressWarnings("unchecked")
+	List<Node<Integer>> postorder(){
+		List<Node<Integer>> list = new LinkedList<>();
+		Node<Integer> current = (Node<Integer>) this.root;
+		postorderHelper(current, list);
+		return list;
+
+	}
+
+	void postorderHelper(Node<Integer> current, List<Node<Integer>> list){
+		if(current == null){
+			return;
+		}
+		postorderHelper(current.left, list);
+		postorderHelper(current.right, list);
+		list.add(current);
+	}
+
 	public static void main(String[] args){	
 	  // 15.1 Is the Binary Tree a BST ? 
 
@@ -269,13 +347,44 @@ class BinarySearchTree<T>{
 		  // Brute force: Do Inorder Traversal and push onto stack then pop of K elements 
 		  // do a reverse inorder traversal and print out first K elements 
 
-		  BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
-		  tree.createTempTree();
-		  ArrayList<Node<Integer>> largest = tree.kLargestElements(3);
+		  // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		  // tree.createTempTree();
+		  // ArrayList<Node<Integer>> largest = tree.kLargestElements(3);
 
-		  for(Node<Integer> node : largest){
-		  	System.out.println(node.data);
-		  }
+		  // for(Node<Integer> node : largest){
+		  // 	System.out.println(node.data);
+		  // }
+
+		// 15.5 Compute the LCA in a BST
+		  // LCA is least common ancestor
+		  // traverse until you find a node where both nodes arent in the same direction
+
+		  // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		  // tree.createTempTree();
+		  // tree.findLCA(29, 53); // should be 43
+		  // tree.findLCA(13, 31); // should be 19
+		  // This implementation assumes that both keys are in the tree. 
+		  // This will break if you try keys that are not in the tree.
+		  // tree.findLCA(1000, 31); // should be 19
+
+		// 15.6 Reconstruct a tree from traversal data 
+		  // keys MUST be distinct to reconstruct tree from traversal data (inorder || preorder || postorder)
+		  // Need inorder && preorder || inorder && postorder 
+
+			BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		  	tree.createTempTree();
+		  	
+		  	// List<Node<Integer>> postorder = tree.postorder();
+			// subproblem get inorder and postorder traversals
+			List<Node<Integer>> preorder = tree.preorder();
+		  	List<Node<Integer>> inorder = tree.inorder();
+		  	List<Node<Integer>> postorder = tree.postorder();
+
+		  	// for(Node<Integer> node : postorder){
+		  	// 	System.out.println(node.data);
+		  	// }
+
+		  	
 
 	}
 }
