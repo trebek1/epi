@@ -1,5 +1,6 @@
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 class BinarySearchTree<T>{
 	T root;
@@ -189,6 +190,29 @@ class BinarySearchTree<T>{
 			}
 		}
 	}
+	@SuppressWarnings("unchecked")
+	ArrayList<Node<Integer>> kLargestElements(int k){
+
+		Node<Integer> current = (Node<Integer>) this.root;
+		ArrayList<Node<Integer>> found = new ArrayList<>();
+	    kLargestHelper(current, found, k);
+
+	    return found;
+
+	}
+
+	void kLargestHelper(Node<Integer> current, ArrayList<Node<Integer>> found, int k){
+		if(current == null){
+			return;
+		}
+		if(found.size() < k){
+			 kLargestHelper(current.right, found, k);
+			if(found.size() < k){
+				found.add(current);
+				kLargestHelper(current.left, found, k);
+			}
+		}
+	}
 
 	public static void main(String[] args){	
 	  // 15.1 Is the Binary Tree a BST ? 
@@ -241,7 +265,17 @@ class BinarySearchTree<T>{
 		  // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
 		  // tree.createTempTree();
 		  // tree.findNextElement(31); // should be 37;
-			
+	  // 15.4 Find the K largest elements in a Binary Search Tree
+		  // Brute force: Do Inorder Traversal and push onto stack then pop of K elements 
+		  // do a reverse inorder traversal and print out first K elements 
+
+		  BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		  tree.createTempTree();
+		  ArrayList<Node<Integer>> largest = tree.kLargestElements(3);
+
+		  for(Node<Integer> node : largest){
+		  	System.out.println(node.data);
+		  }
 
 	}
 }
