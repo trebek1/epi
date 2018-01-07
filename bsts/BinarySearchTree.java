@@ -93,7 +93,6 @@ class BinarySearchTree<T>{
 	@SuppressWarnings("unchecked")
 	void printTree(){
 		Queue<Node<Integer>> q = new LinkedList<>();
-
 		// Have to cast out of generic type 
 		Node<Integer> current = (Node<Integer>)this.root;
 		q.add(current);
@@ -128,29 +127,24 @@ class BinarySearchTree<T>{
 		if(root == null){
 			return true;
 		}
-
 		Node<Integer> current = root;
 		Integer max = Integer.MAX_VALUE;
 		Integer min = Integer.MIN_VALUE;
-
 		return bstCheckHelper(root, max, min);
 	}
 
 	public static boolean bstCheckHelper(Node<Integer> node, Integer max, Integer min){
-
 		if(node == null){
 			return true;
 		} else if(node.data > max || node.data < min){
 			return false;
 		}
-
 		return bstCheckHelper(node.left, node.data, min) && bstCheckHelper(node.right, max, node.data);
 	}
 
 	@SuppressWarnings("unchecked")
 	void findFirstInstance(int number){
 		Node<Integer> current = (Node<Integer>) this.root;
-
 		Node<Integer> found = null;
 		while(current != null){
 			if(current.data == number){
@@ -166,7 +160,6 @@ class BinarySearchTree<T>{
 				current = current.left;
 			}
 		}
-
 		 System.out.println("found it");
 		 System.out.println(found.data);
 	}
@@ -174,7 +167,6 @@ class BinarySearchTree<T>{
 	void findNextElement(int number){
 		Node<Integer> current = (Node<Integer>) this.root;
 		Node<Integer> candidate = null;
-
 		while(current != null){
 			if(current.data != number){
 				if(current.data > number){
@@ -193,13 +185,10 @@ class BinarySearchTree<T>{
 	}
 	@SuppressWarnings("unchecked")
 	ArrayList<Node<Integer>> kLargestElements(int k){
-
 		Node<Integer> current = (Node<Integer>) this.root;
 		ArrayList<Node<Integer>> found = new ArrayList<>();
 	    kLargestHelper(current, found, k);
-
 	    return found;
-
 	}
 
 	void kLargestHelper(Node<Integer> current, ArrayList<Node<Integer>> found, int k){
@@ -245,7 +234,6 @@ class BinarySearchTree<T>{
 		Node<Integer> current = (Node<Integer>) this.root;
 		inorderHelper(current, list);
 		return list;
-
 	}
 
 	void inorderHelper(Node<Integer> current, List<Node<Integer>> list){
@@ -262,7 +250,6 @@ class BinarySearchTree<T>{
 		Node<Integer> current = (Node<Integer>) this.root;
 		preorderHelper(current, list);
 		return list;
-
 	}
 
 	void preorderHelper(Node<Integer> current, List<Node<Integer>> list){
@@ -280,7 +267,6 @@ class BinarySearchTree<T>{
 		Node<Integer> current = (Node<Integer>) this.root;
 		postorderHelper(current, list);
 		return list;
-
 	}
 
 	void postorderHelper(Node<Integer> current, List<Node<Integer>> list){
@@ -290,6 +276,62 @@ class BinarySearchTree<T>{
 		postorderHelper(current.left, list);
 		postorderHelper(current.right, list);
 		list.add(current);
+	}
+
+	static BinarySearchTree<Node<Integer>> constructTreeFromPre(List<Node<Integer>> preorder){
+
+		Node<Integer> root = constructPreHelper(preorder, 0, preorder.size());
+		BinarySearchTree<Node<Integer>> t = new BinarySearchTree<>(root);
+		return t;
+	}
+
+	private static Integer rootIndex;
+
+	static BinarySearchTree<Node<Integer>> constructTreeFromPreV2(List<Node<Integer>> preorder){
+		rootIndex = 0;
+		Node<Integer> root = constructPreHelperV2(preorder, Integer.MIN_VALUE, Integer.MAX_VALUE);
+		BinarySearchTree<Node<Integer>> t = new BinarySearchTree<>(root);
+		return t;
+	}
+
+	// left skewed --> O(n^2) right --> (O(n)) balanced --> (O(nlog(n)))
+	static Node<Integer> constructPreHelper(List<Node<Integer>> preorder, int start, int end){
+		if(start >= end){
+			return null;
+		}
+
+		int transition = start + 1;
+		// find a number bigger than the first number in preorder traversal (head)
+		while(transition < end && Integer.compare(preorder.get(transition).data, preorder.get(start).data) < 0){
+			transition++;
+		}
+		// make tree from sublists left and right
+		return new Node<Integer>(   preorder.get(start).data,
+									constructPreHelper(preorder, start + 1, transition), // does not include transition point
+									constructPreHelper(preorder, transition, end) // uses trans point to start 
+								);
+	}
+
+	static Node<Integer> constructPreHelperV2(List<Node<Integer>> preorder, int lowerBound, int upperBound){
+		if(rootIndex == preorder.size()){
+			return null;
+		}
+
+		Integer root = preorder.get(rootIndex).data;
+
+		if(root < lowerBound || root > upperBound){
+			// System.out.println("here! " + " root " + root + " upper " + upperBound + " lower " + lowerBound);
+			return null;
+		}
+
+		rootIndex++;
+		// System.out.println("Going left " + lowerBound + " " + root);
+		Node<Integer> left = constructPreHelperV2(preorder, lowerBound, root);
+		// System.out.println("going right ? " + root + " " + upperBound);
+		Node<Integer> right = constructPreHelperV2(preorder, root, upperBound);
+		// System.out.println("This is root " + root);
+		return new Node<Integer>(root, left, right);
+
 	}
 
 	public static void main(String[] args){	
@@ -373,18 +415,28 @@ class BinarySearchTree<T>{
 
 			BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
 		  	tree.createTempTree();
-		  	
+			//tree.printTree();
 		  	// List<Node<Integer>> postorder = tree.postorder();
 			// subproblem get inorder and postorder traversals
+			
 			List<Node<Integer>> preorder = tree.preorder();
 		  	List<Node<Integer>> inorder = tree.inorder();
 		  	List<Node<Integer>> postorder = tree.postorder();
 
-		  	// for(Node<Integer> node : postorder){
+		  	// for(Node<Integer> node : preorder){
 		  	// 	System.out.println(node.data);
 		  	// }
 
-		  	
+		  	BinarySearchTree<Node<Integer>> tree2 = BinarySearchTree.constructTreeFromPreV2(preorder);
+		  	tree2.printTree();
+		  	// List<Node<Integer>> listcheck = tree2.postorder();
+
+		  	// for(Node<Integer> node : listcheck){
+		  	// 	System.out.println(node.data);
+		  	// }
+
+
+
 
 	}
 }
