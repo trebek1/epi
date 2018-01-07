@@ -2,6 +2,8 @@ import java.util.Queue;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet; 
+import java.util.NavigableSet;
 
 class BinarySearchTree<T>{
 	T root;
@@ -312,6 +314,10 @@ class BinarySearchTree<T>{
 								);
 	}
 
+	// create a global index
+	// if its outside the bounds return 
+	// make left and right nodes recursively going through preorder nodes in order 
+
 	static Node<Integer> constructPreHelperV2(List<Node<Integer>> preorder, int lowerBound, int upperBound){
 		if(rootIndex == preorder.size()){
 			return null;
@@ -320,7 +326,7 @@ class BinarySearchTree<T>{
 		Integer root = preorder.get(rootIndex).data;
 
 		if(root < lowerBound || root > upperBound){
-			// System.out.println("here! " + " root " + root + " upper " + upperBound + " lower " + lowerBound);
+			System.out.println("here! " + " root " + root + " upper " + upperBound + " lower " + lowerBound);
 			return null;
 		}
 
@@ -331,6 +337,57 @@ class BinarySearchTree<T>{
 		Node<Integer> right = constructPreHelperV2(preorder, root, upperBound);
 		// System.out.println("This is root " + root);
 		return new Node<Integer>(root, left, right);
+
+	}
+
+	// idea is that since arrays are sorted if you always replace the minimum element with the next 
+	// element from its array to the end. This will be n lg(k) efficiency 
+	public static int findMinDistanceSortedArrays(List<List<Integer>> sortedArrays){
+		// list of heads initialized to zero for each array
+		List<Integer> heads = new ArrayList<>(sortedArrays.size());
+
+		// add a zero for each array in the arraylist 
+		for(List<Integer> arr : sortedArrays){
+			heads.add(0);
+		}
+ 
+		// create a set so that we can get min/max easily
+		NavigableSet<ArrayData> currentHeads = new TreeSet<>();
+
+		// add first element from each array to the set 
+		for(int i = 0; i < sortedArrays.size(); i++){
+			// this is the first value in each increasing array
+			int value = sortedArrays.get(i).get(0);
+			currentHeads.add(new ArrayData(i, value));
+		}
+
+		int result = Integer.MAX_VALUE;
+
+		while(true){
+			// get the value for this array 
+			// can get biggest and smallest element come across easily here 
+			result = Math.min(result, currentHeads.last().val - currentHeads.first().val);
+
+			// index of smallest element in the array 
+			int idxNextMin = currentHeads.first().idx;
+			System.out.println("This is smalles idx " + idxNextMin);
+			
+			// increment the smallest index 
+			heads.set(idxNextMin, heads.get(idxNextMin) + 1);
+			for(Integer i : heads){
+				System.out.println(i);
+			}
+			System.out.println("------");
+			
+			// return if some array has no remaining elements 
+			if(heads.get(idxNextMin) >= sortedArrays.get(idxNextMin).size()){
+				return result;
+			}
+			// remove the smallest 
+			currentHeads.pollFirst();
+			// try the next element by adding new index 
+			currentHeads.add(new ArrayData(idxNextMin, sortedArrays.get(idxNextMin).get(heads.get(idxNextMin))));
+		}
 
 	}
 
@@ -413,28 +470,54 @@ class BinarySearchTree<T>{
 		  // keys MUST be distinct to reconstruct tree from traversal data (inorder || preorder || postorder)
 		  // Need inorder && preorder || inorder && postorder 
 
-			BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
-		  	tree.createTempTree();
+			// BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		    // ree.createTempTree();
 			//tree.printTree();
 		  	// List<Node<Integer>> postorder = tree.postorder();
 			// subproblem get inorder and postorder traversals
 			
-			List<Node<Integer>> preorder = tree.preorder();
-		  	List<Node<Integer>> inorder = tree.inorder();
-		  	List<Node<Integer>> postorder = tree.postorder();
+			// List<Node<Integer>> preorder = tree.preorder();
+		    // List<Node<Integer>> inorder = tree.inorder();
+		    // List<Node<Integer>> postorder = tree.postorder();
 
 		  	// for(Node<Integer> node : preorder){
 		  	// 	System.out.println(node.data);
 		  	// }
 
-		  	BinarySearchTree<Node<Integer>> tree2 = BinarySearchTree.constructTreeFromPreV2(preorder);
-		  	tree2.printTree();
+		  	// BinarySearchTree<Node<Integer>> tree2 = BinarySearchTree.constructTreeFromPreV2(preorder);
+		  	// tree2.printTree();
 		  	// List<Node<Integer>> listcheck = tree2.postorder();
 
 		  	// for(Node<Integer> node : listcheck){
 		  	// 	System.out.println(node.data);
 		  	// }
 
+		// 15.7 Find Closest Entries in 3 sorted arrays
+
+			// List<Integer> arr1 = new ArrayList<>();
+			// arr1.add(5);
+			// arr1.add(10);
+			// arr1.add(15);
+			// List<Integer> arr2 = new ArrayList<>();
+			// arr2.add(3);
+			// arr2.add(6);
+			// arr2.add(9);
+			// arr2.add(12);
+			// arr2.add(15);
+			// List<Integer> arr3 = new ArrayList<>();
+			// arr3.add(8);
+			// arr3.add(16);
+			// arr3.add(24);
+		  
+			// BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		 //    tree.createTempTree();
+
+		 //    List<List<Integer>> lists = new ArrayList<>();
+		 //    lists.add(arr1);
+		 //    lists.add(arr2);
+		 //    lists.add(arr3);
+
+		    // System.out.println(BinarySearchTree.findMinDistanceSortedArrays(lists));
 
 
 
