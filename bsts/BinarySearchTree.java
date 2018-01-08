@@ -588,6 +588,69 @@ class BinarySearchTree<T>{
 		}
 	}
 
+	boolean totalOrder(List<Node<Integer>> nodes, Node<Integer> middle){
+
+		Node<Integer> test1 = nodes.get(0);
+		Node<Integer> test2 = nodes.get(1);
+
+		Node<Integer> test1c = nodes.get(0);
+		Node<Integer> test2c = nodes.get(1);
+
+		// if either node is the search node then they arent proper 
+		if(test1.data == middle.data || test2.data == middle.data){
+			return false;
+		}
+		int depth = 0;
+		Node<Integer> winner;
+		while(true){
+			if(test1 == null && test2 == null){
+				return false;
+			}
+			if(test1 != null){
+				if(test1.data > middle.data){
+				test1 = test1.left;
+				} else if(test1.data < middle.data){
+					test1 = test1.right;
+				}	
+			}
+			if(test2 != null){
+				if(test2.data > middle.data){
+				test2 = test2.left;
+				} else if(test2.data < middle.data){
+					test2 = test2.right;
+				}	
+			}
+			
+			depth++;
+			if(test2 != null && test2.data == middle.data){
+				winner = test2c;
+				break;
+		    } else if(test1 != null && test1.data == middle.data){
+		    	winner = test1c;
+				break;
+		    }
+		}
+
+		Node<Integer> target = (winner.data == test1c.data) ? test2c : test1c;
+		Node<Integer> current = middle;
+
+		for(int i = 0; i < depth; i++){
+			if(current.data < target.data){
+				current = current.right;
+			} else if(current.data > target.data){
+				current = current.left;
+			} else {
+				return true;
+			}
+		}
+
+		if(current == null || current.data != target.data){
+			return false;
+		}
+
+		return true;
+	}
+
 	public static void main(String[] args){	
 	  // 15.1 Is the Binary Tree a BST ? 
 
@@ -758,8 +821,8 @@ class BinarySearchTree<T>{
 		  // BinarySearchTree.createBalancedBSTFromList(list);
 		// 15.11 Delete a node from a BST
 
-			BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
-		    tree.createTempTree();
+		// BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		// tree.createTempTree();
 		//          19
 		//    7             43
 		//   3  11      23      47 
@@ -767,22 +830,38 @@ class BinarySearchTree<T>{
 		//       13       29  41 
 		//                  31
 		// no children case
-		tree.delete(13);
-		tree.printTree();
-		System.out.println("------");
-		// one child case     
-		tree.delete(47);
-		tree.printTree();
-		System.out.println("------");
-		// two children case 
-	    tree.delete(11);
-	    tree.printTree();
-	    System.out.println("------");
+		// tree.delete(13);
+		// tree.printTree();
+		// System.out.println("------");
+		// // one child case     
+		// tree.delete(47);
+		// tree.printTree();
+		// System.out.println("------");
+		// // two children case 
+	 	// tree.delete(11);
+	 	// tree.printTree();
+	 	// System.out.println("------");
 	    // not in tree case 
 	    // will break code!
 	    // tree.delete(82);
 	    // System.out.println("------");
+	   
+	    // 15.12 Test if 3 BST Nodes are Totally Ordered (One is proper ancestor one is proper descendant)
 
+	    BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+	    tree.createTempTree();
+	    Node<Integer> node1 = tree.getTreeNode(43);
+	    Node<Integer> node2 = tree.getTreeNode(31);
+	    // Node<Integer> node1 = tree.getTreeNode(37);
+	    // Node<Integer> node2 = tree.getTreeNode(47);
+	    List<Node<Integer>> nodes = new ArrayList<>();
+	    nodes.add(node1);
+	    nodes.add(node2);
+
+	    Node<Integer> middle = tree.getTreeNode(37);
+	    // Node<Integer> middle = tree.getTreeNode(23);
+
+	    System.out.println(tree.totalOrder(nodes, middle));
 
 	}
 }
