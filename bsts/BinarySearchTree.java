@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet; 
 import java.util.NavigableSet;
+import java.util.SortedSet;
 
 class BinarySearchTree<T>{
 	T root;
@@ -390,6 +391,59 @@ class BinarySearchTree<T>{
 		}
 
 	}
+	//O(klogk) time and O(2k) = O(k) space req 
+	List<ABSqrt2> generateKSmallestNums1(int numSmallest){
+		List<ABSqrt2> answer = new ArrayList<>();
+		SortedSet<ABSqrt2> candidates = new TreeSet<>();
+		candidates.add(new ABSqrt2(0,0));
+
+		while(answer.size() < numSmallest){
+			ABSqrt2 next = candidates.first();
+			answer.add(next);
+			candidates.add(new ABSqrt2(next.a + 1, next.b));
+			candidates.add(new ABSqrt2(next.a, next.b + 1));
+			candidates.remove(next);
+		}
+
+		for(ABSqrt2 ans : answer){
+			System.out.println(ans.val);
+		}
+
+		return answer;
+	}
+
+	//O(n) time and O(n) space 
+	List<ABSqrt2> generateKSmallestNums2(int numSmallest){
+		List<ABSqrt2> answer = new ArrayList<>();
+		answer.add(new ABSqrt2(0,0));
+		int i = 0, j = 0;
+		for(int n = 1; n < numSmallest; n++){
+
+			// look at last entry where value was incremented and increment one more 
+			ABSqrt2 resultPlus1 = new ABSqrt2(answer.get(i).a + 1, answer.get(i).b);
+			// look at last value where factor was incremented and add one more to that 
+			ABSqrt2 resultPlusFactor = new ABSqrt2(answer.get(j).a, answer.get(j).b + 1);
+			// This guarantees that all the factors will be considered in order 
+			
+			// increment only if that is what creates the smallest 
+			if(resultPlus1.val < resultPlusFactor.val){
+				i++;
+				answer.add(resultPlus1);
+			} else if(resultPlusFactor.val < resultPlus1.val){
+				j++;
+				answer.add(resultPlusFactor);
+			} else {
+				// This is a case where both are equal
+				i++;
+				j++;
+				answer.add(resultPlusFactor);
+			}
+		}
+		for(ABSqrt2 ans : answer){
+			System.out.println(ans.val);
+		}
+		return answer;
+	}
 
 	public static void main(String[] args){	
 	  // 15.1 Is the Binary Tree a BST ? 
@@ -509,17 +563,20 @@ class BinarySearchTree<T>{
 			// arr3.add(16);
 			// arr3.add(24);
 		  
-			// BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		 // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
 		 //    tree.createTempTree();
-
 		 //    List<List<Integer>> lists = new ArrayList<>();
 		 //    lists.add(arr1);
 		 //    lists.add(arr2);
 		 //    lists.add(arr3);
+		 // System.out.println(BinarySearchTree.findMinDistanceSortedArrays(lists));
 
-		    // System.out.println(BinarySearchTree.findMinDistanceSortedArrays(lists));
-
-
+		// 15.8 Enumerate numbers of the form a + b * Math.sqrt(2)
+		  // find the k smallest numbers in the form above 
+		  // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		  //    tree.createTempTree();
+		  //    tree.generateKSmallestNums2(5);
+		  // System.out.println(BinarySearchTree.findMinDistanceSortedArrays(lists));
 
 	}
 }
