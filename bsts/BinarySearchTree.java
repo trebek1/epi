@@ -445,6 +445,29 @@ class BinarySearchTree<T>{
 		return answer;
 	}
 
+	static Node<Integer> createFromListHelper(List<Integer> list){
+		int size = list.size();
+		int middle = size / 2;
+
+		if(middle == 0){
+			return null;
+		}
+
+		return new Node<Integer>(list.get(middle), createFromListHelper(list.subList(0, middle)), createFromListHelper(list.subList(middle, size)));
+
+
+	}
+
+	static BinarySearchTree<Node<Integer>> createBalancedBSTFromList(List<Integer> list){
+		BinarySearchTree<Node<Integer>> bst = new BinarySearchTree<>();
+		Node<Integer> root = createFromListHelper(list);
+		bst.root = root;
+
+		bst.printTree();
+
+		return bst;
+	}
+
 	public static void main(String[] args){	
 	  // 15.1 Is the Binary Tree a BST ? 
 
@@ -577,6 +600,43 @@ class BinarySearchTree<T>{
 		  //    tree.createTempTree();
 		  //    tree.generateKSmallestNums2(5);
 		  // System.out.println(BinarySearchTree.findMinDistanceSortedArrays(lists));
+
+		// 15.8 The Most Visited Pages Problem 
+		  // read a file a billion lines long and find the k most visited pages 
+		  // each line has a page number on it (id field) identifying the page visited 
+		  // idea: Hight balanced BSTs are good for incremental updates
+		  // something like a hashtable to store most visited takes a lot of extra time to 
+		  // update the current most visited pages 
+		  // use a hash table to keep track of what is in the BST
+		  // when updating delete from BST current, update then add back 
+		  // for k most visited find kth node then do k calls to predecessor 
+		  // O(k + logm) --> much better than iterating through entire collection of pages 
+		  // logm to update the tree with a page --> worse than brute force but price we pay 
+		  // example 
+
+		  // t --> (2,t)
+		  // a --> (1.a)
+
+		  // adding another a page we look up a in HT and get (1,a). update to (2,a). 
+		  // delete (1, a) from BST and input (2, a)
+
+
+		// 15.9 Build a min hight BST from a sorted array (Keep the tree balanced)
+		  // do it recursively making sure that the middle element spits the L and R evenly 
+
+		  List<Integer> list = new ArrayList<>();
+		  list.add(2);
+		  list.add(3);
+		  list.add(5);
+		  list.add(7);
+		  list.add(11);
+		  list.add(13);
+		  list.add(17);
+		  list.add(19);
+		  list.add(23);
+
+		  BinarySearchTree.createBalancedBSTFromList(list);
+
 
 	}
 }
