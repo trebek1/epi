@@ -454,18 +454,138 @@ class BinarySearchTree<T>{
 		}
 
 		return new Node<Integer>(list.get(middle), createFromListHelper(list.subList(0, middle)), createFromListHelper(list.subList(middle, size)));
-
-
 	}
 
 	static BinarySearchTree<Node<Integer>> createBalancedBSTFromList(List<Integer> list){
 		BinarySearchTree<Node<Integer>> bst = new BinarySearchTree<>();
 		Node<Integer> root = createFromListHelper(list);
 		bst.root = root;
-
 		bst.printTree();
-
 		return bst;
+	}
+
+	@SuppressWarnings("unchecked")
+	void delete(int value){
+		deleteHelper((Node<Integer>) this.root, value, null);
+	}
+
+	// assumes that element is in tree to delete 
+	@SuppressWarnings("unchecked")
+	void deleteHelper(Node<Integer> current, int value, Node<Integer> predecessor){
+		// at root 
+		if(current.data == value){
+			// one subtree or 2 
+			if(current.left == null){
+				Node<Integer> rtTree = current.right;
+				this.root = (T)rtTree;
+				return;
+			} else {
+				Node<Integer> rtTree = current.right;
+				Node<Integer> leftTree = current.left;
+				Node<Integer> min = findMin(current.right);
+				min.left = leftTree;
+				this.root = (T)rtTree;
+				return;
+			}
+		}
+		Node<Integer> something;
+		Node<Integer> rightMin;
+		if(value < current.data){
+			if(current.left.data == value){
+				// no children 
+				if(current.left.left == null && current.left.right == null){
+					current.left = null;
+					return;
+				} else if(current.left.left != null && current.left.right != null){
+					rightMin = findMin(current.left.right);
+					rightMin.left = current.left.left;
+					current.left = current.left.right;
+					return;
+				} else {
+					something = (current.left.left == null) ? current.left.right : current.left.left;
+					current.left = something;
+					return;
+				}
+			} else {
+				deleteHelper(current.left, value, current);
+				return;
+			}
+		} else if(value > current.data){
+			if(current.right.data == value){
+				if(current.right.left == null && current.right.right == null){
+					current.right = null;
+					return;
+				} else if(current.right.left != null && current.right.right != null){
+					rightMin = findMin(current.right.right);
+					rightMin.left = current.right.left;
+					current.right = current.right.right;
+					return;
+				} else {
+					something = (current.right.left == null) ? current.right.right : current.right.left;
+					current.right = something; 
+					return;
+				}
+			} else {
+				deleteHelper(current.right, value, predecessor);
+				return;
+			}
+		} else {
+			// do nothing shouldnt get here 
+		}
+	}
+	// if there is a rt subtree then it is min of rt subtree. 
+	// if no rt subtree then it is a node that is last left child predecessor 
+	// find case 2 and look and see if case 1 applies. If so, use case 2 instead of case 1
+	// @SuppressWarnings("unchecked")
+	// Node<Integer> findSuccessor(int val){
+	// 	Node<Integer> current = (Node<Integer>) this.root;
+	// 	return findSuccessorHelper(current, val, null);
+	// }
+
+	// Node<Integer> findSuccessorHelper(Node<Integer> current, int val, Node<Integer> candidate){
+	// 	// must be at root
+	// 	if(current.data == val){
+	// 		return findMin(current.right);
+	// 	}
+
+	// 	if(val < current.data){
+	// 		if(current.left == null){
+	// 			return null;
+	// 		}
+	// 		if(current.left.data != val){
+	// 			return findSuccessorHelper(current.left, val, current.left);
+	// 		} else {
+	// 			if(current.left.right == null){
+	// 				return candidate;
+	// 			} else {
+	// 				return findMin(current.left.right);
+	// 			}
+	// 		}
+
+	// 	} else {
+	// 		if(current.right == null){
+	// 			return null;
+	// 		}
+	// 		if(current.right.data != val){
+	// 			return findSuccessorHelper(current.right, val, candidate);
+	// 		} else {
+	// 			if(current.right.right == null){
+	// 				return candidate;
+	// 			} else {
+	// 				return findMin(current.right.right);
+	// 			}
+					
+	// 		}
+	// 	}	
+	// 	return null;
+	// }
+
+	Node<Integer> findMin(Node<Integer> current){
+		if(current.left != null){
+			return findMin(current.left);
+		} else {
+			return current;
+		}
 	}
 
 	public static void main(String[] args){	
@@ -601,7 +721,7 @@ class BinarySearchTree<T>{
 		  //    tree.generateKSmallestNums2(5);
 		  // System.out.println(BinarySearchTree.findMinDistanceSortedArrays(lists));
 
-		// 15.8 The Most Visited Pages Problem 
+		// 15.9 The Most Visited Pages Problem 
 		  // read a file a billion lines long and find the k most visited pages 
 		  // each line has a page number on it (id field) identifying the page visited 
 		  // idea: Hight balanced BSTs are good for incremental updates
@@ -621,21 +741,47 @@ class BinarySearchTree<T>{
 		  // delete (1, a) from BST and input (2, a)
 
 
-		// 15.9 Build a min hight BST from a sorted array (Keep the tree balanced)
+		// 15.10 Build a min hight BST from a sorted array (Keep the tree balanced)
 		  // do it recursively making sure that the middle element spits the L and R evenly 
 
-		  List<Integer> list = new ArrayList<>();
-		  list.add(2);
-		  list.add(3);
-		  list.add(5);
-		  list.add(7);
-		  list.add(11);
-		  list.add(13);
-		  list.add(17);
-		  list.add(19);
-		  list.add(23);
+		  // List<Integer> list = new ArrayList<>();
+		  // list.add(2);
+		  // list.add(3);
+		  // list.add(5);
+		  // list.add(7);
+		  // list.add(11);
+		  // list.add(13);
+		  // list.add(17);
+		  // list.add(19);
+		  // list.add(23);
 
-		  BinarySearchTree.createBalancedBSTFromList(list);
+		  // BinarySearchTree.createBalancedBSTFromList(list);
+		// 15.11 Delete a node from a BST
+
+			BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+		    tree.createTempTree();
+		//          19
+		//    7             43
+		//   3  11      23      47 
+		// 2  5    17       37     53 
+		//       13       29  41 
+		//                  31
+		// no children case
+		tree.delete(13);
+		tree.printTree();
+		System.out.println("------");
+		// one child case     
+		tree.delete(47);
+		tree.printTree();
+		System.out.println("------");
+		// two children case 
+	    tree.delete(11);
+	    tree.printTree();
+	    System.out.println("------");
+	    // not in tree case 
+	    // will break code!
+	    // tree.delete(82);
+	    // System.out.println("------");
 
 
 	}
