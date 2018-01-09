@@ -651,6 +651,35 @@ class BinarySearchTree<T>{
 		return true;
 	}
 
+	static void findRangeHelper(Node<Integer> node, Interval i, List<Integer> solution){
+
+		if(node.data <= i.y && node.data >= i.x){
+			solution.add(node.data);
+			if(node.left != null){
+				findRangeHelper(node.left, i, solution);
+			}
+			if(node.right != null){
+				findRangeHelper(node.right, i, solution);
+			}
+		} else if(node.data >= i.x){
+			if(node.left != null){
+				findRangeHelper(node.left, i, solution);
+			}
+		} else {
+			if(node.right != null){
+				findRangeHelper(node.right, i, solution);
+			}
+		}
+	}
+
+	static List<Integer> findRange(BinarySearchTree<Node<Integer>> tree, Interval i){
+		List<Integer> result = new ArrayList<>();
+		Node<Integer> start = tree.root;
+		findRangeHelper(start, i, result);
+
+		return result;
+	}
+
 	public static void main(String[] args){	
 	  // 15.1 Is the Binary Tree a BST ? 
 
@@ -848,20 +877,37 @@ class BinarySearchTree<T>{
 	   
 	    // 15.12 Test if 3 BST Nodes are Totally Ordered (One is proper ancestor one is proper descendant)
 
-	    BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
-	    tree.createTempTree();
-	    Node<Integer> node1 = tree.getTreeNode(43);
-	    Node<Integer> node2 = tree.getTreeNode(31);
+	    // BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+	    // tree.createTempTree();
+	    // Node<Integer> node1 = tree.getTreeNode(43);
+	    // Node<Integer> node2 = tree.getTreeNode(31);
 	    // Node<Integer> node1 = tree.getTreeNode(37);
 	    // Node<Integer> node2 = tree.getTreeNode(47);
-	    List<Node<Integer>> nodes = new ArrayList<>();
-	    nodes.add(node1);
-	    nodes.add(node2);
+	    // List<Node<Integer>> nodes = new ArrayList<>();
+	    // nodes.add(node1);
+	    // nodes.add(node2);
 
-	    Node<Integer> middle = tree.getTreeNode(37);
+	    // Node<Integer> middle = tree.getTreeNode(37);
 	    // Node<Integer> middle = tree.getTreeNode(23);
 
-	    System.out.println(tree.totalOrder(nodes, middle));
+	    // System.out.println(tree.totalOrder(nodes, middle));
+
+	    // 15.13 Find Range of Numbers in Interval in BST
+	    // prune tree while traversing to only visit nodes that could be in range 
+	    // O(m) for middle nodes in range, O(h) for nodes on edge looking for endpoints -> O(m + h)
+
+	 	//  BinarySearchTree<Node<Integer>> tree = new BinarySearchTree<>();
+	 	//  tree.createTempTree();
+		// Interval i = new Interval(7, 37);
+
+		// List<Integer> numbersInRange = findRange(tree, i);
+
+		// for(int k : numbersInRange){
+		// 	System.out.println(k);
+		// }
+
+
+
 
 	}
 }
