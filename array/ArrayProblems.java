@@ -155,6 +155,23 @@ class ArrayProblems {
 		return list.subList(0, next);
 	}
 
+	static int buySellOnce(List<Integer> array){
+		int smallest = array.get(0);
+		int maxGain = Integer.MIN_VALUE;
+
+		for(int i = 0; i < array.size(); i++){
+			int current = array.get(i);
+			int gain = current - smallest;
+			if(gain > maxGain){
+				maxGain = gain;
+			}
+			if(current < smallest){
+				smallest = current;
+			}
+		}
+		return maxGain;
+	}
+
 	public static void main(String[] args){
 
 		// 6.1 Dutch Flag Problem
@@ -271,24 +288,38 @@ class ArrayProblems {
 
 		// 6.6 Delete Duplicates from a sorted array 
 
-			List<Integer> array = new ArrayList<Integer>();
-			array.add(1);
-			array.add(1);
-			array.add(1);
-			array.add(3);
-			array.add(3);
-			array.add(5);
-			array.add(10);
-			array.add(25);
-			array.add(25);
-			array.add(50);
-			array.add(75);
+			// List<Integer> array = new ArrayList<Integer>();
+			// array.add(1);
+			// array.add(1);
+			// array.add(1);
+			// array.add(3);
+			// array.add(3);
+			// array.add(5);
+			// array.add(10);
+			// array.add(25);
+			// array.add(25);
+			// array.add(50);
+			// array.add(75);
 
-			List<Integer> solution = ArrayProblems.removeOrderedDuplicates(array);
+			// List<Integer> solution = ArrayProblems.removeOrderedDuplicates(array);
 
-			for(Integer i : solution){
-				System.out.println(i);
-			}
+			// for(Integer i : solution){
+			// 	System.out.println(i);
+			// }
+		// 6.7 Buy and Sell A Stock Once 
+
+		List<Integer> array = new ArrayList<Integer>();
+		array.add(310);
+		array.add(315);
+		array.add(275);
+		array.add(295);
+		array.add(260);
+		array.add(270);
+		array.add(290);
+		array.add(230);
+		array.add(255);
+		array.add(250);
+		System.out.println(ArrayProblems.buySellOnce(array));
 	}
 }
 
