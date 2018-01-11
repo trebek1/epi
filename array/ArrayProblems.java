@@ -115,6 +115,18 @@ class ArrayProblems {
 		return solution;
 	}
 
+	static boolean advance(List<Integer> maze){
+		int start = 0; 
+		int range = 0;
+
+		for(int i = 0; i < maze.size() - 1 && i <= range && range <= maze.size() - 1; i++){
+			int current = maze.get(i);
+			range = Math.max(range, i + current);
+		}
+		
+		return range >= maze.size() - 1; 
+	}
+
 	public static void main(String[] args){
 
 		// 6.1 Dutch Flag Problem
@@ -192,7 +204,22 @@ class ArrayProblems {
 			// for(Integer i : solution){
 			// 	System.out.println("this is i " + i);
 			// }
+
+		// 6.4 Advancing Through an Array 
+
+		// List<Integer> array = new ArrayList<Integer>();
+		// array.add(3);
+		// array.add(2);
+		// array.add(0);
+		// array.add(0);
+		// array.add(2);
+		// array.add(0);
+		// array.add(1);
+
+		// System.out.println(ArrayProblems.advance(array));
+
 		
+
 	}
 }
 
