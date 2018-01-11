@@ -138,6 +138,23 @@ class ArrayProblems {
 		return writeIndex;
 	}
 
+	static List<Integer> removeOrderedDuplicates(List<Integer> list){
+		if(list.isEmpty()){
+			return null;
+		}
+		int next = 1;
+		// 1 1 1 3 3 5 9 12 12 15
+		for(int i = 1; i < list.size(); i++){
+			int current = list.get(i);
+			int previous = list.get(i - 1);
+			if(current != previous){
+				list.set(next++, list.get(i));
+			}
+		}	
+
+		return list.subList(0, next);
+	}
+
 	public static void main(String[] args){
 
 		// 6.1 Dutch Flag Problem
@@ -232,30 +249,46 @@ class ArrayProblems {
 			// System.out.println(ArrayProblems.advance(array));
 
 		// 6.5 Delete a key from an array 
-		List<Integer> array = new ArrayList<Integer>();
-		 // idea --> keep track of index where you should write to 
-		 // as you find values that shouldnt be deleted, add to the index 
-		 // final x duplicates will be wrong but index - 1 will be last index of actual sorted array; 
-		
-		array.add(5);
-		array.add(3);
-		array.add(7);
-		array.add(11);
-		array.add(2);
-		array.add(3);
-		array.add(13);
-		array.add(5);
-		array.add(7);
+		  // List<Integer> array = new ArrayList<Integer>();
+		  // idea --> keep track of index where you should write to 
+		  // as you find values that shouldnt be deleted, add to the index 
+		  // final x duplicates will be wrong but index - 1 will be last index of actual sorted array; 
 
-		System.out.println("This is index " + ArrayProblems.deleteKey(array, 3));
-		for(Integer i : array){
-			System.out.println(i);
-		}
+		  // array.add(5);
+		  // array.add(3);
+		  // array.add(7);
+		  // array.add(11);
+		  // array.add(2);
+		  // array.add(3);
+		  // array.add(13);
+		  // array.add(5);
+		  // array.add(7);
 
+		  // System.out.println("This is index " + ArrayProblems.deleteKey(array, 3));
+		  // for(Integer i : array){
+		  // 	System.out.println(i);
+		  // }
 
+		// 6.6 Delete Duplicates from a sorted array 
 
+			List<Integer> array = new ArrayList<Integer>();
+			array.add(1);
+			array.add(1);
+			array.add(1);
+			array.add(3);
+			array.add(3);
+			array.add(5);
+			array.add(10);
+			array.add(25);
+			array.add(25);
+			array.add(50);
+			array.add(75);
 
+			List<Integer> solution = ArrayProblems.removeOrderedDuplicates(array);
 
+			for(Integer i : solution){
+				System.out.println(i);
+			}
 	}
 }
 
