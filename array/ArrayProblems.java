@@ -127,6 +127,17 @@ class ArrayProblems {
 		return range >= maze.size() - 1; 
 	}
 
+	static int deleteKey(List<Integer> array, int key){
+		int writeIndex = 0;
+		for(int i = 0; i < array.size(); i++){
+			int current = array.get(i);
+			if(current != key){
+				array.set(writeIndex++, array.get(i));
+			}
+		}
+		return writeIndex;
+	}
+
 	public static void main(String[] args){
 
 		// 6.1 Dutch Flag Problem
@@ -206,19 +217,44 @@ class ArrayProblems {
 			// }
 
 		// 6.4 Advancing Through an Array 
+			// idea is to keep track of the furthest you can get at each position
+			// if you cant keep going then return false;
 
-		// List<Integer> array = new ArrayList<Integer>();
-		// array.add(3);
-		// array.add(2);
-		// array.add(0);
-		// array.add(0);
-		// array.add(2);
-		// array.add(0);
-		// array.add(1);
+			// List<Integer> array = new ArrayList<Integer>();
+			// array.add(3);
+			// array.add(2);
+			// array.add(0);
+			// array.add(0);
+			// array.add(2);
+			// array.add(0);
+			// array.add(1);
 
-		// System.out.println(ArrayProblems.advance(array));
+			// System.out.println(ArrayProblems.advance(array));
 
+		// 6.5 Delete a key from an array 
+		List<Integer> array = new ArrayList<Integer>();
+		 // idea --> keep track of index where you should write to 
+		 // as you find values that shouldnt be deleted, add to the index 
+		 // final x duplicates will be wrong but index - 1 will be last index of actual sorted array; 
 		
+		array.add(5);
+		array.add(3);
+		array.add(7);
+		array.add(11);
+		array.add(2);
+		array.add(3);
+		array.add(13);
+		array.add(5);
+		array.add(7);
+
+		System.out.println("This is index " + ArrayProblems.deleteKey(array, 3));
+		for(Integer i : array){
+			System.out.println(i);
+		}
+
+
+
+
 
 	}
 }
