@@ -172,6 +172,39 @@ class ArrayProblems {
 		return maxGain;
 	}
 
+	static int buySellTwice(List<Integer> array){
+		int solution = Integer.MIN_VALUE;
+		int maxSoFar = Integer.MIN_VALUE;
+		List<Integer> maxProfitForward = new ArrayList<>();
+		int min = array.get(0);
+		for(int i = 0; i < array.size(); i++){
+			int current = array.get(i);
+
+			if(current < min){
+				min = current;
+			}
+			int profit = current - min;
+			if(profit > maxSoFar){
+				maxSoFar = profit;
+			}
+			maxProfitForward.add(maxSoFar);
+		}
+
+		int max = array.get(array.size() - 1);
+		for(int i = array.size() - 1; i >= 0; i--){
+			int current = array.get(i);
+			int trial = max - current + maxProfitForward.get(i);
+			if(current > max){
+				max = current;
+			}
+			if(trial > solution){
+				solution = trial;
+			}
+		}
+		return solution;
+	}
+
+
 	public static void main(String[] args){
 
 		// 6.1 Dutch Flag Problem
@@ -308,18 +341,32 @@ class ArrayProblems {
 			// }
 		// 6.7 Buy and Sell A Stock Once 
 
-		List<Integer> array = new ArrayList<Integer>();
-		array.add(310);
-		array.add(315);
-		array.add(275);
-		array.add(295);
-		array.add(260);
-		array.add(270);
-		array.add(290);
-		array.add(230);
-		array.add(255);
-		array.add(250);
-		System.out.println(ArrayProblems.buySellOnce(array));
+			// List<Integer> array = new ArrayList<Integer>();
+			// array.add(310);
+			// array.add(315);
+			// array.add(275);
+			// array.add(295);
+			// array.add(260);
+			// array.add(270);
+			// array.add(290);
+			// array.add(230);
+			// array.add(255);
+			// array.add(250);
+			// System.out.println(ArrayProblems.buySellOnce(array));
+
+		// 6.8 Buy and Sell A Stock Twice
+
+			List<Integer> array = new ArrayList<Integer>();
+			array.add(12);
+			array.add(11);
+			array.add(13);
+			array.add(9);
+			array.add(12);
+			array.add(8);
+			array.add(14);
+			array.add(13);
+			array.add(15);
+			System.out.println(ArrayProblems.buySellTwice(array));
 	}
 }
 
