@@ -225,6 +225,47 @@ class ArrayProblems {
 		return primes;
 	}
 
+	static List<Integer> permuteElements(List<Integer> perms, List<Integer> A){
+		for(int k : A){
+			System.out.println(k);
+		}
+		for(int k = 0; k < A.size(); k++){
+			int i = k; 
+			while(perms.get(i) >= 0){
+				System.out.println("Swapping " + A.get(k) + " and " + A.get(perms.get(i)));
+				Collections.swap(A, k, perms.get(i));
+				int temp = perms.get(i);
+				perms.set(i, perms.get(i) - perms.size());
+				i = temp;
+			}	
+		}
+		
+		return A;
+	}
+
+	static List<Integer> findNextPerm(List<Integer> nums){
+		// has to be a SUFFIX 
+
+		int k = nums.size() - 2;
+		while(k >= 0 && nums.get(k) >= nums.get(k + 1)){
+			k--;
+		}
+		if(k == -1){
+			return Collections.emptyList();
+		}
+		// this just swaps the target and the one closest to it 
+		for(int i = nums.size() - 1; i > k; i--){
+			if(nums.get(i) > nums.get(k)){
+				Collections.swap(nums, k, i);
+				break;
+			}
+		}
+
+		Collections.reverse(nums.subList(k + 1, nums.size()));
+		return nums;
+
+	}
+
 
 	public static void main(String[] args){
 
@@ -399,8 +440,44 @@ class ArrayProblems {
 			// for(int i : solution){
 			// 	System.out.println(i);
 			// }
+		// 6.10 Permute elements of an array 
+			// List<Integer> perm = new ArrayList<>();
+			// perm.add(4);
+			// perm.add(1);
+			// perm.add(3);
+			// perm.add(0);
+			// perm.add(2);
+			// List<Integer> ints = new ArrayList<>();
+			// ints.add(77);
+			// ints.add(23);
+			// ints.add(11);
+			// ints.add(3);
+			// ints.add(4);
 
+			// List<Integer> a = ArrayProblems.permuteElements(perm, ints);
 
+			// for(int i : a){
+			// 	System.out.println(i);
+			// }
+		// 6.11 Next Permutation
+
+		List<Integer> nums = new ArrayList<Integer>();
+		nums.add(6);
+		nums.add(2);
+		nums.add(1);
+		nums.add(5);
+		nums.add(4);
+		nums.add(3);
+		nums.add(0);
+
+		List<Integer> next = findNextPerm(nums);
+
+		for(int i : next){
+			System.out.println(i);
+		}
 	}
 }
+
+
+
 
