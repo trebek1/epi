@@ -671,10 +671,18 @@ class ArrayProblems {
 
 		// 6.15 Compute a random subset 
 
-			List<Integer> solution = ArrayProblems.randomSubset4(10, 5);
-			for(int i : solution){
-				System.out.println(i);
-			}
+			// List<Integer> solution = ArrayProblems.randomSubset4(10, 5);
+			// for(int i : solution){
+			// 	System.out.println(i);
+			// }
+
+		// 6.16 Generate NonUniform Random Numbers 
+
+			// idea, update the range and pick a number from it. If falls in certain parts of the range 
+			// then use values allocated to that range. Find where you fall in the range using a binary tree 
+			// can then find the correct weighted value in O(log(n)) time 
+
+
 
 	}
 }
