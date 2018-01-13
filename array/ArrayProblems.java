@@ -204,6 +204,27 @@ class ArrayProblems {
 		return solution;
 	}
 
+	static List<Integer> findPrimes(int n){
+		// collection of primes 
+		List<Integer> primes = new ArrayList<>();
+
+		// is prime section
+		List<Boolean> list = new ArrayList<>(Collections.nCopies(n + 1, true));
+		// make zero and one false 
+		list.set(0, false);
+		list.set(1, false);
+
+		for(int i = 2; i <= n; i++){
+			if(list.get(i)){
+				primes.add(i);
+				for(int k = i; k <= n; k += i){
+					list.set(k, false);
+				}
+			}
+		}
+		return primes;
+	}
+
 
 	public static void main(String[] args){
 
@@ -340,7 +361,7 @@ class ArrayProblems {
 			// 	System.out.println(i);
 			// }
 		// 6.7 Buy and Sell A Stock Once 
-
+			// keep track of lowest found and difference of that with current 
 			// List<Integer> array = new ArrayList<Integer>();
 			// array.add(310);
 			// array.add(315);
@@ -355,18 +376,27 @@ class ArrayProblems {
 			// System.out.println(ArrayProblems.buySellOnce(array));
 
 		// 6.8 Buy and Sell A Stock Twice
+		    // pass once over the array and find largest gains 
+			// pass backwards calculating largest gain + largest gain in other direction to find 2 
+			// List<Integer> array = new ArrayList<Integer>();
+			// array.add(12);
+			// array.add(11);
+			// array.add(13);
+			// array.add(9);
+			// array.add(12);
+			// array.add(8);
+			// array.add(14);
+			// array.add(13);
+			// array.add(15);
+			// System.out.println(ArrayProblems.buySellTwice(array));
+		// 6.9 Enumerate all primes to N 
+			List<Integer> solution = ArrayProblems.findPrimes(50);
 
-			List<Integer> array = new ArrayList<Integer>();
-			array.add(12);
-			array.add(11);
-			array.add(13);
-			array.add(9);
-			array.add(12);
-			array.add(8);
-			array.add(14);
-			array.add(13);
-			array.add(15);
-			System.out.println(ArrayProblems.buySellTwice(array));
+			for(int i : solution){
+				System.out.println(i);
+			}
+
+
 	}
 }
 
