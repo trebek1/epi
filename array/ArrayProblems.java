@@ -389,12 +389,16 @@ class ArrayProblems {
 			// array.add(13);
 			// array.add(15);
 			// System.out.println(ArrayProblems.buySellTwice(array));
-		// 6.9 Enumerate all primes to N 
-			List<Integer> solution = ArrayProblems.findPrimes(50);
+		// 6.9 Enumerate all primes to N
+			//  use a sieve to remove multiples of a found prime
+			// after all mults are removed as you move across array 
+			// any true value is a prime 
+			// Collections.nCopies(int i , value) to distribute values in arrayList instantiation
+			// List<Integer> solution = ArrayProblems.findPrimes(50);
 
-			for(int i : solution){
-				System.out.println(i);
-			}
+			// for(int i : solution){
+			// 	System.out.println(i);
+			// }
 
 
 	}
