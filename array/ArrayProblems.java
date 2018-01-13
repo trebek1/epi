@@ -266,6 +266,48 @@ class ArrayProblems {
 
 	}
 
+	// this is 0(k) time and 0(k) space 
+	static List<Integer> randomSubset(List<Integer> set, int size){
+
+		// how do you take a set and return a subset with equal probability 
+
+		List<Integer> usedIdx = new ArrayList<>();
+		List<Integer> soln = new ArrayList<>();
+
+		// 0 --> set size - 1
+		int idx;
+
+		for(int i = 0; i < size; i++){
+			while(true){
+				idx = (int) Math.floor(Math.random() * set.size());
+				if(!usedIdx.contains(idx)){
+					usedIdx.add(idx);
+					soln.add(set.get(idx));
+					break;
+				}
+			}
+		}
+		return soln;
+	}
+	// solution for 0(k) time and O(1) space 
+	static List<Integer> randomSubset2(List<Integer> set, int size){
+		int idx;
+		for(int i = 0; i < size; i++){
+			idx = i + (int) Math.floor(Math.random() * (set.size() - i));
+			Collections.swap(set, i, idx);
+		}
+		return set.subList(0, size);
+	}
+
+	static List<Integer> randomPermutation(int n){
+		List<Integer> arr = new ArrayList<>(n);
+		for(int i = 0; i < n; i++){
+			arr.add(i);
+		}
+
+		return ArrayProblems.randomSubset2(arr, n);
+	}
+
 
 	public static void main(String[] args){
 
@@ -461,20 +503,79 @@ class ArrayProblems {
 			// }
 		// 6.11 Next Permutation
 
-		List<Integer> nums = new ArrayList<Integer>();
-		nums.add(6);
-		nums.add(2);
-		nums.add(1);
-		nums.add(5);
-		nums.add(4);
-		nums.add(3);
-		nums.add(0);
+			// List<Integer> nums = new ArrayList<Integer>();
+			// nums.add(6);
+			// nums.add(2);
+			// nums.add(1);
+			// nums.add(5);
+			// nums.add(4);
+			// nums.add(3);
+			// nums.add(0);
 
-		List<Integer> next = findNextPerm(nums);
+			// List<Integer> next = findNextPerm(nums);
 
-		for(int i : next){
-			System.out.println(i);
-		}
+			// for(int i : next){
+			// 	System.out.println(i);
+			// }
+		// 6.12 Sample offline data 
+
+			// take a subset of an array of data randomly from a larger set with each set equally likely 
+
+		// 		List<Integer> set = new ArrayList<>();
+
+		// 		set.add(45);
+		// 		set.add(10);
+		// 		set.add(7);
+		// 		set.add(82);
+		// 		set.add(77);
+		// 		set.add(12);
+		// 		set.add(55);
+		// 		set.add(99);
+		// 		set.add(44);
+		// 		set.add(3);
+
+		// 		List<Integer> solution = ArrayProblems.randomSubset2(set, 5);
+
+		// 		for(int i : solution){
+		// 			System.out.println(i);
+		// 		}
+		// }
+
+		// 6.13 Sample Online data 
+		// packed sniffer.
+		// design program that takes input size k and reads packets 
+		// continuously maintaing a uniform random subset of size k of read packets 
+
+		// maintain some subset of the k packets taken as new packets are coming in 
+
+		// idea: Find the subset using the strategy from the previous problem 
+		// as n + 1 packet comes in. 
+		// Find one random element from the whole set. 
+		// if element is not in the set already or is the new element added, 
+		// find a random element in the set and swap it with the new element 
+		// the new set is a subset of the whole set including the new element added 
+
+		// 6.14 Compute a random Permutation
+
+		// Brute force approach
+		// iteratively pick random numbers from 0 -> n - 1 and discard if repeating 
+		// store seen in hashTable. 
+		// this would work 
+
+		// coupon collectors problem O(nlog(n)) 
+		// O(n) space
+
+		// better approach is to use same algorithm as finding a random subset of an array of data 
+
+		// List<Integer> solution = ArrayProblems.randomPermutation(5);
+		// for (int i : solution) {
+		// 	System.out.println(i);
+		// }
+
+		// 6.15 Compute a random subset 
+
+		
+
 	}
 }
 
