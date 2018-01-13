@@ -1,6 +1,9 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Random;
 
 // Array Notes
 // good for retrieving and updating (O(1))
@@ -308,6 +311,100 @@ class ArrayProblems {
 		return ArrayProblems.randomSubset2(arr, n);
 	}
 
+	static List<Integer> randomSubset3(int n, int k){
+		// k is size of subset
+		// n is size of initial array
+
+		Map<Integer, Integer> elements = new HashMap<>();
+
+		Random randIdxGen = new Random();
+
+		for(int i = 0; i < k; i++){
+
+			// grab an index in the remaining elements that aren't set 
+			int randIdx = i + randIdxGen.nextInt(n - i);
+
+			// element that you are using 
+			Integer randomValue = elements.get(randIdx);
+
+			// index you are at 
+			Integer currentIndexValue = elements.get(i);
+
+			// both are null 
+			if(randomValue == null && currentIndexValue == null){
+				// really this is the only value being added to the solution here 
+				// 0, 10
+				elements.put(i, randIdx);
+
+				// example setting both values when at index 0
+				// 10, 0
+				elements.put(randIdx, i);
+
+			} else if(randomValue == null && currentIndexValue != null){
+				// again set I to the randIndex 
+				elements.put(i, randIdx);
+				// set the random index to the value at i 
+				elements.put(randIdx, currentIndexValue);
+
+			} else if(randomValue != null && currentIndexValue == null){
+				
+				// here sine p1 isnt null just set value to p1 (rand index value)
+				elements.put(i, randomValue);
+
+				// set randIndex to index where last found 
+				elements.put(randIdx, i);
+
+			} else {
+				
+				// really this is the only value being added to the solution here 
+				elements.put(i, randomValue); // set i to the rand index val (so update to last value found)
+				
+				elements.put(randIdx, currentIndexValue); // set randIndex to last index found at 
+			}
+		}
+		List<Integer> result = new ArrayList<>(k);
+		for(int i = 0; i < k; i++){
+			result.add(elements.get(i));
+		}
+		return result;
+	}
+
+	static List<Integer> randomSubset4(int n, int k){
+		// k is size of subset
+		// n is size of initial array
+
+		// idea is you are finding current and random values;
+		// if random val is null use rand idx otherwise use rand val
+		// if current val is null use current idx for rand val else use current val 	
+
+		Map<Integer, Integer> elements = new HashMap<>();
+
+		Random randIdxGen = new Random();
+
+		for(int i = 0; i < k; i++){
+
+			int rand = i + randIdxGen.nextInt(n - i);
+
+			// element that you are using 
+			Integer randomValue = elements.get(rand);
+
+			// index you are at 
+			Integer currentIndexValue = elements.get(i);
+
+			int first = (randomValue == null) ? rand : randomValue;
+			int second = (currentIndexValue == null) ? i : currentIndexValue;
+
+			elements.put(i, first);
+			elements.put(rand, second);
+
+		}
+		List<Integer> result = new ArrayList<>(k);
+		for(int i = 0; i < k; i++){
+			result.add(elements.get(i));
+		}
+		return result;
+	}
+
 
 	public static void main(String[] args){
 
@@ -574,7 +671,10 @@ class ArrayProblems {
 
 		// 6.15 Compute a random subset 
 
-		
+			List<Integer> solution = ArrayProblems.randomSubset4(10, 5);
+			for(int i : solution){
+				System.out.println(i);
+			}
 
 	}
 }
