@@ -405,6 +405,42 @@ class ArrayProblems {
 		return result;
 	}
 
+	static List<Integer> findNonUniformNumbers(List<Integer> values, List<Double> p, int num){
+		List<Integer> soln = new ArrayList<>();
+		List<Double> prefixPx = new ArrayList<>();
+
+		prefixPx.add(0.0);
+		Random r = new Random();
+
+		// calculate a prefix array
+		for(int i = 0; i < p.size(); i++){
+			double px = p.get(i);
+			double lastPx = prefixPx.get(i);
+			prefixPx.add(px + lastPx);
+		}
+		for(int i = 0; i < num; i++){
+			// get a double
+			double d = r.nextDouble();
+			// look for double in prefixes
+			int it = Collections.binarySearch(prefixPx, d);
+			// System.out.println("this is it " + it);
+			if(it < 0){
+				// want the index of the first element greater than the key 
+				// System.out.println("This is d " + d);
+				// System.out.println("This is it " + it);
+				// returns -(index greater than value) - 1
+				// convert that value to an index that is useful 
+				int idx = (Math.abs(it) - 2); 
+				// System.out.println("This is idx " + idx);
+				soln.add(values.get(idx));
+			} else {
+				// if it finds a value exactly just look it up and return the value
+				soln.add(values.get(it));
+			}
+		}
+		return soln;
+	}
+
 
 	public static void main(String[] args){
 
@@ -682,8 +718,33 @@ class ArrayProblems {
 			// then use values allocated to that range. Find where you fall in the range using a binary tree 
 			// can then find the correct weighted value in O(log(n)) time 
 
+			// List<Integer> numbers = new ArrayList<>();
+			// List<Double> probabilities = new ArrayList<>();
+			// Map<Integer, Integer> map = new HashMap<>();
 
+			// numbers.add(7);
+			// numbers.add(11);
+			// numbers.add(25);
+			// numbers.add(77);
+			// numbers.add(1337);
 
+			// probabilities.add(0.05);
+			// probabilities.add(0.5);
+			// probabilities.add(0.2);
+			// probabilities.add(0.1);
+			// probabilities.add(0.15);
+
+			// List<Integer> arr = ArrayProblems.findNonUniformNumbers(numbers, probabilities, 5000);
+			// for(int i : arr){
+			// 	if(map.containsKey(i)){
+			// 		map.put(i, map.get(i) + 1);
+			// 	} else {
+			// 		map.put(i, 1);
+			// 	}
+			// }
+			// for(int key : map.keySet()){
+			// 	System.out.println(key + " --> " + map.get(key));
+			// }
 	}
 }
 
