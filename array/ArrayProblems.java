@@ -441,6 +441,56 @@ class ArrayProblems {
 		return soln;
 	}
 
+	static boolean isValidBoard(List<List<Integer>> board){
+		// loop through all rows and check 0 --> 9
+		// loop through all columns check 0 --> 9
+		// loop through each box and check 0 --> 9. 
+		
+		// check row
+		for(int i = 0; i <board.size(); i++){
+			if(hasDuplicate(board, i, i + 1, 0, board.size())){
+				return false;
+			}
+		}
+
+		// check col
+		for(int i = 0; i <board.size(); i++){
+			if(hasDuplicate(board, 0, board.size(), i, i + 1)){
+				return false;
+			}
+		}
+		
+		//check box 
+		int regionSize = (int)Math.sqrt(board.size());
+		for(int i = 0; i < regionSize; i++){
+			for(int j = 0; j < regionSize; j++){
+				if(hasDuplicate(board, regionSize * i, regionSize * (i + 1), regionSize * j, regionSize * (j + 1))){
+					return false;
+				}
+			}
+		}
+
+		// efficiency is 3*O(n^2) = O(n^2) for nxn matrix
+		// space is O(n) for storing true/false 
+
+
+		return true;
+	}
+
+	private static boolean hasDuplicate(List<List<Integer>> partial, int startRow, int endRow, int startCol, int endCol){
+		List<Boolean> isPresent = new ArrayList<>(Collections.nCopies(partial.size() + 1, false)); // 0 --> 9 is 1 more than size 
+		for(int i = startRow; i < endRow; i++){
+			for(int j = startCol; j < endCol; j++){
+				if(partial.get(i).get(j) != 0 && isPresent.get(partial.get(i).get(j))){
+					return true;
+				}
+				// get value from the matrix and set it to true in the present array 
+				isPresent.set(partial.get(i).get(j), true);
+			}
+		}
+		return false;
+	}
+
 
 	public static void main(String[] args){
 
@@ -745,6 +795,114 @@ class ArrayProblems {
 			// for(int key : map.keySet()){
 			// 	System.out.println(key + " --> " + map.get(key));
 			// }
+
+		// 6.17 Sudoku Checker 
+
+			// List<Integer> row0 = new ArrayList<>();
+			// row0.add(5);
+			// row0.add(3);
+			// row0.add(4);
+			// row0.add(6);
+			// row0.add(7);
+			// row0.add(8);
+			// row0.add(9);
+			// row0.add(1);
+			// row0.add(2);
+			// List<Integer> row1 = new ArrayList<>();
+			// row1.add(6);
+			// row1.add(7);
+			// row1.add(2);
+			// row1.add(1);
+			// row1.add(9);
+			// row1.add(5);
+			// row1.add(3);
+			// row1.add(4);
+			// row1.add(8);
+			// List<Integer> row2 = new ArrayList<>();
+			// row2.add(1);
+			// row2.add(9);
+			// row2.add(8);
+			// row2.add(3);
+			// row2.add(4);
+			// row2.add(2);
+			// row2.add(5);
+			// row2.add(6);
+			// row2.add(7);
+
+			// List<Integer> row3 = new ArrayList<>();
+			// row3.add(8);
+			// row3.add(5);
+			// row3.add(9);
+			// row3.add(7);
+			// row3.add(6);
+			// row3.add(1);
+			// row3.add(4);
+			// row3.add(2);
+			// row3.add(3);
+			// List<Integer> row4 = new ArrayList<>();
+			// row4.add(4);
+			// row4.add(2);
+			// row4.add(6);
+			// row4.add(8);
+			// row4.add(5);
+			// row4.add(3);
+			// row4.add(7);
+			// row4.add(9);
+			// row4.add(1);
+			// List<Integer> row5 = new ArrayList<>();
+			// row5.add(7);
+			// row5.add(1);
+			// row5.add(3);
+			// row5.add(9);
+			// row5.add(2);
+			// row5.add(4);
+			// row5.add(8);
+			// row5.add(5);
+			// row5.add(6);
+			// List<Integer> row6 = new ArrayList<>();
+			// row6.add(9);
+			// row6.add(6);
+			// row6.add(1);
+			// row6.add(5);
+			// row6.add(3);
+			// row6.add(7);
+			// row6.add(2);
+			// row6.add(8);
+			// row6.add(4);
+			// List<Integer> row7 = new ArrayList<>();
+			// row7.add(2);
+			// row7.add(8);
+			// row7.add(7);
+			// row7.add(4);
+			// row7.add(1);
+			// row7.add(9);
+			// row7.add(6);
+			// row7.add(3);
+			// row7.add(5);
+			// List<Integer> row8 = new ArrayList<>();
+			// row8.add(3);
+			// row8.add(4);
+			// row8.add(5);
+			// row8.add(2);
+			// row8.add(8);
+			// row8.add(6);
+			// row8.add(1);
+			// row8.add(7);
+			// row8.add(9);
+
+			// List<List<Integer>> sudoku = new ArrayList<>();
+			// sudoku.add(row0);
+			// sudoku.add(row1);
+			// sudoku.add(row2);
+			// sudoku.add(row3);
+			// sudoku.add(row4);
+			// sudoku.add(row5);
+			// sudoku.add(row6);
+			// sudoku.add(row7);
+			// sudoku.add(row8);
+
+			// System.out.println(ArrayProblems.isValidBoard(sudoku));
+
 	}
 }
 
