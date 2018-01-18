@@ -491,6 +491,130 @@ class ArrayProblems {
 		return false;
 	}
 
+	private static void matrixLayer(List<List<Integer>> matrix, int offset, List<Integer> solution){
+
+		// center of matrix w odd dim 
+		if(offset == matrix.size() - offset - 1){
+			solution.add(matrix.get(offset).get(offset));
+			return;
+		}
+		// dont want to include the column value in this pass (so - 1)
+		
+		for(int j = offset; j < matrix.size() - offset - 1; j++){
+			solution.add(matrix.get(offset).get(j));
+		}
+		
+		for(int i = offset; i < matrix.size() - offset - 1; i++){
+			solution.add(matrix.get(i).get(matrix.size() - offset - 1));
+		}
+		
+		for(int j = matrix.size() - offset - 1; j > offset; j--){
+			solution.add(matrix.get(matrix.size() - offset - 1).get(j));
+		}
+		
+		for(int i = matrix.size() - offset - 1; i > offset; i--){
+			solution.add(matrix.get(i).get(offset));
+		}
+	}
+
+
+	static List<Integer> spiralOrdering(List<List<Integer>> grid){
+		List<Integer> solution = new ArrayList<>();
+
+		for(int offset = 0; offset < Math.ceil(0.5*grid.size()); offset++){
+			matrixLayer(grid, offset, solution);
+		}
+
+		return solution;
+	}
+
+	 static void pascalsTriangle(int n){
+    List<List<Integer>> solution = new ArrayList<>();
+    for(int i = 0; i < n; i++){
+        List<Integer> row = new ArrayList<>();
+        
+        for(int j = 0; j <= i; j++){
+            if(j == 0 || j == i){
+                row.add(1);
+            } else {
+                row.add(solution.get(i - 1).get(j - 1) + solution.get(i - 1).get(j));
+            }
+        } 
+        solution.add(row);
+    }
+
+    for(int i = 0; i < solution.size(); i++){
+        int space = (solution.size() - i)/2 + 1;
+        StringBuilder builder = new StringBuilder();
+        for(int k = 0; k < space; k++){
+            builder.append(" ");
+        }
+        List<Integer> row = solution.get(i);
+        for(int j = 0; j < row.size(); j++){
+            if(i < 10){
+                System.out.print(builder.toString() + row.get(j) + "  ");    
+            } else {
+                System.out.print(builder.toString() + row.get(j) + " ");    
+            }
+            
+        }
+        System.out.println();
+    }
+  }
+
+// 0          //      1
+// 0          //     1 1 
+// 1          //    1 2 1
+// 2          //   1 3 3 1
+// 3          //  1 4 6 4 1
+// 4         // 1 5 10 10 5 1 
+// 5        // 1 6 15 20 15 6 1
+
+
+  static List<List<Integer>> rotate(List<List<Integer>> grid){
+
+    int loops = grid.size() / 2;
+    int size = grid.size() - 1;
+    int power;
+
+
+    for(int i = 0; i < loops; i++){
+      power = (int)Math.pow(2,i);
+      for(int k = i; k - i < grid.size()/power - 1; k++){
+        
+        int up = grid.get(i).get(k);
+        int right = grid.get(k).get(size - i);
+        int down = grid.get(size - i).get(size - k);
+        int left = grid.get(size - k).get(i);
+
+        // System.out.println("up " + up);
+        // System.out.println("right " + right);
+        // System.out.println("down " + down);
+        // System.out.println("left " + left);
+
+        grid.get(i).set(k, left); // set up 
+        grid.get(k).set(size - i, up); // set right 
+        grid.get(size - i).set(size - k, right); // set down 
+        grid.get(size - k).set(i, down); // set left 
+
+      }
+    }
+
+    // 1  2  3  4 
+    // 5  6  7  8 
+    // 9 10 11 12 
+    // 13 14 15 16
+
+    // 13 9  5  1
+    // 14 10 6  2
+    // 15 11 7  3
+    // 16 12 8  4
+
+
+
+    return grid;
+  }
+
 
 	public static void main(String[] args){
 
@@ -903,6 +1027,108 @@ class ArrayProblems {
 
 			// System.out.println(ArrayProblems.isValidBoard(sudoku));
 
+		//6.18 Spiral Ordering of 2D Array
+
+		// List<Integer> row0 = new ArrayList<>();
+		// row0.add(1);
+		// row0.add(2);
+		// row0.add(3);
+		// row0.add(4);
+
+		// List<Integer> row1 = new ArrayList<>();
+		// row1.add(5);
+		// row1.add(6);
+		// row1.add(7);
+		// row1.add(8);
+
+		// List<Integer> row2 = new ArrayList<>();
+		// row2.add(9);
+		// row2.add(10);
+		// row2.add(11);
+		// row2.add(12);
+
+		// List<Integer> row3 = new ArrayList<>();
+		// row3.add(13);
+		// row3.add(14);
+		// row3.add(15);
+		// row3.add(16);
+
+		// List<List<Integer>> grid = new ArrayList<>();
+		// grid.add(row0);
+		// grid.add(row1);
+		// grid.add(row2);
+		// grid.add(row3);
+
+		// List<Integer> soln = ArrayProblems.spiralOrdering(grid);
+		// for(Integer i : soln){
+		// 	System.out.println(i);
+		// }
+
+		//6.19 Rotate 2D grid
+
+		// List<List<Integer>> grid = new ArrayList<>();
+
+	    // List<Integer> row0 = new ArrayList<>();
+	    // row0.add(1);
+	    // row0.add(2);
+	    // row0.add(3);
+	    // row0.add(4);
+
+	    // List<Integer> row1 = new ArrayList<>();
+	    // row1.add(5);
+	    // row1.add(6);
+	    // row1.add(7);
+	    // row1.add(8);
+
+	    // List<Integer> row2 = new ArrayList<>();
+	    // row2.add(9);
+	    // row2.add(10);
+	    // row2.add(11);
+	    // row2.add(12);
+
+	    // List<Integer> row3 = new ArrayList<>();
+	    // row3.add(13);
+	    // row3.add(14);
+	    // row3.add(15);
+	    // row3.add(16);
+
+	    // grid.add(row0);
+	    // grid.add(row1);
+	    // grid.add(row2);
+	    // grid.add(row3);
+
+	    // int size = grid.size();
+	    // System.out.println("----Before----");
+	    // for(int i = 0; i < size; i++){
+	    //   for(int k = 0; k < size; k++){
+	    //     System.out.print(grid.get(i).get(k));
+	    //     System.out.print(" ");
+	    //   }
+	    //   System.out.println(" ");
+	    // }
+	    // System.out.println("      ");
+	    // List<List<Integer>> rotated = Array.rotate(grid);
+	    // System.out.println("----After----");
+	    // for(int i = 0; i < size; i++){
+	    //   for(int k = 0; k < size; k++){
+	    //     System.out.print(grid.get(i).get(k));
+	    //     System.out.print(" ");
+	    //   }
+	    //   System.out.println(" ");
+	    // }
+
+	    // 1  2  3  4 
+	    // 5  6  7  8 
+	    // 9 10 11 12 
+	    // 13 14 15 16
+
+	    // 13 9  5  1
+	    // 14 10 6  2
+	    // 15 11 7  3
+	    // 16 12 8  4
+
+		//6.20 Create Pascals Triangle
+	    //Array.pascalsTriangle(7);
 	}
 }
 
