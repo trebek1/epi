@@ -148,7 +148,11 @@ class Table {
       // System.out.println(constructLetter(letter, magazine1));
       // System.out.println(constructLetter(letter, magazine2));
     // 13.4 Implement ISBN Cache
-      // 
+      // ISBN cache implements a LinkedHashMap 
+      // implement methods lookup, insert and remove 
+      // LRU Cache (Least Recently Used is a setting on Linked HashMap setting arg 3 to true)
+      // Override the removeEldestEntry method by setting size() > capacity that you pass in 
+
 
 
   }
