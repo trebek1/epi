@@ -141,12 +141,14 @@ class Table {
       // System.out.println(isPalindrome("alex"));
 
     // 13.3 Is An Anonymous Letter Constructable ? 
-      String letter = "a joy to all";
-      String magazine1 = " the bear was a joy to all";
-      String magazine2 = " xbox is the best";
+      // String letter = "a joy to all";
+      // String magazine1 = " the bear was a joy to all";
+      // String magazine2 = " xbox is the best";
 
-      System.out.println(constructLetter(letter, magazine1));
-      System.out.println(constructLetter(letter, magazine2));
+      // System.out.println(constructLetter(letter, magazine1));
+      // System.out.println(constructLetter(letter, magazine2));
+    // 13.4 Implement ISBN Cache
+      // 
 
 
   }
