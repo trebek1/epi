@@ -3,6 +3,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 class Table {
 
@@ -110,6 +112,26 @@ class Table {
     return false;
   }
 
+
+  static Node LCACloseOptimization(Node c1, Node c2){
+    // a set of unordered values 
+    Set<Node> nodes = new HashSet<>();
+
+    while(c1 != null && c2 != null){
+      if(nodes.contains(c1)){
+        return c1;
+      } else if(nodes.contains(c2)){
+        return c2;
+      } else {
+        nodes.add(c1);
+        nodes.add(c2);
+      }
+      c1 = c1.p;
+      c2 = c2.p;
+    }
+    return null;
+  }
+
   public static void main(String[] args){
   	// 13.1 Partition into anagrams
 
@@ -152,7 +174,34 @@ class Table {
       // implement methods lookup, insert and remove 
       // LRU Cache (Least Recently Used is a setting on Linked HashMap setting arg 3 to true)
       // Override the removeEldestEntry method by setting size() > capacity that you pass in 
+    //13.5 Compute the LCA, optimizing for close ancestors 
+      // idea is that old solution is O(h) time with O(1) space, use more space to trade off for
+      // less time on average 
+      // Keep track of nodes visited alternating between the two nodes. This leads to 
+      // O(D1 + D2) space and time on average
+      // BinaryTree tree = new BinaryTree();  
+      // tree.add(25);
+      // tree.add(11);
+      // tree.add(40);
+      // tree.add(6);
+      // tree.add(15);
+      // tree.add(35);
+      // tree.add(55);
+      // tree.add(1);
+      // tree.add(33);
+      // tree.add(30);
 
+      // Node n1 = tree.treeSearch(1);
+      // Node n2 = tree.treeSearch(15);
+
+      //       25
+      //    11.    40
+      //  6.  15. 35. 55
+      // 1.      33
+
+      // Node lca = LCACloseOptimization(n1, n2);
+      // System.out.println(lca.value); // Should return 11 
+    //13.6 Compute the k most frequent queries 
 
 
   }
