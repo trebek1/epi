@@ -132,6 +132,26 @@ class Table {
     return null;
   }
 
+  static int minDistance(List<String> words){
+    Map<String, Integer> map = new HashMap<>();
+
+    Integer min = Integer.MAX_VALUE;
+    int diff = 0;
+    for(int i = 0; i < words.size(); i++){
+      String word = words.get(i);
+      if(map.containsKey(word)){
+        diff = i - map.get(word);
+        if(diff < min){
+          min = diff;
+        }
+        map.put(word, i);
+      } else {
+        map.put(word, i);
+      }
+    }
+    return min;
+  }
+
   public static void main(String[] args){
   	// 13.1 Partition into anagrams
 
@@ -206,10 +226,27 @@ class Table {
         // with HT you have to keep track of frequencies in a HT and keep track of top 6 
         // frequencies in a Min Heap Concurrently - This leads to O(n + mlog(k) efficiency and O(m) space)
         // with m = distinct keys, n = total strings and k number of elements looking for (k min)
-        
+    //13.7 Find the Smallest Distance between Two of the same strings in a sentence 
 
+      // List<String> words = new ArrayList<>();
+      // words.add("all");
+      // words.add("work");
+      // words.add("and");
+      // words.add("no");
+      // words.add("play");
+      // words.add("makes");
+      // words.add("for");
+      // words.add("no");
+      // words.add("work");
+      // words.add("no");
+      // words.add("fun");
+      // words.add("and");
+      // words.add("no");
+      // words.add("results");
 
+      // int minDistance = minDistance(words);
 
+      // System.out.println(minDistance); // expect 2
 
 
   }
