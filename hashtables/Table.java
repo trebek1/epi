@@ -152,6 +152,68 @@ class Table {
     return min;
   }
 
+  // Only nested classes can be static in java 
+  // Can only access outer vars that are static 
+  // Do not need instance of outer class to make instance of this inner class 
+  static class Subarray {
+    Integer start; 
+    Integer end;
+    Subarray(int start, int end){
+      this.start = start;
+      this.end = end;
+    }
+  }
+
+  // O(2n) = O(n)
+  static Subarray smallestSubarray(List<String> paragraph, Set<String> set){
+    Subarray soln = new Subarray(-1, -1);
+    Map<String, Integer> keywordsToCount = new HashMap<>();
+    int left = 0, right = 0;
+
+    // goes until all the words are found once, now keywords ToCount has frequencies of each word in interval
+    while(right < paragraph.size()){
+      while(right < paragraph.size() && keywordsToCount.size() < set.size()){
+        String  word = paragraph.get(right);
+        if(set.contains(word)){
+          keywordsToCount.put(word, keywordsToCount.containsKey(word) ? keywordsToCount.get(word) + 1 : 1);
+        }
+        right++;
+      }
+      boolean foundAll = keywordsToCount.size() == set.size();
+      boolean noneYet = soln.start == -1 && soln.end == -1;
+      boolean smallerRange = right - 1 - left < soln.end - soln.start;
+
+      // replace value if found the smallest range;
+      if (foundAll && (noneYet || smallerRange)) {
+        soln.start = left;
+        soln.end = right - 1;
+      }
+
+      // from left to right keep looking for smaller range until 
+      // you dont have all the elements required for the set 
+      while(left < right && foundAll){
+        String l = paragraph.get(left);
+        if(set.contains(l)){
+          int keywordCount = keywordsToCount.get(l);
+          keywordsToCount.put(l, --keywordCount);
+          if(keywordCount == 0){
+            keywordsToCount.remove(l);
+            smallerRange = right - 1 - left < soln.end - soln.start;
+            noneYet = soln.start == -1 && soln.end == -1;
+            if(noneYet || smallerRange){
+              soln.start = left;
+              soln.end = right - 1;
+            }
+          }
+        }
+        left++;
+        foundAll = keywordsToCount.size() == set.size();
+      }
+    }
+    return soln;
+  }
+
+
   public static void main(String[] args){
   	// 13.1 Partition into anagrams
 
@@ -248,6 +310,35 @@ class Table {
 
       // System.out.println(minDistance); // expect 2
 
+    // 13.8 Find smallest subarray covering all values 
+      List<String> list = new ArrayList<>();
+      // looking for banana cat 
+      // first 0 --> 5
+      list.add("apple");   // 0
+      // now 1 --> 5 // min is now 4 
+      list.add("banana"); // 1
+      list.add("apple");   // 2
+      list.add("apple");   // 3
+      list.add("dog");     // 4
+      list.add("cat");     // 5
+      // skip to 5 
+      list.add("apple");   // 6
+      list.add("dog");     // 7
+      list.add("banana"); // 8
+      // 5 --> 8 is 3 so new min 
+
+      list.add("apple");   // 9 
+      list.add("cat");     // 10
+      // 8 --> 10 is new min 
+
+      list.add("dog");     // 11
+
+      Set<String> subset = new HashSet<>();
+      subset.add("banana");
+      subset.add("cat");
+
+      Subarray s = smallestSubarray(list, subset);
+      System.out.println("Start " + s.start + " end " + s.end);
 
   }
 }
