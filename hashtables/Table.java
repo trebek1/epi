@@ -201,7 +201,15 @@ class Table {
 
       // Node lca = LCACloseOptimization(n1, n2);
       // System.out.println(lca.value); // Should return 11 
+      // Sets have contains method, Maps have containsKey methods 
     //13.6 Compute the k most frequent queries 
+        // with HT you have to keep track of frequencies in a HT and keep track of top 6 
+        // frequencies in a Min Heap Concurrently - This leads to O(n + mlog(k) efficiency and O(m) space)
+        // with m = distinct keys, n = total strings and k number of elements looking for (k min)
+        
+
+
+
 
 
   }
