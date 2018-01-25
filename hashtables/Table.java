@@ -213,6 +213,52 @@ class Table {
     return soln;
   }
 
+  static Subarray smallestSubarraySequential(List<String> document, List<String> orderedList){
+    Subarray soln = new Subarray(-1, -1); 
+
+    // keyword to index in orderedList (keyword, idx)
+    Map<String, Integer> keywordToIdx = new HashMap<>();
+
+    List<Integer> latestOccurance = new ArrayList<>(orderedList.size());
+
+    List<Integer> shortestSubarrayLength = new ArrayList<>(orderedList.size());
+
+    // setup data structures 
+    for(int i = 0; i < orderedList.size(); i++){
+      latestOccurance.add(-1);
+      shortestSubarrayLength.add(Integer.MAX_VALUE);
+      keywordToIdx.put(orderedList.get(i), i);
+    }
+
+    int shortestDistance = Integer.MAX_VALUE;
+
+
+
+    for(int i = 0; i < document.size(); i++){
+      Integer keywordIdx = keywordToIdx.get(document.get(i)); // index of current word in orderedList
+
+      if(keywordIdx != null){
+        // first keyword 
+        if(keywordIdx == 0){
+          shortestSubarrayLength.set(0, 1);
+        } else if(shortestSubarrayLength.get(keywordIdx - 1) != Integer.MAX_VALUE){
+          int distanceToPreviousKeyword = i - latestOccurance.get(keywordIdx - 1);
+          shortestSubarrayLength.set(keywordIdx, distanceToPreviousKeyword + shortestSubarrayLength.get(keywordIdx - 1));
+        }
+        latestOccurance.set(keywordIdx, i);
+
+        // last keyword 
+        if(keywordIdx == orderedList.size() - 1 && shortestSubarrayLength.get(shortestSubarrayLength.size() - 1) < shortestDistance){
+          shortestDistance = shortestSubarrayLength.get(shortestSubarrayLength.size() - 1);
+          soln.start = i - shortestSubarrayLength.get(shortestSubarrayLength.size() - 1) + 1;
+          soln.end = i; 
+        }
+      }
+    }
+
+    return soln;
+
+  }
 
   public static void main(String[] args){
   	// 13.1 Partition into anagrams
@@ -311,33 +357,57 @@ class Table {
       // System.out.println(minDistance); // expect 2
 
     // 13.8 Find smallest subarray covering all values 
-      List<String> list = new ArrayList<>();
+      // List<String> list = new ArrayList<>();
       // looking for banana cat 
       // first 0 --> 5
+      // list.add("apple");   // 0
+      // // now 1 --> 5 // min is now 4 
+      // list.add("banana"); // 1
+      // list.add("apple");   // 2
+      // list.add("apple");   // 3
+      // list.add("dog");     // 4
+      // list.add("cat");     // 5
+      // // skip to 5 
+      // list.add("apple");   // 6
+      // list.add("dog");     // 7
+      // list.add("banana"); // 8
+      // // 5 --> 8 is 3 so new min 
+
+      // list.add("apple");   // 9 
+      // list.add("cat");     // 10
+      // // 8 --> 10 is new min 
+
+      // list.add("dog");     // 11
+
+      // Set<String> subset = new HashSet<>();
+      // subset.add("banana");
+      // subset.add("cat");
+
+      // Subarray s = smallestSubarray(list, subset);
+      // System.out.println("Start " + s.start + " end " + s.end);
+    // 13.9 Find smallest subarray SEQUENTIALLY covering all values; 
+
+       List<String> list = new ArrayList<>();
+      // looking for banana cat 
+      
       list.add("apple");   // 0
-      // now 1 --> 5 // min is now 4 
-      list.add("banana"); // 1
-      list.add("apple");   // 2
+      list.add("dog"); // 1
+      list.add("cat");   // 2
       list.add("apple");   // 3
-      list.add("dog");     // 4
-      list.add("cat");     // 5
-      // skip to 5 
+      list.add("panda");     // 4
+      list.add("panda");     // 5
       list.add("apple");   // 6
       list.add("dog");     // 7
       list.add("banana"); // 8
-      // 5 --> 8 is 3 so new min 
-
       list.add("apple");   // 9 
       list.add("cat");     // 10
-      // 8 --> 10 is new min 
+      list.add("panda");     // 11
 
-      list.add("dog");     // 11
-
-      Set<String> subset = new HashSet<>();
-      subset.add("banana");
+      List<String> subset = new ArrayList<>();
       subset.add("cat");
+      subset.add("dog");
 
-      Subarray s = smallestSubarray(list, subset);
+      Subarray s = smallestSubarraySequential(list, subset);
       System.out.println("Start " + s.start + " end " + s.end);
 
   }
