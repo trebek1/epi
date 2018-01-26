@@ -451,6 +451,58 @@ class Table {
     return true;
   }
 
+  static Pair affinity(){
+    Pair most = null;
+    HashMap<String, Set<String>> map = new HashMap<>();
+
+    try {
+
+      FileReader fileReader = new FileReader("affinity.txt");
+      BufferedReader buff = new BufferedReader(fileReader);
+      String line = null;
+
+      while((line = buff.readLine()) != null){
+        String[] data = line.split(" ");
+        String site = data[0];
+        String user = data[1];
+
+        Set<String> users = map.get(site);
+        if(users == null){
+          users = new HashSet<>();
+        }
+        users.add(user);
+        map.put(site, users);
+      }
+
+    } catch (IOException e) {
+      System.out.println("IOException");
+    } 
+
+    int max = 0;
+    List<String> keys = new ArrayList<>(map.keySet());
+    for(int i = 0; i < keys.size(); i++){
+      for(int k = i + 1; k < keys.size(); k++){
+        Set<String> base = new HashSet<>(map.get(keys.get(i)));
+        base.retainAll(map.get(keys.get(k)));
+        if(base.size() > max){
+          max = base.size();
+          most = new Pair(keys.get(i), keys.get(k));
+        }
+      }
+    }
+
+    return most;
+  }
+
+  static class Pair {
+    String site1;
+    String site2;
+    Pair(String site1, String site2){
+      this.site1 = site1;
+      this.site2 = site2;
+    }
+  }
+
   public static void main(String[] args){
   	// 13.1 Partition into anagrams
 
@@ -654,6 +706,12 @@ class Table {
     //   for(Integer i : results){
     //     System.out.println(i);
     //   }
+
+    // 13.14 Highest Affinity 
+      // Pair most = affinity();
+      // System.out.println(most.site1);
+      // System.out.println(most.site2);
+
   }
 }
 
