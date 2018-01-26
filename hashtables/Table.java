@@ -213,6 +213,9 @@ class Table {
     return soln;
   }
 
+  // idea is to map all the words to their index since its unique 
+  // you have to find the first one and set its shortest length to 1 
+  // once you have one you look for the next element and so forth. 
   static Subarray smallestSubarraySequential(List<String> document, List<String> orderedList){
     Subarray soln = new Subarray(-1, -1); 
 
@@ -231,8 +234,6 @@ class Table {
     }
 
     int shortestDistance = Integer.MAX_VALUE;
-
-
 
     for(int i = 0; i < document.size(); i++){
       Integer keywordIdx = keywordToIdx.get(document.get(i)); // index of current word in orderedList
@@ -258,6 +259,33 @@ class Table {
 
     return soln;
 
+  }
+
+  static List<Integer> longestDistinct(List<String> range){
+    List<Integer> soln = new ArrayList<>();
+    soln.add(0);
+    soln.add(0);
+
+    Map<String, Integer> map = new HashMap<>();
+    int start = 0;
+    int maxLength = 0;
+    for(int i = 0; i < range.size(); i++){
+      String target = range.get(i);
+      if(map.containsKey(target)){
+        int length = i - start;
+        if(length > maxLength){
+          maxLength = length;
+          soln.set(1, i - 1);
+          soln.set(0, start);
+        } 
+          length = 0;
+          start = map.get(target) + 1;
+          map.put(target, i);
+      } else {
+        map.put(target, i);
+      }
+    }
+    return soln;
   }
 
   public static void main(String[] args){
@@ -385,30 +413,58 @@ class Table {
 
       // Subarray s = smallestSubarray(list, subset);
       // System.out.println("Start " + s.start + " end " + s.end);
+
     // 13.9 Find smallest subarray SEQUENTIALLY covering all values; 
 
-       List<String> list = new ArrayList<>();
-      // looking for banana cat 
+      //  List<String> list = new ArrayList<>();
+      // // looking for banana cat 
       
-      list.add("apple");   // 0
-      list.add("dog"); // 1
-      list.add("cat");   // 2
-      list.add("apple");   // 3
-      list.add("panda");     // 4
-      list.add("panda");     // 5
-      list.add("apple");   // 6
-      list.add("dog");     // 7
-      list.add("banana"); // 8
-      list.add("apple");   // 9 
-      list.add("cat");     // 10
-      list.add("panda");     // 11
+      // list.add("apple");   // 0
+      // list.add("dog"); // 1
+      // list.add("cat");   // 2
+      // list.add("apple");   // 3
+      // list.add("panda");     // 4
+      // list.add("panda");     // 5
+      // list.add("apple");   // 6
+      // list.add("dog");     // 7
+      // list.add("banana"); // 8
+      // list.add("apple");   // 9 
+      // list.add("cat");     // 10
+      // list.add("panda");     // 11
 
-      List<String> subset = new ArrayList<>();
-      subset.add("cat");
-      subset.add("dog");
+      // List<String> subset = new ArrayList<>();
+      // subset.add("cat");
+      // subset.add("dog");
 
-      Subarray s = smallestSubarraySequential(list, subset);
-      System.out.println("Start " + s.start + " end " + s.end);
+      // Subarray s = smallestSubarraySequential(list, subset);
+      // System.out.println("Start " + s.start + " end " + s.end);
+
+      // 13.10 Find Longest string of distinct words 
+
+      List<String> list = new ArrayList<>();
+      list.add("a");
+      list.add("b");
+      list.add("c");
+      list.add("a");
+      list.add("d");
+      list.add("e");
+      list.add("f");
+      list.add("g");
+      list.add("g");
+      list.add("h");
+      list.add("i");
+      list.add("j");
+
+      List<Integer> range = longestDistinct(list);
+
+      for(Integer i : range){
+        System.out.println(i);
+      }
 
   }
 }
+
+
+
+
+
