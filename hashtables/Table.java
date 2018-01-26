@@ -5,6 +5,12 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Iterator;
 
 class Table {
 
@@ -322,6 +328,80 @@ class Table {
     return soln;
   }
 
+  static int topThree(){
+    String line = null;
+    int winner = 0;
+    String fileName = "scores.txt";
+
+    Map<String, PriorityQueue<Integer>> map = new HashMap<>(); 
+
+    try {
+        // FileReader reads text files in the default encoding.
+        FileReader fileReader = 
+            new FileReader(fileName);
+
+        // Always wrap FileReader in BufferedReader.
+        BufferedReader bufferedReader = 
+            new BufferedReader(fileReader);
+
+        while((line = bufferedReader.readLine()) != null) {
+            System.out.println(line);
+            String[] split = line.split(" ");
+            String id = split[0];
+            int score = Integer.parseInt(split[1]);
+            
+            PriorityQueue<Integer> scores = map.get(id);
+            if(scores == null){
+              scores = new PriorityQueue<>();
+              map.put(id, scores);
+            } 
+
+            scores.add(score);
+
+            if(scores.size() > 3){
+              scores.poll(); // only keep the top 3 scores 
+            }
+        }   
+        // Always close files.
+        bufferedReader.close();         
+        String topStudent = "none";
+
+        for(Map.Entry<String, PriorityQueue<Integer>> scores : map.entrySet()){
+          if(scores.getValue().size() == 3){
+            int sum = topThreeSum(scores.getValue());
+            if(sum > winner){
+              winner = sum; 
+              topStudent = scores.getKey();
+            }
+          }
+        }
+    }
+    catch(FileNotFoundException ex) {
+        System.out.println(
+            "Unable to open file '" + 
+            fileName + "'");                
+    }
+    catch(IOException ex) {
+        System.out.println(
+            "Error reading file '" 
+            + fileName + "'");                  
+        // Or we could just do this: 
+        // ex.printStackTrace();
+    }
+
+
+    return winner;
+  }
+
+  private static int topThreeSum(PriorityQueue<Integer> q){
+      Iterator<Integer> it = q.iterator();
+      int result = 0;
+      while(it.hasNext()){
+        result += it.next();
+      }
+      return result;
+    }
+
   public static void main(String[] args){
   	// 13.1 Partition into anagrams
 
@@ -496,17 +576,23 @@ class Table {
       // }
 
     // 13.11 Find Longest continuous interval in array 
-    List<Integer> list = new ArrayList<>(); 
-    list.add(10);
-    list.add(5);
-    list.add(3);
-    list.add(11);
-    list.add(6);
-    list.add(100);
-    list.add(4);
+    // List<Integer> list = new ArrayList<>(); 
+    // list.add(10);
+    // list.add(5);
+    // list.add(3);
+    // list.add(11);
+    // list.add(6);
+    // list.add(100);
+    // list.add(4);
 
-    int len = longestInterval(list);
-    System.out.println(len);
+    // int len = longestInterval(list);
+    // System.out.println(len);
+
+    // 13.12 Top 3 scores given that they have three scores
+
+    int average = topThree();
+    System.out.println(average/3);
+
 
   }
 }
