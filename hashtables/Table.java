@@ -288,6 +288,40 @@ class Table {
     return soln;
   }
 
+  static int longestInterval(List<Integer> list){
+    int soln = 0; 
+
+    Set<Integer> hashSet = new HashSet<>();
+
+    for(int i = 0; i < list.size(); i++){
+      hashSet.add(list.get(i));
+    }
+
+    // numbers are in hashSet 
+    while(!hashSet.isEmpty()){
+      int next = hashSet.iterator().next();
+      hashSet.remove(next);
+
+      int upper = next + 1; 
+
+      while(hashSet.contains(upper)){
+        hashSet.remove(upper);
+        upper++;
+      }
+
+      int lower = next - 1;
+      while(hashSet.contains(lower)){
+        hashSet.remove(lower);
+        lower--;
+      }
+      
+      soln = Math.max(soln, upper - lower - 1);
+
+    }
+
+    return soln;
+  }
+
   public static void main(String[] args){
   	// 13.1 Partition into anagrams
 
@@ -441,25 +475,38 @@ class Table {
 
       // 13.10 Find Longest string of distinct words 
 
-      List<String> list = new ArrayList<>();
-      list.add("a");
-      list.add("b");
-      list.add("c");
-      list.add("a");
-      list.add("d");
-      list.add("e");
-      list.add("f");
-      list.add("g");
-      list.add("g");
-      list.add("h");
-      list.add("i");
-      list.add("j");
+      // List<String> list = new ArrayList<>();
+      // list.add("a");
+      // list.add("b");
+      // list.add("c");
+      // list.add("a");
+      // list.add("d");
+      // list.add("e");
+      // list.add("f");
+      // list.add("g");
+      // list.add("g");
+      // list.add("h");
+      // list.add("i");
+      // list.add("j");
 
-      List<Integer> range = longestDistinct(list);
+      // List<Integer> range = longestDistinct(list);
 
-      for(Integer i : range){
-        System.out.println(i);
-      }
+      // for(Integer i : range){
+      //   System.out.println(i);
+      // }
+
+    // 13.11 Find Longest continuous interval in array 
+    List<Integer> list = new ArrayList<>(); 
+    list.add(10);
+    list.add(5);
+    list.add(3);
+    list.add(11);
+    list.add(6);
+    list.add(100);
+    list.add(4);
+
+    int len = longestInterval(list);
+    System.out.println(len);
 
   }
 }
