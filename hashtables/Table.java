@@ -402,6 +402,55 @@ class Table {
       return result;
     }
 
+  static List<Integer> stringDecomposition(String sentence, List<String> subs){
+    List<Integer> result = new ArrayList<>();
+
+    Map<String, Integer> freq = new HashMap<>();
+    for(int i = 0; i < subs.size(); i++){
+      String target = subs.get(i);
+      if(freq.containsKey(target)){
+        freq.put(target, freq.get(target) + 1);
+      } else {
+        freq.put(target, 1);
+      }
+    }
+
+    // we know all the subs need to be in the string or nothing 
+    // range is size of sub * subs + i < length of sentence 
+    int subSize = subs.get(0).length();
+    int numSubs = subs.size();
+
+    for(int i = 0; i + subSize * numSubs < sentence.length(); i++){
+      if(checkRange(i, sentence, subs, freq)){
+        result.add(i);
+      }
+    }
+
+    return result;
+  }
+
+  private static boolean checkRange(int idx, String sentence, List<String> subs, Map<String, Integer> freq){
+
+    int len = subs.get(0).length();
+    Map<String, Integer> actualFreq = new HashMap<>();
+    for(int i = 0; i < subs.size(); i++){
+      String s = sentence.substring(idx + i * len, idx + (i + 1) * len);
+      if(freq.get(s) == null) {
+        return false;
+      }
+      if(actualFreq.containsKey(s)){
+        actualFreq.put(s, actualFreq.get(s) + 1);
+      } else {
+        actualFreq.put(s, 1);
+      }
+      if(freq.get(s) != null && actualFreq.get(s) > freq.get(s)){
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   public static void main(String[] args){
   	// 13.1 Partition into anagrams
 
@@ -590,10 +639,21 @@ class Table {
 
     // 13.12 Top 3 scores given that they have three scores
 
-    int average = topThree();
-    System.out.println(average/3);
+    // int average = topThree();
+    // System.out.println(average/3);
 
+    // 13.13 Compute all string decompositions 
 
+    // String sentence = "amanaplanacanal";
+    // List<String> subs = new ArrayList<>();
+    // subs.add("can");
+    // subs.add("apl");
+    // subs.add("ana");
+
+    //   List<Integer> results = stringDecomposition(sentence, subs);
+    //   for(Integer i : results){
+    //     System.out.println(i);
+    //   }
   }
 }
 
