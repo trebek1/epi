@@ -262,6 +262,55 @@ class StringProblems {
 		return ans;
 	}
 
+	// place 3 periods in a string to get new IPs if nums are 0 --> 255 
+	// total IP Addresses is 2^32 so O(1) time complexity 
+	static List<String> findAllValidIps(String s){
+		List<String> ans = new ArrayList<>();
+		StringBuilder sb = new StringBuilder();
+		// first period comes after 1, 2 or 3 letters 
+		for(int i = 1; i < 4; i++){
+			String first = s.substring(0, i);
+			if(isValid(first)){
+				for(int j = 1; i + j < s.length() && j < 4; j++){
+					String second = s.substring(i, i + j);
+					if(isValid(second)){
+						for(int k = 1; i + j + k < s.length() && k < 4; k++){
+							String third = s.substring(i + j, i + j + k);
+							String fourth = s.substring(i + j + k);
+							if(isValid(third) && isValid(fourth)){
+								sb.append(first);
+								sb.append(".");
+								sb.append(second);
+								sb.append(".");
+								sb.append(third);
+								sb.append(".");
+								sb.append(fourth);
+								ans.add(sb.toString());
+								sb.setLength(0);
+							}
+						}	
+					}
+				}	
+			}
+		}
+		return ans;
+	}
+
+	static boolean isValid(String s){
+		if(s.length() > 3 || s.length() == 0){
+			return false;
+		}
+
+		if(s.startsWith("0") && s.length() > 0){
+			return false;
+		}
+		int val = Integer.parseInt(s);
+		if(val > 255){
+			return false;
+		}
+		return true;
+	}
+
 	public static void main(String[] args){
 		// 7.1 Convert String to int or int to string
 		// int five = 511;
@@ -322,12 +371,19 @@ class StringProblems {
 			// String s = lookSay(8);
 			// System.out.println(s);
 		// 7.9 Convert from Roman to Decimal 
-			String s = "XXXXXIIIIIIIII"; // 59 
-			String s2 = "LIX"; // 59 
-			int ans = romanToDec(s);
-			int ans2 = romanToDec(s2);
-			System.out.println(ans);
-			System.out.println(ans2);
+			// String s = "XXXXXIIIIIIIII"; // 59 
+			// String s2 = "LIX"; // 59 
+			// int ans = romanToDec(s);
+			// int ans2 = romanToDec(s2);
+			// System.out.println(ans);
+			// System.out.println(ans2);
+		// 7.10 Compute all valid IP Addresses
+			String ip = "19216811";
+			List<String> ips = findAllValidIps(ip);
+
+			for(String s : ips){
+				System.out.println(s);
+			}
 	}	
 }
 
