@@ -211,6 +211,27 @@ class StringProblems {
 		ans.append(current);
 		return ans.toString();
 	}
+	
+	static int romanToDec(String s){
+		Map<Character, Integer> map = new HashMap<>();
+		map.put('I', 1);
+		map.put('V', 5);
+		map.put('X', 10);
+		map.put('L', 50);
+		map.put('C', 100);
+		map.put('D', 500);
+		map.put('M', 1000);
+
+		int ans = 0;
+
+		for(int i = 0; i < s.length(); i++){
+			char next = s.charAt(i);
+			int value = map.get(next);
+			ans += value;
+		}
+
+		return ans;
+	}
 
 	public static void main(String[] args){
 		// 7.1 Convert String to int or int to string
@@ -271,6 +292,10 @@ class StringProblems {
 		// 7.8 Look and Say problem
 			// String s = lookSay(8);
 			// System.out.println(s);
+		// 7.9 Convert from Roman to Decimal 
+			String s = "XXXXXIIIIIII"; // 57 
+			int ans = romanToDec(s);
+			System.out.println(s);
 	}	
 }
 
