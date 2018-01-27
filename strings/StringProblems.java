@@ -161,7 +161,7 @@ class StringProblems {
 
 		return ans;
 	}
-
+	// O(4^n) for calculation, need a copy of partial for each recursive call so O(n) so (O(n*4^n))
 	static void mnemonicHelper(String number, int digit, char[] partial, List<String> ans){
 		if(digit == number.length()){
 			ans.add(new String(partial)); // can create a new String from a char[]!! 
@@ -179,8 +179,40 @@ class StringProblems {
 	static final String[] MAPPING = new String[] {
 		"0", "1", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ" };
 
-	public static void main(String[] args){
+	// Page 100
+	static String lookSay(int n){
 
+		String ans = "1";
+		for(int i = 1; i < n; i++){
+			ans = nextNumber(ans);
+		}
+
+		return ans;
+	}
+
+	private static String nextNumber(String s){
+		StringBuilder ans = new StringBuilder();
+		int count = 1; 
+		char current = s.charAt(0);
+
+		for(int i = 1; i < s.length(); i++){
+			char target = s.charAt(i);
+
+			if(target != current){
+				ans.append(count);
+				ans.append(current);
+				current = target;
+				count = 1;
+			} else {
+				count++;
+			}
+		}
+		ans.append(count);
+		ans.append(current);
+		return ans.toString();
+	}
+
+	public static void main(String[] args){
 		// 7.1 Convert String to int or int to string
 		// int five = 511;
 		// String s5 = "500";
@@ -230,12 +262,15 @@ class StringProblems {
 			// String ans = reverse(s);
 			// System.out.println(ans);
 		// 7.7 mnemonics from a phone number 
-			String number = "2276696";
-			List<String> ans =  mnemonics(number);
-			System.out.println("count " + ans.size());
-			for(int i = 0; i < ans.size(); i++){
-				System.out.println(ans.get(i));
-			}
+			// String number = "2276696";
+			// List<String> ans =  mnemonics(number);
+			// System.out.println("count " + ans.size());
+			// for(int i = 0; i < ans.size(); i++){
+			// 	System.out.println(ans.get(i));
+			// }
+		// 7.8 Look and Say problem
+			// String s = lookSay(8);
+			// System.out.println(s);
 	}	
 }
 
