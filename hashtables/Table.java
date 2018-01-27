@@ -712,6 +712,9 @@ class Table {
       // System.out.println(most.site1);
       // System.out.println(most.site2);
 
+    // 13.15 Test the Collatz Conjecture 
+      
+
   }
 }
 

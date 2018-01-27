@@ -1,0 +1,9 @@
+"asdf" 25
+"asdf" 50
+"asdf" 99
+"kk" 33
+"bb" 11
+"asdf" 99
+"kk" 11 
+"kk" 12
+"kk" 50
