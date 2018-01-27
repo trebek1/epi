@@ -60,6 +60,52 @@ class StringProblems {
 	    return s.charAt(0) == '-' ? -result : result;
 	}
 
+	public static int spreadSheetNumber(String number){
+		// A = 65, a = 97 --> + 32
+		int sum = 0;
+		int multiplier = 0;
+		int current = 0;
+		int next = 0;
+		for(int i = number.length() - 1; i >= 0; i--){
+			multiplier = (int)Math.pow(26, current);
+			current++;
+			next = (number.charAt(i) - 64) * multiplier;
+			sum += next;
+		}
+		return sum;
+	}
+
+	static char[] removeAndReplace(char[] arr, int size, int originalSize){
+		// make another array
+		// if array != a or b, add it 
+		// if a, add two d chars 
+		// if b, dont add anything 
+
+		int a = 0;
+		int writeIndex = 0;
+
+
+		for(int i = 0; i < size; i++){
+			if(i < originalSize){
+				if(arr[i] != 'b' && arr[i] != 'a'){
+					arr[writeIndex++] = arr[i];
+				}
+				if(arr[i] == 'a'){
+					++a;
+				}	
+			}
+		}
+		int curIdx = writeIndex;
+		int extra = writeIndex + a - 1; 
+		int finalSize = extra + 1;
+		
+		while(curIdx < size){
+			arr[curIdx] = 'd';
+			curIdx++;
+		}
+		return arr;
+	}
+
 	public static void main(String[] args){
 
 		// 7.1 Convert String to int or int to string
@@ -76,7 +122,22 @@ class StringProblems {
 			// System.out.println(ans);
 			// String ans = convertBase("61523453464576578", 7, 13);
 			// System.out.println(ans);
+		// 7.3 Compute Spreadsheet Column Encoding 
 
+			// "D" --> 4 , ZZ --> 702
+			// int a = spreadSheetNumber("ZZ");
+			// int b = spreadSheetNumber("D");
+
+			// System.out.println(a + " " + b);
+		// 7.4 Remove and Replace 
+
+			// char[] input = {'a', 'a', 'b', 'a', 'd', 'k', 'b','b','r','y','a','n','a','a','a'};
+			
+			// char[] soln = removeAndReplace(input, 15,13); 
+
+			// for(int i = 0; i < soln.length; i++){
+			// 	System.out.println(soln[i]);
+			// }
 
 	}	
 }
