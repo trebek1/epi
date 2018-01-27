@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class StringProblems {
 
 	public static String convertBase(String s, int b1, int b2){
@@ -106,6 +109,76 @@ class StringProblems {
 		return arr;
 	}
 
+	static boolean isPalindrome(String str){
+		int l = 0;
+		int r = str.length() - 1; 
+		// could use method Character.isLetterOrDigit to test 
+		// for spaces before making comparison if that was required 
+
+		// could also make strings lowercase first as well 
+
+		while(l <= r){
+			if(str.charAt(l) != str.charAt(r)){
+				return false;
+			}
+			l++;
+			r--;
+		}
+
+		return true;
+	}
+
+	static String reverse(String s){
+		// split by blank space
+		String[] arr = s.split("\\s+");
+
+		// reverse the string
+		for(int i = 0; i < arr.length/2; i++){
+			int l = i;
+			int r = arr.length - 1 - i;
+			String temp = arr[i];
+			arr[i] = arr[r];
+			arr[r] = temp;
+		}
+
+		// joint back together 
+		StringBuilder sb = new StringBuilder();
+		for(String string : arr){
+			sb.append(string);
+			sb.append(" ");
+		}
+
+		// turn stringbuilder to string 
+		String ans = sb.toString();
+
+		return ans;
+	}
+
+	static List<String> mnemonics(String number){
+		List<String> ans = new ArrayList<>();
+		char[] partial = new char[number.length()];
+		mnemonicHelper(number, 0, partial, ans);
+
+		return ans;
+	}
+
+	static void mnemonicHelper(String number, int digit, char[] partial, List<String> ans){
+		if(digit == number.length()){
+			ans.add(new String(partial)); // can create a new String from a char[]!! 
+		} else {
+				// 0 to size of lookup digit 
+			int phoneDigit = number.charAt(digit) - '0'; // the phone digit in numeric terms 
+			for(int i = 0; i < MAPPING[phoneDigit].length(); i++){
+				char c = MAPPING[phoneDigit].charAt(i);
+				partial[digit] = c; 
+				mnemonicHelper(number, digit + 1, partial, ans);
+			}
+		}
+	}
+
+	static final String[] MAPPING = new String[] {
+		"0", "1", "ABC", "DEF", "GHI", "JKL", "MNO", "PQRS", "TUV", "WXYZ" };
+
 	public static void main(String[] args){
 
 		// 7.1 Convert String to int or int to string
@@ -138,7 +211,31 @@ class StringProblems {
 			// for(int i = 0; i < soln.length; i++){
 			// 	System.out.println(soln[i]);
 			// }
-
+		// 7.5 Test for a palindrome 
+			// String word = "amanaplanacanalpanama";
+			// String word2 = "alex";
+			// String word3 = "racecar";
+			// String word4 = "fabio";
+			// boolean soln = isPalindrome(word);
+			// boolean soln2 = isPalindrome(word2);
+			// boolean soln3 = isPalindrome(word3);
+			// boolean soln4 = isPalindrome(word4);
+			// System.out.println(soln);
+			// System.out.println(soln2);
+			// System.out.println(soln3);
+			// System.out.println(soln4);
+		// 7.6 Reverse all the words in a sentence 
+			// alice meets bob --> bob meets alice 
+			// String s = "John and Michael"; 
+			// String ans = reverse(s);
+			// System.out.println(ans);
+		// 7.7 mnemonics from a phone number 
+			String number = "2276696";
+			List<String> ans =  mnemonics(number);
+			System.out.println("count " + ans.size());
+			for(int i = 0; i < ans.size(); i++){
+				System.out.println(ans.get(i));
+			}
 	}	
 }
 
