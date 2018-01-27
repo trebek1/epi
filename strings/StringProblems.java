@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 class StringProblems {
 
@@ -227,9 +229,36 @@ class StringProblems {
 		for(int i = 0; i < s.length(); i++){
 			char next = s.charAt(i);
 			int value = map.get(next);
+			if(i != s.length() - 1){
+				char special = s.charAt(i + 1);
+				if(next == 'I'){
+					if(special == 'V'){
+						value = 4;
+						i++;
+					} else if(special == 'X'){
+						value = 9;
+						i++;
+					}
+				} else if(next == 'X'){
+					if(special == 'L'){
+						value = 40;
+						i++;
+					} else if(special == 'C'){
+						value = 90;
+						i++;
+					}
+				} else if(next == 'C'){
+					if(special == 'D'){
+						value = 400;
+						i++;
+					} else if(special == 'M'){
+						value = 900;
+						i++;
+					}
+				}
+			}
 			ans += value;
 		}
-
 		return ans;
 	}
 
@@ -293,9 +322,12 @@ class StringProblems {
 			// String s = lookSay(8);
 			// System.out.println(s);
 		// 7.9 Convert from Roman to Decimal 
-			String s = "XXXXXIIIIIII"; // 57 
+			String s = "XXXXXIIIIIIIII"; // 59 
+			String s2 = "LIX"; // 59 
 			int ans = romanToDec(s);
-			System.out.println(s);
+			int ans2 = romanToDec(s2);
+			System.out.println(ans);
+			System.out.println(ans2);
 	}	
 }
 
