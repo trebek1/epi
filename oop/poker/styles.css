@@ -1,0 +1,12 @@
+.card:nth-child(even) {
+	background-color: #c0ffee;
+}
+
+.card:nth-child(odd) {
+	background-color: #FED024;
+}
+
+.card {
+	
+}
+
