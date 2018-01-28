@@ -1,0 +1,30 @@
+.board{
+	height: 300px;
+	width: 300px;
+	text-align: center;
+}
+
+.box{
+	height: 100px;
+	width: 100px;
+	line-height: 100px;
+	border: 1px solid black;
+	box-sizing: border-box;
+	float: left;
+}
+
+.clearfix:after{
+	display: table;
+	content: "";
+	clear: both;
+}
+
+.player1{
+	background-color: #c0ffee;
+}	
+
+.player2{
+	background-color: #FED024;
+}
+
+
