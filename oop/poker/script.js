@@ -214,16 +214,16 @@ document.addEventListener("DOMContentLoaded", function(){
       for(let i = 0; i < this.hands; i++){
         this.playHand();
       }
-      console.log("royal flushes " + this.royalFlush);
-      console.log("royal flushes " + this.straightFlush);
-      console.log("royal flushes " + this.fourOfAKind);
-      console.log("royal flushes " + this.fullHouse);
-      console.log("royal flushes " + this.flush);
-      console.log("royal flushes " + this.straight);
-      console.log("royal flushes " + this.threeOfAKind);
-      console.log("royal flushes " + this.twoPair);
-      console.log("royal flushes " + this.onePair);
-      console.log("royal flushes " + this.highCard);
+      console.log("royal flushes: " + this.royalFlush);
+      console.log("straight flushes: " + this.straightFlush);
+      console.log("four of a kind: " + this.fourOfAKind);
+      console.log("full house: " + this.fullHouse);
+      console.log("flush: " + this.flush);
+      console.log("straight: " + this.straight);
+      console.log("three of a kind: " + this.threeOfAKind);
+      console.log("two pair: " + this.twoPair);
+      console.log("one pair: " + this.onePair);
+      console.log("high card: " + this.highCard);
     }
   }
 
@@ -253,17 +253,12 @@ document.addEventListener("DOMContentLoaded", function(){
       // map the cards to suits
       for(let i = 0; i < totalCards.length; i++){
         let card = totalCards[i];
-        if(card === undefined){
-          //console.log(totalCards);  
-          console.log(tableCards);
-        }
-        
         map[card.suit].push(card);
       }
 
       // This will sort so items are increasing left to right
       var compare = function(a, b){
-        return a - b;
+        return a.number - b.number;
       };
 
       // sort the arrays 
@@ -293,6 +288,7 @@ document.addEventListener("DOMContentLoaded", function(){
                   || consecutiveCards === 5 && start == 9
                   || consecutiveCards === 6 && start === 8)
                 && suit[0].number === 1){
+                console.log(suit);
                 return true;
               }
 
@@ -325,7 +321,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       // This will sort so items are increasing left to right
       var compare = function(a, b){
-        return a - b;
+        return a.number - b.number;
       };
 
       // sort the arrays 
@@ -439,7 +435,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       // This will sort so items are increasing left to right
       var compare = function(a, b){
-        return a - b;
+        return a.number - b.number;
       };
 
       // sort the arrays 
@@ -550,7 +546,7 @@ document.addEventListener("DOMContentLoaded", function(){
   // const deck = new Deck(1);
   // deck.printDeck();
 
-  const game = new Game(3, 5, 100);
+  const game = new Game(3, 5, 220000);
 
 });
 
