@@ -74,20 +74,20 @@ document.addEventListener("DOMContentLoaded", function(){
       this.onePair = 0; 
       this.highCard = 0;
 
-      for(int i = 0; i < players; i++){
+      for(let i = 0; i < players; i++){
         this.players.push(new Player(0));
       }
 
-      for(int i = 0; i < decks; i++){
+      for(let i = 0; i < decks; i++){
         this.decks.push(new Deck(i));
       }
 
-      startGame();
+      this.startGame();
     }
 
     getCurrentCards(){
       for(let i = 0; i < this.decks.length; i++){
-        this.currentCards.concat(this.decks[i]);
+        this.currentCards = this.currentCards.concat(this.decks[i].cards);
       }
     }
 
@@ -96,12 +96,11 @@ document.addEventListener("DOMContentLoaded", function(){
       for(let i = 0; i < 100000; i++){
         let idx1 = Math.floor(Math.random() * this.currentCards.length);
         let idx2 = Math.floor(Math.random() * this.currentCards.length);
-        
+
         // swap the cards 
-        let card = this.cards[idx1];
-        this.cards[idx1] = this.cards[idx2];
-        this.cards[idx2] = card;
-        
+        let card = this.currentCards[idx1];
+        this.currentCards[idx1] = this.currentCards[idx2];
+        this.currentCards[idx2] = card;
       }
     }
 
@@ -145,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function(){
           current.value = 2;
           this.onePair++;
         } else {
-          current.highCard(this.tableCards);
+          current.highCardFn(this.tableCards);
           current.bestCombination = "High Card";
           current.value = 1;
           this.highCard++;
@@ -154,18 +153,18 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     determineWinner(){
-      determineBestHand();
-      evaluateResults();
+      this.determineBestHand();
+      // this.evaluateResults();
     }
 
     playHand(){
-      dealCards();
-      determineWinner();
-      clearCards();
+      this.dealCards();
+      this.determineWinner();
+      this.clearCards();
     }
 
     clearCards(){
-      for(let i = 0; i < players.length; i++){
+      for(let i = 0; i < this.players.length; i++){
         this.usedCards.push(this.players[i].hand.pop());
         this.usedCards.push(this.players[i].hand.pop());
       }
@@ -176,9 +175,9 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     resetCards(){
-      this.currentCards.concat(this.usedCards);
+      this.currentCards = this.currentCards.concat(this.usedCards);
       this.usedCards = [];
-      shuffleCurrentCards();
+      this.shuffleCurrentCards();
 
     }
 
@@ -186,10 +185,10 @@ document.addEventListener("DOMContentLoaded", function(){
       let numberOfCards = this.currentCards.length;
       let neededCards = (this.players.length) * 2 + 5;
       if(neededCards > numberOfCards){
-        resetCards();
+        this.resetCards();
       }
-      for(let i = 0; i < players.length; i++){
-        let target = players[i];
+      for(let i = 0; i < this.players.length; i++){
+        let target = this.players[i];
         target.hand.push(this.currentCards.pop());
         target.hand.push(this.currentCards.pop());
       }
@@ -201,10 +200,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
     startGame(){
       // put current cards into an array
-      getCurrentCards();
+      this.getCurrentCards();
 
       // shuffle the cards 
-      shuffleCurrentCards();
+      this.shuffleCurrentCards();
 
       // combine the decks 
       // keep track of cards left
@@ -213,9 +212,18 @@ document.addEventListener("DOMContentLoaded", function(){
       // after determining winner move cards from current cards to used cards;
 
       for(let i = 0; i < this.hands; i++){
-        playHand();
+        this.playHand();
       }
-      console.log()
+      console.log("royal flushes " + this.royalFlush);
+      console.log("royal flushes " + this.straightFlush);
+      console.log("royal flushes " + this.fourOfAKind);
+      console.log("royal flushes " + this.fullHouse);
+      console.log("royal flushes " + this.flush);
+      console.log("royal flushes " + this.straight);
+      console.log("royal flushes " + this.threeOfAKind);
+      console.log("royal flushes " + this.twoPair);
+      console.log("royal flushes " + this.onePair);
+      console.log("royal flushes " + this.highCard);
     }
   }
 
@@ -236,15 +244,20 @@ document.addEventListener("DOMContentLoaded", function(){
       // 10 11 12 13 1 
       let totalCards = [...tableCards, ...this.hand];
       let map = {
-        "spade": [],
-        "heart": [],
-        "diamond": [],
-        "club": []
+        "Spade": [],
+        "Heart": [],
+        "Diamond": [],
+        "Club": []
       };
 
       // map the cards to suits
       for(let i = 0; i < totalCards.length; i++){
         let card = totalCards[i];
+        if(card === undefined){
+          //console.log(totalCards);  
+          console.log(tableCards);
+        }
+        
         map[card.suit].push(card);
       }
 
@@ -254,13 +267,13 @@ document.addEventListener("DOMContentLoaded", function(){
       };
 
       // sort the arrays 
-      for(let key : map){
+      for(let key in map){
         let arr = map[key];
         arr.sort(compare);
       }
 
       // go through each suit and look for a flush
-      for(let key : map){
+      for(let key in map){
         let suit = map[key];
 
         // need 5 cards at least 
@@ -298,10 +311,10 @@ document.addEventListener("DOMContentLoaded", function(){
     hasStraightFlush(tableCards){
       let totalCards = [...tableCards, ...this.hand];
       let map = {
-        "spade": [],
-        "heart": [],
-        "diamond": [],
-        "club": []
+        "Spade": [],
+        "Heart": [],
+        "Diamond": [],
+        "Club": []
       };
 
       // map the cards to suits
@@ -316,13 +329,13 @@ document.addEventListener("DOMContentLoaded", function(){
       };
 
       // sort the arrays 
-      for(let key : map){
+      for(let key in map){
         let arr = map[key];
         arr.sort(compare);
       }
 
       // go through each suit and look for a flush
-      for(let key : map){
+      for(let key in map){
         let suit = map[key];
 
         // need 5 cards at least 
@@ -362,7 +375,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
       }
 
-      for(var key : map){
+      for(var key in map){
         if(map[key] === 4){
           return true;
         }
@@ -386,7 +399,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
       }
 
-      for(var key : map){
+      for(var key in map){
         if(map[key] === 3){
           threeOfAKind = true;
         }
@@ -411,7 +424,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
       }
 
-      for(var key : map){
+      for(var key in map){
         if(map[key] === 5){
           return true;
         }
@@ -465,7 +478,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
       }
 
-      for(var key : map){
+      for(var key in map){
         if(map[key] === 3){
           return true;
         }
@@ -510,7 +523,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
       }
 
-      for(var key : map){
+      for(var key in map){
         if(map[key] === 2){
           return true;
         }
@@ -519,7 +532,7 @@ document.addEventListener("DOMContentLoaded", function(){
       return false;
     }
 
-    highCard(tableCards){
+    highCardFn(tableCards){
       let totalCards = [...tableCards, ...this.hand];
       let max = 0; 
       let card = null;
@@ -537,7 +550,7 @@ document.addEventListener("DOMContentLoaded", function(){
   // const deck = new Deck(1);
   // deck.printDeck();
 
-  const game = new Game(3, 5, 10000);
+  const game = new Game(3, 5, 100);
 
 });
 
