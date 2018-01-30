@@ -47,37 +47,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const blue = document.getElementById("blue");
         const green = document.getElementById("green");
         const yellow = document.getElementById("yellow");
-        red.addEventListener("click", () => {
-          this.moves.push("red");
-          red.style.opacity = 1;
-          setTimeout(() => {
-            red.style.opacity = 0.5;
-          }, 500);
-        });
-        blue.addEventListener("click", () => {
-          this.moves.push("blue");
-          blue.style.opacity = 1;
-          setTimeout(() => {
-            blue.style.opacity = 0.5;
-          }, 500);
-        });
-        green.addEventListener("click", () => {
-          this.moves.push("green");
-          green.style.opacity = 1;
-          setTimeout(() => {
-            green.style.opacity = 0.5;
-          }, 500);
-        });
-        yellow.addEventListener("click", () => {
-          this.moves.push("yellow");
-          yellow.style.opacity = 1;
-          setTimeout(() => {
-            yellow.style.opacity = 0.5;
-          }, 500);
 
-        });
+        this.createEventListener(red);
+        this.createEventListener(blue);
+        this.createEventListener(green);
+        this.createEventListener(yellow);
     }
 
+    createEventListener(el){
+      this.moves.push(el.id);
+        el.addEventListener("click", () =>{
+          el.style.opacity = 1;
+          setTimeout(() => {
+            el.style.opacity = 0.5;
+          }, 500);
+        });
+      }
   }
-
 });
+
+
+
