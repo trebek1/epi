@@ -90,6 +90,25 @@ document.addEventListener("DOMContentLoaded", function(){
         this.currentCards = this.currentCards.concat(this.decks[i].cards);
       }
     }
+    // This is the Fischer Yeats Shuffle 
+    shuffle() {
+      let array = this.currentCards;
+      var currentIndex = array.length, temporaryValue, randomIndex;
+
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      this.currentCards = array;
+    }
 
     shuffleCurrentCards(){
       // randomly pick two places in the deck and swap the cards 
@@ -546,7 +565,7 @@ document.addEventListener("DOMContentLoaded", function(){
   // const deck = new Deck(1);
   // deck.printDeck();
 
-  const game = new Game(3, 5, 220000);
+  const game = new Game(3, 1, 220000);
 
 });
 

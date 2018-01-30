@@ -1,0 +1,95 @@
+
+
+#alex{
+  background-color: #c0ffee;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  float: left;
+  box-sizing: border-box;
+  border: 1px solid black;
+  opacity: 0.5;
+} 
+
+.red {
+  background-color: red;
+}
+
+.ul {
+  border-radius: 100% 0 0 0;
+}
+
+.ur {
+  border-radius: 0 100% 0 0;
+}
+
+.br {
+  border-radius: 0 0 0 100%;
+}
+
+.bl{
+  border-radius: 0 0 100% 0;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.green {
+  background-color: green;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+#start:hover {
+  cursor: pointer;
+}
+
+#start {
+  height: 20px;
+  width: 100px;
+  background-color: grey;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#game {
+  width: 200px;
+  border-radius: 50%;
+}
+
+.clearfix{
+  display: inline-block;
+}
+
+#start:hover{
+  background-color: #d3d3d3;
+  transition-duration: .3s;
+}
+
+#start:active{
+  background-color: red;
+  transition: 0s;
+}
+
+.clearfix:after{
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+#game:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+} 
