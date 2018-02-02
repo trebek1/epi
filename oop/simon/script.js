@@ -1,28 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
   const start = document.getElementById("start");
   start.addEventListener("click", newGame);
-
-  var game = (function(){
-
+  
+  let game = (function(){
     var instance;
-
     function createGame(){
-      var inst = new Game();
+      let inst = new Game();
       return inst;
     }
-
     return {
       getInstance: function(){
         if(!instance){
           instance = createGame();
         }
         return instance;
+      }
     }
-  }
   })();
 
   function newGame(){
-    const g = game.getInstance();
+    let g = game.getInstance();
     g.start();
   }
 
@@ -32,15 +29,15 @@ document.addEventListener("DOMContentLoaded", () => {
       this.player = new Player();
       this.iteration = 4;
 
-        let red = document.getElementById("red");
-        let blue = document.getElementById("blue");
-        let green = document.getElementById("green");
-        let yellow = document.getElementById("yellow");
+      let red = document.getElementById("red");
+      let blue = document.getElementById("blue");
+      let green = document.getElementById("green");
+      let yellow = document.getElementById("yellow");
 
-        this.createEventListener(red);
-        this.createEventListener(blue);
-        this.createEventListener(green);
-        this.createEventListener(yellow);
+      this.createEventListener(red);
+      this.createEventListener(blue);
+      this.createEventListener(green);
+      this.createEventListener(yellow);
     }
 
     evaluateMove(){
@@ -62,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     createEventListener(el){
-      
       el.addEventListener("click", () =>{
         el.style.opacity = 1;
         this.player.moves.push(el.id);
@@ -96,14 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       for(let i = 0 + x; i < colors + x; i++){
-
         let map = {
           0 : "red",
           1 : "blue",
           2 : "green",
           3 : "yellow"
         }
-
         setTimeout(() => {
           let selection = Math.floor(Math.random()*4);
           this.moves.push(map[selection]);
@@ -116,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
+  
   class Player {
     constructor(){
       this.moves = [];
