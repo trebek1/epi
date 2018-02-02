@@ -1,9 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
   const start = document.getElementById("start");
   start.addEventListener("click", newGame);
+
+  var game = (function(){
+
+    var instance;
+
+    function createGame(){
+      var inst = new Game();
+      return inst;
+    }
+
+    return {
+      getInstance: function(){
+        if(!instance){
+          instance = createGame();
+        }
+        return instance;
+    }
+  }
+  })();
+
   function newGame(){
-    let player = new Player();
-    this.game = new Game(player);
+    const g = game.getInstance();
+    g.start();
   }
 
   class Game {
@@ -11,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
       this.moves = [];
       this.player = new Player();
       this.iteration = 4;
-      this.start();
 
         let red = document.getElementById("red");
         let blue = document.getElementById("blue");
@@ -33,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
           alert("game over!");
           this.player.moves = [];
           this.moves = [];
-          window.location.reload();
           return;
         }
         if(i === this.player.moves.length - 1 && this.player.moves.length === this.moves.length){
