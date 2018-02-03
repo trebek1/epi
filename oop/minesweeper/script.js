@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let startGame = (function(){
     let game = null;
-
     return {
       getGame: function(){
         if(game === null){
@@ -14,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     }
-
   })();
   
   reset.addEventListener("click", () => {
@@ -25,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   class Player {
     constructor(){
-      this.score = 0; 
+      this.score = 0;
     }
   }
 
@@ -102,5 +100,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   let currentGame = startGame.getGame();
-
 });
