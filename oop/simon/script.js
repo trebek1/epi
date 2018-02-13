@@ -70,16 +70,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     start(){
+      this.player.moves = [];
+      this.moves = [];
       this.gameIteration(4);
     }
 
     gameIteration(colors){
       let previousColors = this.moves;
       let lenP = previousColors.length;
-      let x = 0;
+      
       if(previousColors.length > 0){
-        for(x = 0; x < lenP; x++){
-          (function(x){
+        for(let x = 0; x < lenP; x++){
             setTimeout(() => {
             var el = document.getElementById(previousColors[x]);
             el.style.opacity = 1;
@@ -87,11 +88,10 @@ document.addEventListener("DOMContentLoaded", () => {
               el.style.opacity = 0.5;
             }, 500);
           }, x * 1000);
-          })(x)
         }
       }
 
-      for(let i = 0 + x; i < colors + x; i++){
+      for(let i = 0 + lenP; i < colors + lenP; i++){
         let map = {
           0 : "red",
           1 : "blue",
