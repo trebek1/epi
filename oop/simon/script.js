@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   class Game {
     constructor(){
+      this.score = 0;
+      this.highScore = 4;
       this.moves = [];
       this.player = new Player();
       this.iteration = 4;
@@ -40,6 +42,18 @@ document.addEventListener("DOMContentLoaded", () => {
       this.createEventListener(yellow);
     }
 
+    handleScore(){
+      this.score++;
+      if(this.score > this.highScore){
+        this.highScore = this.score;
+        const highScore = document.getElementById("record");
+        highScore.innerHTML = this.highScore;
+      }
+      const score = document.getElementById("currentScore");
+      score.innerHTML = this.score;
+
+    }
+
     evaluateMove(){
       for(let i = 0; i < this.player.moves.length; i++){
         let playerMove = this.player.moves[i];
@@ -51,9 +65,14 @@ document.addEventListener("DOMContentLoaded", () => {
           this.moves = [];
           return;
         }
+
+        // calls the next round of the game 
         if(i === this.player.moves.length - 1 && this.player.moves.length === this.moves.length){
-          this.player.moves = [];
-          this.gameIteration(1);
+          this.handleScore();
+          setTimeout(() => {
+            this.player.moves = [];
+            this.gameIteration(1);
+          }, 1000);
         }
       }
     }
