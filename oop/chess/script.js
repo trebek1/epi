@@ -20,8 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
           if(!e.target.classList.contains('possible')){
             this.removePossible();
           } else {
-            this.handleMove(this.activeSquare, i);
             this.removePossible();
+            this.handleMove(this.activeSquare, i);
+            
             return;
           }
           let x = i % 8;
@@ -48,7 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
             for(let j = 0; j < moves.length; j++){
               let move = moves[j];
               let possibleMoveIndex = move[0] + move[1] * 8;
-              this.squares[possibleMoveIndex].classList.add('possible');
+              let possibleSquare = this.squares[possibleMoveIndex];
+
+                this.squares[possibleMoveIndex].classList.add('possible');
             }
           }
 
@@ -91,11 +94,32 @@ document.addEventListener("DOMContentLoaded", () => {
       let y = Math.floor(target/8);
       this.activeObject.x = x
       this.activeObject.y = y
-      this.calculateNextMoves(this.activeObject);
       this.squares[target].classList.add(this.activeClass);
       this.activeClass = null;
       this.setNextPlayer();
+      this.calculateAllMoves();
       return;
+    }
+
+    calculateAllMoves(){
+      let player1Pieces = this.player1.pieces;
+      let player2Pieces = this.player2.pieces;
+      let i = 0;
+      let target = null;
+
+      for(i = 0; i < player1Pieces.length; i++){
+        target = player1Pieces[i];
+        target.moves = [];
+        this.calculateNextMoves(target);
+      }
+
+      for(i = 0; i < player2Pieces.length; i++){
+       target = player2Pieces[i]; 
+       target.moves = [];
+       this.calculateNextMoves(target);
+      }
+      this.removePossible();
+      this.removeActive();
     }
 
     setNextPlayer(){
@@ -110,6 +134,10 @@ document.addEventListener("DOMContentLoaded", () => {
       
       if(obj instanceof Pawn){
         if(obj.color === 'white'){
+          if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
+            obj.moves = [[obj.x,obj.y - 1], [obj.x, obj.y - 2]];
+            return;
+          }
           let index = obj.x + obj.y * 8;
           if(index - 9 >= 0){
             let relIndex = index - 9;
@@ -117,10 +145,11 @@ document.addEventListener("DOMContentLoaded", () => {
               let classList = this.squares[relIndex].classList;
               let i = 0;
               while(i < classList.length){
-                if(classList[i].indexOf("b") != -1){
+                if(classList[i][0] === "b"){
                   let x = relIndex % 8;
                   let y = Math.floor(relIndex / 8);
                   obj.moves.push([x, y]);
+                  break;
                 }
                 i++;
               }
@@ -142,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
               let classList = this.squares[relIndex].classList;
               let i = 0;
               while(i < classList.length){
-                if(classList[i].indexOf("b") != -1){
+                if(classList[i][0] === "b"){
                   let x = relIndex % 8;
                   let y = Math.floor(relIndex / 8);
                   obj.moves.push([x, y]);
@@ -152,14 +181,18 @@ document.addEventListener("DOMContentLoaded", () => {
             } 
           }
         } else {
+          if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
+            obj.moves = [[obj.x,obj.y + 1], [obj.x, obj.y + 2]];
+            return;
+          }
           let index = obj.x + obj.y * 8;
-          if(index + 7 >= 0){
+          if(index + 7 < 64){
             let relIndex = index + 7;
             if(this.squares[relIndex].classList.length > 2 ){
               let classList = this.squares[relIndex].classList;
               let i = 0;
               while(i < classList.length){
-                if(classList[i].indexOf("w") != -1){
+                if(classList[i][0] === "w"){
                   let x = relIndex % 8;
                   let y = Math.floor(relIndex / 8);
                   obj.moves.push([x, y]);
@@ -168,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
               }
             } 
           }
-          if(index + 8 >= 0){
+          if(index + 8 < 64){
             let relIndex = index + 8;
             let x = relIndex % 8;
             let y = Math.floor(relIndex / 8);
@@ -178,13 +211,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           }
 
-          if(index + 9 >= 0){
-            let relIndex = index - 9;
+          if(index + 9 < 64){
+            let relIndex = index + 9;
             if(this.squares[relIndex].classList.length > 2 ){
               let classList = this.squares[relIndex].classList;
               let i = 0;
               while(i < classList.length){
-                if(classList[i].indexOf("w") != -1){
+                if(classList[i][0] === "w"){
                   let x = relIndex % 8;
                   let y = Math.floor(relIndex / 8);
                   obj.moves.push([x, y]);
@@ -207,6 +240,17 @@ document.addEventListener("DOMContentLoaded", () => {
         while(possible.length > 0){
           var pos = possible[0];
           pos.classList.remove("possible");
+        }            
+      }
+    }
+
+    removeActive(){
+      let active = document.getElementsByClassName("active");
+      if(active.length > 0){
+        
+        while(active.length > 0){
+          var act = active[0];
+          act.classList.remove("active");
         }            
       }
     }
