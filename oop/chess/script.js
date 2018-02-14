@@ -133,12 +133,20 @@ document.addEventListener("DOMContentLoaded", () => {
     calculateNextMoves(obj){
       
       if(obj instanceof Pawn){
+        let index = obj.x + obj.y * 8;
         if(obj.color === 'white'){
           if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
-            obj.moves = [[obj.x,obj.y - 1], [obj.x, obj.y - 2]];
+            let relIndex = index - 8;
+            if(this.squares[relIndex].classList.length == 2){
+              obj.moves.push([obj.x,obj.y - 1]);
+            }
+            relIndex = index - 16;
+            if(this.squares[relIndex].classList.length == 2){
+              obj.moves.push([obj.x, obj.y - 2]);
+            }
             return;
           }
-          let index = obj.x + obj.y * 8;
+          
           if(index - 9 >= 0){
             let relIndex = index - 9;
             if(this.squares[relIndex].classList.length > 2 ){
@@ -181,11 +189,19 @@ document.addEventListener("DOMContentLoaded", () => {
             } 
           }
         } else {
+          let index = obj.x + obj.y * 8;
           if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
-            obj.moves = [[obj.x,obj.y + 1], [obj.x, obj.y + 2]];
+            let relIndex = index + 8;
+            if(this.squares[relIndex].classList.length == 2){
+              obj.moves.push([obj.x,obj.y + 1]);
+            }
+            relIndex = index + 16;
+            if(this.squares[relIndex].classList.length == 2){
+              obj.moves.push([obj.x, obj.y + 2]);
+            }
             return;
           }
-          let index = obj.x + obj.y * 8;
+          obj.x + obj.y * 8;
           if(index + 7 < 64){
             let relIndex = index + 7;
             if(this.squares[relIndex].classList.length > 2 ){
