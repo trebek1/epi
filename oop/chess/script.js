@@ -3,24 +3,55 @@ document.addEventListener("DOMContentLoaded", () => {
   class Game {
     constructor(){
       this.squares = document.getElementsByClassName("square"); 
-      this.player1 = new Player(1, this.squares);
-      this.player2 = new Player(2, this.squares);
+      this.player1 = new Player(1);
+      this.player2 = new Player(2);
+      this.currentPlayer = this.player1;
       this.activeSquare = null;
       const that = this;
 
       for(let i = 0; i < this.squares.length; i++){
         let target = this.squares[i];
+
+        // add piece to player
+
         target.addEventListener("click", (e) => {
+          console.log("this is i " + i);
+          let x = i % 8;
+          let y = Math.floor(i/8) + 1;
+
+          let pieces = that.currentPlayer.pieces;
+          let object = null;
+          
+          for(let k = 0; k < pieces.length; k++){
+            let p = pieces[k];
+            if(p.equals(x,y)){
+              object = p;
+              break;
+            }
+          }
+          // clicked on a piece that does not belong to you
+          if(object === null){
+            return
+          } else {
+
+          }
+
+
+          // find the index 
+          // look and see if its in current players pieces 
+          // show possible moves
+
           if(this.activeSquare === target){
             that.activeSquare.classList.remove('active');
             this.activeSquare = null;
-            return;
           }
+
           if(that.activeSquare != null){
             that.activeSquare.classList.remove('active');
           }
           this.activeSquare = target;
           target.classList.add('active');
+
         });
       }
     }
@@ -29,17 +60,15 @@ document.addEventListener("DOMContentLoaded", () => {
   class Player {
     constructor(number){
       this.number = number;
-      this.pieces = [];
       this.color = null;
-
       if(number === 1){
         this.color = 'white';
-        // 48 -> 55 shoud be pawns
-
+        this.pieces = [new Pawn(0,7,'white'),new Pawn(1,7,'white'),new Pawn(2,7,'white'),new Pawn(3,7,'white'),new Pawn(4,7,'white'),new Pawn(5,7,'white'),new Pawn(6,7,'white'), new Pawn(7,7,'white')];
+        
       // white
       } else if (number === 2) {
         this.color = 'black';
-        // 8 --> 15 should be pawns 
+        this.pieces = [new Pawn(0,1,'black'),new Pawn(1,1,'black'),new Pawn(2,1,'black'),new Pawn(3,1,'black'),new Pawn(4,1,'black'),new Pawn(5,1,'black'),new Pawn(6,1,'black'), new Pawn(7,1,'black')];
       } else {
         console.log("cant have more than 2 players");
         return;
@@ -54,6 +83,13 @@ document.addEventListener("DOMContentLoaded", () => {
       this.y = y;
       this.startingPosition = [x, y];
       this.color = color;
+    }
+
+    equals(x, y){
+      if(this.x === x && this.y === y){
+        return true;
+      }
+      return false;
     }
   }
 
