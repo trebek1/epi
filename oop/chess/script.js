@@ -221,7 +221,6 @@ document.addEventListener("DOMContentLoaded", () => {
             let relIndex = index + 8;
             let x = relIndex % 8;
             let y = Math.floor(relIndex / 8);
-            relIndex = index - 8;
             if(this.squares[relIndex].classList.length === 2 ){
               obj.moves.push([x, y]);  
             }
