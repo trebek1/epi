@@ -94,11 +94,36 @@ document.addEventListener("DOMContentLoaded", () => {
       let y = Math.floor(target/8);
       this.activeObject.x = x
       this.activeObject.y = y
+      if(this.squares[target].classList.length > 2){
+        this.handleTake(target);  
+      }
       this.squares[target].classList.add(this.activeClass);
       this.activeClass = null;
       this.setNextPlayer();
       this.calculateAllMoves();
       return;
+    }
+
+    // remove the class from the board
+    handleTake(target){
+      let player = this.currentPlayer;
+      let other = this.currentPlayer === this.player1 ? this.player2 : this.player1;
+      let color = player.color;
+      let square = this.squares[target];
+      for(let i = 0; i < square.classList.length; i++){
+        let cls = square.classList[i];
+        let letter = cls[0];
+        if(letter === 'b' && color === 'white'){
+          square.classList.remove(cls);
+          other.remove(target);
+          return;
+        } else if(letter === 'w' && color === 'black'){
+          square.classList.remove(cls);
+          other.remove(target);
+          return;
+        }
+      }
+
     }
 
     calculateAllMoves(){
@@ -149,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
         colorText: "w"
       };
 
-      Pawn.calculatePawnMoves(obj, settings, this.squares);
+      Pawn.calculateMoves(obj, settings, this.squares);
     }
 
     calculateWhitePawnNextMoves(obj){
@@ -169,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
         colorText: "b"
       };
 
-      Pawn.calculatePawnMoves(obj, settings, this.squares);
+      Pawn.calculateMoves(obj, settings, this.squares);
     }
 
     calculateNextMoves(obj){
@@ -227,6 +252,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       console.log("player " + number + " created ");
     }
+
+    remove(index){
+      let x = index % 8;
+      let y = Math.floor(index / 8);
+      for(let i = 0; i < this.pieces.length; i++){
+        let target = this.pieces[i];
+        if(target.x === x && target.y == y){
+          this.pieces.splice(i, 1);
+          return;
+        }
+      }
+    }
   }
 
   class Piece {
@@ -255,17 +292,52 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    static calculatePawnMoves(obj, settings, squares){
+    static calculateMoves(obj, settings, squares){
       let index = obj.x + obj.y * 8;
+      // starting position
       if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
-        let relIndex = index + +settings.relIndex;
-        if(squares[relIndex].classList.length == 2){
+        let relIndex1 = index + +settings.relIndex;
+        if(squares[relIndex1].classList.length == 2){
           obj.moves.push([obj.x,obj.y + +settings.beginOffset]);
         }
-        relIndex = index + +settings.relIndex2;
-        if(squares[relIndex].classList.length == 2){
+        let relIndex2 = index + +settings.relIndex2;
+        if(squares[relIndex2].classList.length == 2 && squares[relIndex1].classList.length == 2){
           obj.moves.push([obj.x, obj.y + +settings.beginOffset2]);
         }
+
+        // check left take 
+        if(settings.firstIndex == true){
+        let relIndex = settings.next1;
+        if(squares[relIndex].classList.length > 2 ){
+          let classList = squares[relIndex].classList;
+          let i = 0;
+          while(i < classList.length){
+            if(classList[i][0] === settings.colorText){
+              let x = relIndex % 8;
+              let y = Math.floor(relIndex / 8);
+              obj.moves.push([x, y]);
+            }
+            i++;
+          }
+        } 
+      }
+
+      // check right take
+      if(settings.thirdIndex == true){
+        let relIndex = settings.next3;
+        if(squares[relIndex].classList.length > 2 ){
+          let classList = squares[relIndex].classList;
+          let i = 0;
+          while(i < classList.length){
+            if(classList[i][0] === settings.colorText){
+              let x = relIndex % 8;
+              let y = Math.floor(relIndex / 8);
+              obj.moves.push([x, y]);
+            }
+            i++;
+          }
+        } 
+      }
         return;
       }
       
