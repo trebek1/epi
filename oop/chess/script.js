@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         beginOffset2: 2,
         firstIndex: index + 7 < 64,
         secondIndex: index + 8 < 64,
-        thirdIndex: index + 9 < 64,
+        thirdIndex: index + 9 < 64 && obj.x != 7,
         next1: index + 7,
         next2: index + 8,
         next3: index + 9,
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         beginOffset2: -2,
         firstIndex: index - 7 >= 0,
         secondIndex: index - 8 >= 0,
-        thirdIndex: index - 9 >= 0,
+        thirdIndex: index - 9 >= 0 && obj.x > 0,
         next1: index - 7,
         next2: index - 8,
         next3: index - 9,
@@ -270,7 +270,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       
       if(settings.firstIndex == true){
-        
         let relIndex = settings.next1;
         if(squares[relIndex].classList.length > 2 ){
           let classList = squares[relIndex].classList;
@@ -287,7 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       
       if(settings.secondIndex === true){
-        
         let relIndex = settings.next2;
         let x = relIndex % 8;
         let y = Math.floor(relIndex / 8);
@@ -297,7 +295,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if(settings.thirdIndex == true){
-        
         let relIndex = settings.next3;
         if(squares[relIndex].classList.length > 2 ){
           let classList = squares[relIndex].classList;
