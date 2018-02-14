@@ -133,65 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    calculatePawnMoves(obj, settings){
-      let index = obj.x + obj.y * 8;
-      if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
-        let relIndex = index + +settings.relIndex;
-        if(this.squares[relIndex].classList.length == 2){
-          obj.moves.push([obj.x,obj.y + +settings.beginOffset]);
-        }
-        relIndex = index + +settings.relIndex2;
-        if(this.squares[relIndex].classList.length == 2){
-          obj.moves.push([obj.x, obj.y + +settings.beginOffset2]);
-        }
-        return;
-      }
-      
-      if(settings.firstIndex == true){
-        
-        let relIndex = settings.next1;
-        if(this.squares[relIndex].classList.length > 2 ){
-          let classList = this.squares[relIndex].classList;
-          let i = 0;
-          while(i < classList.length){
-            if(classList[i][0] === settings.colorText){
-              let x = relIndex % 8;
-              let y = Math.floor(relIndex / 8);
-              obj.moves.push([x, y]);
-            }
-            i++;
-          }
-        } 
-      }
-      
-      if(settings.secondIndex === true){
-        
-        let relIndex = settings.next2;
-        let x = relIndex % 8;
-        let y = Math.floor(relIndex / 8);
-        if(this.squares[relIndex].classList.length === 2 ){
-          obj.moves.push([x, y]);  
-        }
-      }
-
-      if(settings.thirdIndex == true){
-        
-        let relIndex = settings.next3;
-        if(this.squares[relIndex].classList.length > 2 ){
-          let classList = this.squares[relIndex].classList;
-          let i = 0;
-          while(i < classList.length){
-            if(classList[i][0] === settings.colorText){
-              let x = relIndex % 8;
-              let y = Math.floor(relIndex / 8);
-              obj.moves.push([x, y]);
-            }
-            i++;
-          }
-        } 
-      }
-    }
-
     calculateBlackPawnNextMoves(obj){
       let index = obj.x + obj.y * 8;
       let settings = {
@@ -208,10 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
         colorText: "w"
       };
 
-      this.calculatePawnMoves(obj, settings);
+      Pawn.calculatePawnMoves(obj, settings, this.squares);
     }
-
-
 
     calculateWhitePawnNextMoves(obj){
 
@@ -230,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
         colorText: "b"
       };
 
-      this.calculatePawnMoves(obj, settings);
+      Pawn.calculatePawnMoves(obj, settings, this.squares);
     }
 
     calculateNextMoves(obj){
@@ -314,7 +253,65 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         this.moves = [[x,y - 1], [x, y - 2]];
       }
-    
+    }
+
+    static calculatePawnMoves(obj, settings, squares){
+      let index = obj.x + obj.y * 8;
+      if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
+        let relIndex = index + +settings.relIndex;
+        if(squares[relIndex].classList.length == 2){
+          obj.moves.push([obj.x,obj.y + +settings.beginOffset]);
+        }
+        relIndex = index + +settings.relIndex2;
+        if(squares[relIndex].classList.length == 2){
+          obj.moves.push([obj.x, obj.y + +settings.beginOffset2]);
+        }
+        return;
+      }
+      
+      if(settings.firstIndex == true){
+        
+        let relIndex = settings.next1;
+        if(squares[relIndex].classList.length > 2 ){
+          let classList = squares[relIndex].classList;
+          let i = 0;
+          while(i < classList.length){
+            if(classList[i][0] === settings.colorText){
+              let x = relIndex % 8;
+              let y = Math.floor(relIndex / 8);
+              obj.moves.push([x, y]);
+            }
+            i++;
+          }
+        } 
+      }
+      
+      if(settings.secondIndex === true){
+        
+        let relIndex = settings.next2;
+        let x = relIndex % 8;
+        let y = Math.floor(relIndex / 8);
+        if(squares[relIndex].classList.length === 2 ){
+          obj.moves.push([x, y]);  
+        }
+      }
+
+      if(settings.thirdIndex == true){
+        
+        let relIndex = settings.next3;
+        if(squares[relIndex].classList.length > 2 ){
+          let classList = squares[relIndex].classList;
+          let i = 0;
+          while(i < classList.length){
+            if(classList[i][0] === settings.colorText){
+              let x = relIndex % 8;
+              let y = Math.floor(relIndex / 8);
+              obj.moves.push([x, y]);
+            }
+            i++;
+          }
+        } 
+      }
     }
   }
 
