@@ -123,124 +123,123 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     setNextPlayer(){
+      let target = document.getElementById("activePlayer");
       if(this.currentPlayer === this.player1){
         this.currentPlayer = this.player2;
+        target.innerHTML = "Black";
       } else {
         this.currentPlayer = this.player1;
+        target.innerHTML = "White";
       }
+    }
+
+    calculatePawnMoves(obj, settings){
+      let index = obj.x + obj.y * 8;
+      if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
+        let relIndex = index + +settings.relIndex;
+        if(this.squares[relIndex].classList.length == 2){
+          obj.moves.push([obj.x,obj.y + +settings.beginOffset]);
+        }
+        relIndex = index + +settings.relIndex2;
+        if(this.squares[relIndex].classList.length == 2){
+          obj.moves.push([obj.x, obj.y + +settings.beginOffset2]);
+        }
+        return;
+      }
+      
+      if(settings.firstIndex == true){
+        
+        let relIndex = settings.next1;
+        if(this.squares[relIndex].classList.length > 2 ){
+          let classList = this.squares[relIndex].classList;
+          let i = 0;
+          while(i < classList.length){
+            if(classList[i][0] === settings.colorText){
+              let x = relIndex % 8;
+              let y = Math.floor(relIndex / 8);
+              obj.moves.push([x, y]);
+            }
+            i++;
+          }
+        } 
+      }
+      
+      if(settings.secondIndex === true){
+        
+        let relIndex = settings.next2;
+        let x = relIndex % 8;
+        let y = Math.floor(relIndex / 8);
+        if(this.squares[relIndex].classList.length === 2 ){
+          obj.moves.push([x, y]);  
+        }
+      }
+
+      if(settings.thirdIndex == true){
+        
+        let relIndex = settings.next3;
+        if(this.squares[relIndex].classList.length > 2 ){
+          let classList = this.squares[relIndex].classList;
+          let i = 0;
+          while(i < classList.length){
+            if(classList[i][0] === settings.colorText){
+              let x = relIndex % 8;
+              let y = Math.floor(relIndex / 8);
+              obj.moves.push([x, y]);
+            }
+            i++;
+          }
+        } 
+      }
+    }
+
+    calculateBlackPawnNextMoves(obj){
+      let index = obj.x + obj.y * 8;
+      let settings = {
+        relIndex: 8,
+        relIndex2: 16,
+        beginOffset: 1,
+        beginOffset2: 2,
+        firstIndex: index + 7 < 64,
+        secondIndex: index + 8 < 64,
+        thirdIndex: index + 9 < 64,
+        next1: index + 7,
+        next2: index + 8,
+        next3: index + 9,
+        colorText: "w"
+      };
+
+      this.calculatePawnMoves(obj, settings);
+    }
+
+
+
+    calculateWhitePawnNextMoves(obj){
+
+      let index = obj.x + obj.y * 8;
+      let settings = {
+        relIndex: -8,
+        relIndex2: -16,
+        beginOffset: -1,
+        beginOffset2: -2,
+        firstIndex: index - 7 >= 0,
+        secondIndex: index - 8 >= 0,
+        thirdIndex: index - 9 >= 0,
+        next1: index - 7,
+        next2: index - 8,
+        next3: index - 9,
+        colorText: "b"
+      };
+
+      this.calculatePawnMoves(obj, settings);
     }
 
     calculateNextMoves(obj){
       
       if(obj instanceof Pawn){
-        let index = obj.x + obj.y * 8;
         if(obj.color === 'white'){
-          if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
-            let relIndex = index - 8;
-            if(this.squares[relIndex].classList.length == 2){
-              obj.moves.push([obj.x,obj.y - 1]);
-            }
-            relIndex = index - 16;
-            if(this.squares[relIndex].classList.length == 2){
-              obj.moves.push([obj.x, obj.y - 2]);
-            }
-            return;
-          }
-          
-          if(index - 9 >= 0){
-            let relIndex = index - 9;
-            if(this.squares[relIndex].classList.length > 2 ){
-              let classList = this.squares[relIndex].classList;
-              let i = 0;
-              while(i < classList.length){
-                if(classList[i][0] === "b"){
-                  let x = relIndex % 8;
-                  let y = Math.floor(relIndex / 8);
-                  obj.moves.push([x, y]);
-                  break;
-                }
-                i++;
-              }
-            } 
-          }
-          if(index - 8 >= 0){
-            let relIndex = index - 8;
-            let x = relIndex % 8;
-            let y = Math.floor(relIndex / 8);
-            relIndex = index - 8;
-            if(this.squares[relIndex].classList.length === 2 ){
-              obj.moves.push([x, y]);  
-            }
-          }
-
-          if(index - 7 >= 0){
-            let relIndex = index - 7;
-            if(this.squares[relIndex].classList.length > 2 ){
-              let classList = this.squares[relIndex].classList;
-              let i = 0;
-              while(i < classList.length){
-                if(classList[i][0] === "b"){
-                  let x = relIndex % 8;
-                  let y = Math.floor(relIndex / 8);
-                  obj.moves.push([x, y]);
-                }
-                i++;
-              }
-            } 
-          }
+          this.calculateWhitePawnNextMoves(obj);
         } else {
-          let index = obj.x + obj.y * 8;
-          if(obj.x === obj.startingPosition[0] && obj.y === obj.startingPosition[1]){
-            let relIndex = index + 8;
-            if(this.squares[relIndex].classList.length == 2){
-              obj.moves.push([obj.x,obj.y + 1]);
-            }
-            relIndex = index + 16;
-            if(this.squares[relIndex].classList.length == 2){
-              obj.moves.push([obj.x, obj.y + 2]);
-            }
-            return;
-          }
-          obj.x + obj.y * 8;
-          if(index + 7 < 64){
-            let relIndex = index + 7;
-            if(this.squares[relIndex].classList.length > 2 ){
-              let classList = this.squares[relIndex].classList;
-              let i = 0;
-              while(i < classList.length){
-                if(classList[i][0] === "w"){
-                  let x = relIndex % 8;
-                  let y = Math.floor(relIndex / 8);
-                  obj.moves.push([x, y]);
-                }
-                i++;
-              }
-            } 
-          }
-          if(index + 8 < 64){
-            let relIndex = index + 8;
-            let x = relIndex % 8;
-            let y = Math.floor(relIndex / 8);
-            if(this.squares[relIndex].classList.length === 2 ){
-              obj.moves.push([x, y]);  
-            }
-          }
-
-          if(index + 9 < 64){
-            let relIndex = index + 9;
-            if(this.squares[relIndex].classList.length > 2 ){
-              let classList = this.squares[relIndex].classList;
-              let i = 0;
-              while(i < classList.length){
-                if(classList[i][0] === "w"){
-                  let x = relIndex % 8;
-                  let y = Math.floor(relIndex / 8);
-                  obj.moves.push([x, y]);
-                }
-                i++;
-              }
-            } 
-          }
+          this.calculateBlackPawnNextMoves(obj);
         }
 
       } else if(obj instanceof Rook){
