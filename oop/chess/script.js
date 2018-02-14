@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.currentPlayer = this.player1;
       this.activeSquare = null;
       this.activeClass = null;
+      this.activeObject = null;
       const that = this;
 
       for(let i = 0; i < this.squares.length; i++){
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
           }
           let x = i % 8;
-          let y = Math.floor(i/8) + 1;
+          let y = Math.floor(i/8);
 
           let pieces = that.currentPlayer.pieces;
           let object = null;
@@ -33,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let p = pieces[k];
             if(p.equals(x,y)){
               object = p;
+              this.activeObject = object;
               break;
             }
           }
@@ -84,9 +86,118 @@ document.addEventListener("DOMContentLoaded", () => {
 
     handleMove(activeSquare, target){
       activeSquare.classList.remove(this.activeClass);
+      this.activeObject.moves = [];
+      let x = target % 8;
+      let y = Math.floor(target/8);
+      this.activeObject.x = x
+      this.activeObject.y = y
+      this.calculateNextMoves(this.activeObject);
       this.squares[target].classList.add(this.activeClass);
       this.activeClass = null;
+      this.setNextPlayer();
       return;
+    }
+
+    setNextPlayer(){
+      if(this.currentPlayer === this.player1){
+        this.currentPlayer = this.player2;
+      } else {
+        this.currentPlayer = this.player1;
+      }
+    }
+
+    calculateNextMoves(obj){
+      
+      if(obj instanceof Pawn){
+        if(obj.color === 'white'){
+          let index = obj.x + obj.y * 8;
+          if(index - 9 >= 0){
+            let relIndex = index - 9;
+            if(this.squares[relIndex].classList.length > 2 ){
+              let classList = this.squares[relIndex].classList;
+              let i = 0;
+              while(i < classList.length){
+                if(classList[i].indexOf("b") != -1){
+                  let x = relIndex % 8;
+                  let y = Math.floor(relIndex / 8);
+                  obj.moves.push([x, y]);
+                }
+                i++;
+              }
+            } 
+          }
+          if(index - 8 >= 0){
+            let relIndex = index - 8;
+            let x = relIndex % 8;
+            let y = Math.floor(relIndex / 8);
+            relIndex = index - 8;
+            if(this.squares[relIndex].classList.length === 2 ){
+              obj.moves.push([x, y]);  
+            }
+          }
+
+          if(index - 7 >= 0){
+            let relIndex = index - 7;
+            if(this.squares[relIndex].classList.length > 2 ){
+              let classList = this.squares[relIndex].classList;
+              let i = 0;
+              while(i < classList.length){
+                if(classList[i].indexOf("b") != -1){
+                  let x = relIndex % 8;
+                  let y = Math.floor(relIndex / 8);
+                  obj.moves.push([x, y]);
+                }
+                i++;
+              }
+            } 
+          }
+        } else {
+          let index = obj.x + obj.y * 8;
+          if(index + 7 >= 0){
+            let relIndex = index + 7;
+            if(this.squares[relIndex].classList.length > 2 ){
+              let classList = this.squares[relIndex].classList;
+              let i = 0;
+              while(i < classList.length){
+                if(classList[i].indexOf("w") != -1){
+                  let x = relIndex % 8;
+                  let y = Math.floor(relIndex / 8);
+                  obj.moves.push([x, y]);
+                }
+                i++;
+              }
+            } 
+          }
+          if(index + 8 >= 0){
+            let relIndex = index + 8;
+            let x = relIndex % 8;
+            let y = Math.floor(relIndex / 8);
+            relIndex = index - 8;
+            if(this.squares[relIndex].classList.length === 2 ){
+              obj.moves.push([x, y]);  
+            }
+          }
+
+          if(index + 9 >= 0){
+            let relIndex = index - 9;
+            if(this.squares[relIndex].classList.length > 2 ){
+              let classList = this.squares[relIndex].classList;
+              let i = 0;
+              while(i < classList.length){
+                if(classList[i].indexOf("w") != -1){
+                  let x = relIndex % 8;
+                  let y = Math.floor(relIndex / 8);
+                  obj.moves.push([x, y]);
+                }
+                i++;
+              }
+            } 
+          }
+        }
+
+      } else if(obj instanceof Rook){
+
+      }
     }
 
     removePossible(){
@@ -107,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.color = null;
       if(number === 1){
         this.color = 'white';
-        this.pieces = [new Pawn(0,7,'white'),new Pawn(1,7,'white'),new Pawn(2,7,'white'),new Pawn(3,7,'white'),new Pawn(4,7,'white'),new Pawn(5,7,'white'),new Pawn(6,7,'white'), new Pawn(7,7,'white')];
+        this.pieces = [new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
         
       // white
       } else if (number === 2) {
@@ -143,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if(this.color === 'black'){
         this.moves = [[x,y + 1], [x, y + 2]];
       } else {
-        this.moves = [[x,y - 2], [x, y - 3]];
+        this.moves = [[x,y - 1], [x, y - 2]];
       }
     
     }
