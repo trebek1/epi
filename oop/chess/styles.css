@@ -25,7 +25,13 @@
 }
 
 #game {
-  width: 480px;
+  width: 480px;;
+}
+
+#game:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 .bpawn{
   background-image: url("./pieces/bpawn60.png");

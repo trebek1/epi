@@ -340,6 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       
+      // check left take
       if(settings.firstIndex == true){
         let relIndex = settings.next1;
         if(squares[relIndex].classList.length > 2 ){
@@ -356,6 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } 
       }
       
+      // check in front of pawn
       if(settings.secondIndex === true){
         let relIndex = settings.next2;
         let x = relIndex % 8;
@@ -365,6 +367,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      // check right take 
       if(settings.thirdIndex == true){
         let relIndex = settings.next3;
         if(squares[relIndex].classList.length > 2 ){
