@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.player2 = new Player(2);
       this.currentPlayer = this.player1;
       this.activeSquare = null;
+      this.activeClass = null;
       const that = this;
 
       for(let i = 0; i < this.squares.length; i++){
@@ -15,7 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
         // add piece to player
 
         target.addEventListener("click", (e) => {
-          console.log("this is i " + i);
+          if(!e.target.classList.contains('possible')){
+            this.removePossible();
+          } else {
+            this.handleMove(this.activeSquare, i);
+            this.removePossible();
+            return;
+          }
           let x = i % 8;
           let y = Math.floor(i/8) + 1;
 
@@ -29,11 +36,18 @@ document.addEventListener("DOMContentLoaded", () => {
               break;
             }
           }
+
+
           // clicked on a piece that does not belong to you
           if(object === null){
             return
           } else {
-
+            let moves = object.moves;
+            for(let j = 0; j < moves.length; j++){
+              let move = moves[j];
+              let possibleMoveIndex = move[0] + move[1] * 8;
+              this.squares[possibleMoveIndex].classList.add('possible');
+            }
           }
 
 
@@ -51,8 +65,38 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           this.activeSquare = target;
           target.classList.add('active');
+          this.setActiveClass(this.activeSquare);
 
         });
+      }
+    }
+
+    setActiveClass(target){
+      let classList = target.classList;
+
+      for(let i = 0; i < classList.length; i++){
+        let target = classList[i];
+        if(target != 'square' && target.indexOf('row') === -1 && target != 'active'){
+          this.activeClass = target;
+        }
+      }
+    }
+
+    handleMove(activeSquare, target){
+      activeSquare.classList.remove(this.activeClass);
+      this.squares[target].classList.add(this.activeClass);
+      this.activeClass = null;
+      return;
+    }
+
+    removePossible(){
+      let possible = document.getElementsByClassName("possible");
+      if(possible.length > 0){
+        
+        while(possible.length > 0){
+          var pos = possible[0];
+          pos.classList.remove("possible");
+        }            
       }
     }
   }
@@ -99,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if(this.color === 'black'){
         this.moves = [[x,y + 1], [x, y + 2]];
       } else {
-        this.moves = [[x,y - 1], [x, y - 2]];
+        this.moves = [[x,y - 2], [x, y - 3]];
       }
     
     }
