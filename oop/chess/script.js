@@ -250,7 +250,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("cant have more than 2 players");
         return;
       }
-      console.log("player " + number + " created ");
     }
 
     remove(index){
