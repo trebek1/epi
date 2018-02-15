@@ -211,6 +211,8 @@ document.addEventListener("DOMContentLoaded", () => {
         Rook.calculateMoves(obj, null, this.squares);
       } else if(obj instanceof Bishop){
         Bishop.calculateMoves(obj, null, this.squares);
+      } else if(obj instanceof Queen){
+        Queen.calculateMoves(obj, null, this.squares);
       }
     }
 
@@ -243,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.color = null;
       if(number === 1){
         this.color = 'white';
-        this.pieces = [new Bishop(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
+        this.pieces = [new Queen(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
         
       // white
       } else if (number === 2) {
@@ -500,6 +502,11 @@ document.addEventListener("DOMContentLoaded", () => {
     constructor(x, y, color){
       super(x,y, color);
       this.moves = [];
+    }
+
+    static calculateMoves(obj, settings, squares){
+      Bishop.calculateMoves(obj, settings, squares);
+      Rook.calculateMoves(obj, settings, squares);
     }
   }
 
