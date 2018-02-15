@@ -213,6 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
         Bishop.calculateMoves(obj, null, this.squares);
       } else if(obj instanceof Queen){
         Queen.calculateMoves(obj, null, this.squares);
+      } else if(obj instanceof Knight){
+        Knight.calculateMoves(obj, null, this.squares);
       }
     }
 
@@ -245,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.color = null;
       if(number === 1){
         this.color = 'white';
-        this.pieces = [new Queen(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
+        this.pieces = [new Knight(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
         
       // white
       } else if (number === 2) {
@@ -459,6 +461,25 @@ document.addEventListener("DOMContentLoaded", () => {
     constructor(x, y, color){
       super(x,y, color);
       this.moves = [];
+    }
+    static calculateMoves(obj, settings, squares){
+      let index = obj.x + obj.y * 8;
+      // check possible indices
+      const delta = [1,2, -1, -2];
+      for(let i = 0; i < delta.length; i++){
+        for(let j = 0; j < delta.length; j++){
+          let dx = Math.abs(delta[i]);
+          let dy = Math.abs(delta[j]);
+          if(dx === dy){
+            continue;
+          }
+          let index = (obj.x + delta[i]) + (obj.y + delta[j]) * 8;
+          const isNoPiece = squares[index] && squares[index].classList.length === 2;
+          if(index < 64 && isNoPiece && obj.x + delta[i] < 8 && obj.x + delta[i] >=0){
+            obj.moves.push([obj.x + delta[i], obj.y + delta[j]]);
+          }
+        }
+      }
     }
   }
 
