@@ -205,9 +205,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           this.calculateBlackPawnNextMoves(obj);
         }
-
       } else if(obj instanceof King){
         King.calculateMoves(obj, null, this.squares);
+      } else if(obj instanceof Rook){
+        Rook.calculateMoves(obj, null, this.squares);
       }
     }
 
@@ -240,7 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.color = null;
       if(number === 1){
         this.color = 'white';
-        this.pieces = [new King(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
+        this.pieces = [new Rook(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
         
       // white
       } else if (number === 2) {
@@ -389,8 +390,64 @@ document.addEventListener("DOMContentLoaded", () => {
   class Rook extends Piece{
     constructor(x, y, color){
       super(x,y, color);
-      this.moves = [];
-      
+      this.moves = []; 
+    }
+    static calculateMoves(obj, settings, squares){
+      let index = obj.x + obj.y * 8;
+      // check possible indices
+      // move up down left right as far as possible and add squares until you run into a wall or piece
+      let up = 1; 
+      let down = -1; 
+      let left = -1; 
+      let right = 1;
+
+      // up
+      while(true){
+        index = obj.x + (obj.y + up) * 8;
+        const isNoPiece = squares[index] && squares[index].classList.length === 2;
+        if(index < 64 && isNoPiece && obj.y + up < 8){
+          obj.moves.push([obj.x, obj.y + up]);
+          up++;
+        } else {
+          break;
+        }
+      }
+
+      // down
+      while(true){
+        index = obj.x + (obj.y + down) * 8;
+        const isNoPiece = squares[index] && squares[index].classList.length === 2;
+        if(index >= 0 && isNoPiece && obj.y + down >= 0){
+          obj.moves.push([obj.x, obj.y + down]);
+          down--;
+        } else {
+          break;
+        }
+      }
+
+      // left
+      while(true){
+        index = obj.x + left + (obj.y) * 8;
+        const isNoPiece = squares[index] && squares[index].classList.length === 2;
+        if(index >= 0 && isNoPiece && obj.x + left >= 0){
+          obj.moves.push([obj.x + left, obj.y]);
+          left--;
+        } else {
+          break;
+        }
+      }
+
+      // right
+      while(true){
+        index = obj.x + right + (obj.y) * 8;
+        const isNoPiece = squares[index] && squares[index].classList.length === 2;
+        if(index >= 0 && isNoPiece && obj.x + right < 8){
+          obj.moves.push([obj.x + right, obj.y]);
+          right++;
+        } else {
+          break;
+        }
+      }
     }
   }
 
