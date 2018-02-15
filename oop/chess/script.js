@@ -544,25 +544,39 @@ document.addEventListener("DOMContentLoaded", () => {
       let delta = [1, -1];
 
       let counter = 1;
+      let blocker = false;
       for(let i = 0; i < delta.length; i++){
-        counter = 1;
         for(let j = 0; j < delta.length; j++){
           while(true){
-            let index = (obj.x + delta[i]) + (obj.y + delta[j]) * 8;
+            if(blocker){
+              break;
+            }
+
             let possibleX = obj.x + delta[i] * counter;
             let possibleY = obj.y + delta[j] * counter;
+
+            let index = possibleX + possibleY * 8;
+
+            // if we are not on the board
             if(possibleX < 0 || possibleX > 7 || possibleY < 0 || possibleY > 7){
               break;
             }
             const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
             if(index < 64 && isNoPiece){
+              if(blocker){
+                break;  
+              }
               obj.moves.push([possibleX, possibleY]);
               counter++;
+              if(!Piece.checkTeam(squares[index].classList, other, obj.color[0])){
+                blocker = true;
+              }
             } else {
               break;
             }  
           }
           counter = 1;
+          blocker = false;
         }
       }
     }
