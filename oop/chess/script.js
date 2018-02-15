@@ -427,11 +427,16 @@ document.addEventListener("DOMContentLoaded", () => {
       let right = 1;
 
       // up
+      let blocker = false;
       while(true){
         index = obj.x + (obj.y + up) * 8;
+        
         const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
-        if(index < 64 && isNoPiece && obj.y + up < 8){
+        if(index < 64 && isNoPiece && obj.y + up < 8 && !blocker){
           obj.moves.push([obj.x, obj.y + up]);
+          if(!Piece.checkTeam(squares[index].classList, other, obj.color[0])){
+            blocker = true;
+          }
           up++;
         } else {
           break;
@@ -439,11 +444,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // down
+      blocker = false;
       while(true){
         index = obj.x + (obj.y + down) * 8;
         const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
-        if(index >= 0 && isNoPiece && obj.y + down >= 0){
+        if(index >= 0 && isNoPiece && obj.y + down >= 0 && !blocker){
           obj.moves.push([obj.x, obj.y + down]);
+          if(!Piece.checkTeam(squares[index].classList, other, obj.color[0])){
+            blocker = true;
+          }
           down--;
         } else {
           break;
@@ -451,11 +460,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // left
+      blocker = false;
       while(true){
         index = obj.x + left + (obj.y) * 8;
         const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
-        if(index >= 0 && isNoPiece && obj.x + left >= 0){
+        if(index >= 0 && isNoPiece && obj.x + left >= 0 && !blocker){
           obj.moves.push([obj.x + left, obj.y]);
+          if(!Piece.checkTeam(squares[index].classList, other, obj.color[0])){
+            blocker = true;
+          }
           left--;
         } else {
           break;
@@ -463,11 +476,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // right
+      blocker = false;
       while(true){
         index = obj.x + right + (obj.y) * 8;
         const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
-        if(index >= 0 && isNoPiece && obj.x + right < 8){
+        if(index >= 0 && isNoPiece && obj.x + right < 8 && !blocker){
           obj.moves.push([obj.x + right, obj.y]);
+          if(!Piece.checkTeam(squares[index].classList, other, obj.color[0])){
+            blocker = true;
+          }
           right++;
         } else {
           break;
