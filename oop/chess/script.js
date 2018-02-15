@@ -40,11 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           }
 
-
           // clicked on a piece that does not belong to you
           if(object === null){
             return
           } else {
+            this.calculateAllMoves();
             let moves = object.moves;
             for(let j = 0; j < moves.length; j++){
               let move = moves[j];
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       this.squares[target].classList.add(this.activeClass);
       this.activeClass = null;
-      this.setNextPlayer();
+      //this.setNextPlayer();
       this.calculateAllMoves();
       return;
     }
@@ -206,8 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
           this.calculateBlackPawnNextMoves(obj);
         }
 
-      } else if(obj instanceof Rook){
-
+      } else if(obj instanceof King){
+        King.calculateMoves(obj, null, this.squares);
       }
     }
 
@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.color = null;
       if(number === 1){
         this.color = 'white';
-        this.pieces = [new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
+        this.pieces = [new King(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
         
       // white
       } else if (number === 2) {
@@ -419,6 +419,24 @@ document.addEventListener("DOMContentLoaded", () => {
     constructor(x, y, color){
       super(x,y, color);
       this.moves = [];
+    }
+
+    static calculateMoves(obj, settings, squares){
+      let index = obj.x + obj.y * 8;
+      // check possible indices
+      const delta = [0, 1, -1];
+      for(let i = 0; i < delta.length; i++){
+        for(let j = 0; j < delta.length; j++){
+          if(i === 0 && j === 0){
+            continue;
+          }
+          let index = (obj.x + delta[i]) + (obj.y + delta[j]) * 8;
+          const isNoPiece = squares[index] && squares[index].classList.length === 2;
+          if(index < 64 && isNoPiece){
+            obj.moves.push([obj.x + delta[i], obj.y + delta[j]]);
+          }
+        }
+      }
     }
   }
 
