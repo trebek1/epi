@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       this.squares[target].classList.add(this.activeClass);
       this.activeClass = null;
-      //this.setNextPlayer();
+      this.setNextPlayer();
       this.calculateAllMoves();
       return;
     }
@@ -247,12 +247,12 @@ document.addEventListener("DOMContentLoaded", () => {
       this.color = null;
       if(number === 1){
         this.color = 'white';
-        this.pieces = [new Knight(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
+        this.pieces = [new Rook(0, 7, 'white'),new Knight(1,7,'white'), new Bishop(2,7, 'white'), new Queen(3,7, 'white'), new King(4,7,'white'), new Bishop(5,7,'white'), new Knight(6,7,'white'), new Rook(7,7,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
         
       // white
       } else if (number === 2) {
         this.color = 'black';
-        this.pieces = [new Pawn(0,1,'black'),new Pawn(1,1,'black'),new Pawn(2,1,'black'),new Pawn(3,1,'black'),new Pawn(4,1,'black'),new Pawn(5,1,'black'),new Pawn(6,1,'black'), new Pawn(7,1,'black')];
+        this.pieces = [new Rook(0, 0, 'black'),new Knight(1,0,'black'), new Bishop(2,0, 'black'), new Queen(3,0, 'black'), new King(4,0,'black'), new Bishop(5,0,'black'), new Knight(6,0,'black'), new Rook(7,0,'black'),new Pawn(0,1,'black'),new Pawn(1,1,'black'),new Pawn(2,1,'black'),new Pawn(3,1,'black'),new Pawn(4,1,'black'),new Pawn(5,1,'black'),new Pawn(6,1,'black'), new Pawn(7,1,'black')];
       } else {
         console.log("cant have more than 2 players");
         return;
@@ -285,6 +285,19 @@ document.addEventListener("DOMContentLoaded", () => {
         return true;
       }
       return false;
+    }
+
+    static checkTeam(classes, other, current){
+      for(let i = 0; i < classes.length; i++){
+        let c = classes[i][0];
+        if(c === other){
+          return false;
+        }
+        if(c[0] === current){
+          return true;
+        }
+      }
+      return true;
     }
   }
 
@@ -462,7 +475,14 @@ document.addEventListener("DOMContentLoaded", () => {
       super(x,y, color);
       this.moves = [];
     }
+
     static calculateMoves(obj, settings, squares){
+      let other = null;
+      if(obj.color === 'white'){
+        other = 'b';
+      } else {
+        other = 'w';
+      }
       let index = obj.x + obj.y * 8;
       // check possible indices
       const delta = [1,2, -1, -2];
@@ -474,7 +494,7 @@ document.addEventListener("DOMContentLoaded", () => {
             continue;
           }
           let index = (obj.x + delta[i]) + (obj.y + delta[j]) * 8;
-          const isNoPiece = squares[index] && squares[index].classList.length === 2;
+          let isNoPiece = (index < 64) && squares[index] != undefined && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
           if(index < 64 && isNoPiece && obj.x + delta[i] < 8 && obj.x + delta[i] >=0){
             obj.moves.push([obj.x + delta[i], obj.y + delta[j]]);
           }
