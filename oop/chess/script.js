@@ -412,6 +412,12 @@ document.addEventListener("DOMContentLoaded", () => {
       this.moves = []; 
     }
     static calculateMoves(obj, settings, squares){
+      let other = null;
+      if(obj.color === 'white'){
+        other = 'b';
+      } else {
+        other = 'w';
+      }
       let index = obj.x + obj.y * 8;
       // check possible indices
       // move up down left right as far as possible and add squares until you run into a wall or piece
@@ -423,7 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // up
       while(true){
         index = obj.x + (obj.y + up) * 8;
-        const isNoPiece = squares[index] && squares[index].classList.length === 2;
+        const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
         if(index < 64 && isNoPiece && obj.y + up < 8){
           obj.moves.push([obj.x, obj.y + up]);
           up++;
@@ -435,7 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // down
       while(true){
         index = obj.x + (obj.y + down) * 8;
-        const isNoPiece = squares[index] && squares[index].classList.length === 2;
+        const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
         if(index >= 0 && isNoPiece && obj.y + down >= 0){
           obj.moves.push([obj.x, obj.y + down]);
           down--;
@@ -447,7 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // left
       while(true){
         index = obj.x + left + (obj.y) * 8;
-        const isNoPiece = squares[index] && squares[index].classList.length === 2;
+        const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
         if(index >= 0 && isNoPiece && obj.x + left >= 0){
           obj.moves.push([obj.x + left, obj.y]);
           left--;
@@ -459,7 +465,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // right
       while(true){
         index = obj.x + right + (obj.y) * 8;
-        const isNoPiece = squares[index] && squares[index].classList.length === 2;
+        const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
         if(index >= 0 && isNoPiece && obj.x + right < 8){
           obj.moves.push([obj.x + right, obj.y]);
           right++;
@@ -510,6 +516,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     static calculateMoves(obj, settings, squares){
+      let other = null;
+      if(obj.color === 'white'){
+        other = 'b';
+      } else {
+        other = 'w';
+      }
       let index = obj.x + obj.y * 8;
       // check possible indices
       let delta = [1, -1];
@@ -525,7 +537,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if(possibleX < 0 || possibleX > 7 || possibleY < 0 || possibleY > 7){
               break;
             }
-            const isNoPiece = squares[index] && squares[index].classList.length === 2;
+            const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
             if(index < 64 && isNoPiece){
               obj.moves.push([possibleX, possibleY]);
               counter++;
@@ -558,6 +570,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     static calculateMoves(obj, settings, squares){
+      let other = null;
+      if(obj.color === 'white'){
+        other = 'b';
+      } else {
+        other = 'w';
+      }
       let index = obj.x + obj.y * 8;
       // check possible indices
       const delta = [0, 1, -1];
@@ -567,7 +585,7 @@ document.addEventListener("DOMContentLoaded", () => {
             continue;
           }
           let index = (obj.x + delta[i]) + (obj.y + delta[j]) * 8;
-          const isNoPiece = squares[index] && squares[index].classList.length === 2;
+          const isNoPiece = squares[index] && (squares[index].classList.length === 2 || !Piece.checkTeam(squares[index].classList, other, obj.color[0]));
           if(index < 64 && isNoPiece){
             obj.moves.push([obj.x + delta[i], obj.y + delta[j]]);
           }
