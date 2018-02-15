@@ -209,6 +209,8 @@ document.addEventListener("DOMContentLoaded", () => {
         King.calculateMoves(obj, null, this.squares);
       } else if(obj instanceof Rook){
         Rook.calculateMoves(obj, null, this.squares);
+      } else if(obj instanceof Bishop){
+        Bishop.calculateMoves(obj, null, this.squares);
       }
     }
 
@@ -241,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
       this.color = null;
       if(number === 1){
         this.color = 'white';
-        this.pieces = [new Rook(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
+        this.pieces = [new Bishop(5,4,'white'),new Pawn(0,6,'white'),new Pawn(1,6,'white'),new Pawn(2,6,'white'),new Pawn(3,6,'white'),new Pawn(4,6,'white'),new Pawn(5,6,'white'),new Pawn(6,6,'white'), new Pawn(7,6,'white')];
         
       // white
       } else if (number === 2) {
@@ -462,6 +464,35 @@ document.addEventListener("DOMContentLoaded", () => {
     constructor(x, y, color){
       super(x,y, color);
       this.moves = [];
+    }
+
+    static calculateMoves(obj, settings, squares){
+      let index = obj.x + obj.y * 8;
+      // check possible indices
+      let delta = [1, -1];
+
+      let counter = 1;
+      for(let i = 0; i < delta.length; i++){
+        counter = 1;
+        for(let j = 0; j < delta.length; j++){
+          while(true){
+            let index = (obj.x + delta[i]) + (obj.y + delta[j]) * 8;
+            let possibleX = obj.x + delta[i] * counter;
+            let possibleY = obj.y + delta[j] * counter;
+            if(possibleX < 0 || possibleX > 7 || possibleY < 0 || possibleY > 7){
+              break;
+            }
+            const isNoPiece = squares[index] && squares[index].classList.length === 2;
+            if(index < 64 && isNoPiece){
+              obj.moves.push([possibleX, possibleY]);
+              counter++;
+            } else {
+              break;
+            }  
+          }
+          counter = 1;
+        }
+      }
     }
   }
 
