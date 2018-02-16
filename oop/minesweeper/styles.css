@@ -60,6 +60,18 @@
 	background-size: cover;
 }
 
+#reset {
+	margin: 5px;
+	background: lightgray;
+	display: inline-block;
+	border-radius: 3px;
+	padding: 5px;
+}
+
+#reset:hover{
+	cursor: pointer;
+	background: #e0e0e0;
+}
 
 
 

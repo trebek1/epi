@@ -223,6 +223,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if(target.classList.contains("number")){
           target.classList.remove("number");
         }
+        if(target.classList.contains("flag")){
+          target.classList.remove("flag");
+        }
         if(target.classList.contains("mineFuture")){
           target.classList.remove("mineFuture");
         }
