@@ -220,6 +220,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if(target.classList.contains("gray")){
           target.classList.remove("gray");
         }
+        if(target.classList.contains("number")){
+          target.classList.remove("number");
+        }
         if(target.classList.contains("mineFuture")){
           target.classList.remove("mineFuture");
         }
