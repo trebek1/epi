@@ -249,7 +249,15 @@ document.addEventListener("DOMContentLoaded", () => {
       this.dom = domElement;
       this.mines = 0;
       var _that = this;
-      this.dom.addEventListener('click', function(){
+      this.dom.addEventListener('click', function(e){
+        if(e.shiftKey){
+          if(this.classList.contains('flag')){
+            this.classList.remove('flag');
+          } else {
+            this.classList.add('flag');
+          }
+          return;
+        }
         console.log("hi there " + _that.index);
         if(this.classList.contains('mineFuture')){
           this.classList.add('mine');
