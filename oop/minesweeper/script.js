@@ -135,10 +135,10 @@ document.addEventListener("DOMContentLoaded", () => {
             break;
           default:
             break;
-
         }
-
+        return true;
       }
+      return false;
     }
 
     explore(index){
@@ -148,21 +148,25 @@ document.addEventListener("DOMContentLoaded", () => {
       const down = index + 9;
       const boxes = document.getElementsByClassName('box');
 
-      if(this.checkIndex(left) && left % 10 != 9){
+      if(this.checkIndex(left) && left % 9 != 8){
         const target = boxes[left];
         if(!this.clicked(target)){
           target.classList.add('gray');
-          this.checkNeighbors(left);
-          this.explore(left);
+          let n = this.checkNeighbors(left);
+          if(!n){
+            this.explore(left);
+          }
         }
       }
 
-      if(this.checkIndex(right) && right % 10 != 0){
+      if(this.checkIndex(right) && right % 9 != 0){
         const target = boxes[right];
         if(!this.clicked(target)){
          target.classList.add('gray');
-         this.checkNeighbors(right);
-         this.explore(right);
+         let n = this.checkNeighbors(right);
+         if(!n){
+          this.explore(right); 
+         }
         }
       }
 
@@ -170,8 +174,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const target = boxes[up];
         if(!this.clicked(target)){
           target.classList.add('gray');
-          this.checkNeighbors(up);
-          this.explore(up);
+          let n = this.checkNeighbors(up);
+          if(!n){
+            this.explore(up);  
+          }
+          
         }
 
       }
@@ -180,8 +187,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const target = boxes[down];
         if(!this.clicked(target)){
           target.classList.add('gray');
-          this.checkNeighbors(down);
-          this.explore(down);
+          let n = this.checkNeighbors(down);
+          if(!n){
+            this.explore(down);  
+          }
         }
       }
     }
@@ -243,8 +252,11 @@ document.addEventListener("DOMContentLoaded", () => {
           this.classList.add('mine');
         } else {
           this.classList.add('gray');
-          _that.board.checkNeighbors(_that.index);
-          _that.board.explore(_that.index);
+          let n = _that.board.checkNeighbors(_that.index);
+          if(!n){
+            _that.board.explore(_that.index);  
+          }
+          
         }
       });
     }
