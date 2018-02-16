@@ -261,7 +261,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           return;
         }
-        console.log("hi there " + _that.index);
         if(this.classList.contains('mineFuture')){
           this.classList.add('mine');
         } else {
