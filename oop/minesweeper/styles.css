@@ -14,5 +14,52 @@
 }
 
 .gray {
-  background-color: gray;
+  background-color: #F0F0F0;
 }
+
+.number {
+	text-align: center;
+	line-height: 50px;
+	background-color: #F0F0F0;	
+}
+
+.one {
+	color: blue;
+}
+
+.two {
+	color: green;
+}
+
+.three {
+	color: red;
+}
+
+.four {
+	color: purple;
+}
+
+.five {
+	color: maroon;
+}
+
+.six {
+	color: turquoise;
+}
+
+.seven {
+	color: black;
+}
+
+.eight {
+	color: gray;
+}
+
+
+
+
+
+
+
+
+
