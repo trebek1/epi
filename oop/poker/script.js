@@ -562,10 +562,9 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
 
-  // const deck = new Deck(1);
-  // deck.printDeck();
+  const game = new Game(3, 1, 2200);
 
-  const game = new Game(3, 1, 220000);
+  // Total hands will be number of players * number of hands
 
 });
 
